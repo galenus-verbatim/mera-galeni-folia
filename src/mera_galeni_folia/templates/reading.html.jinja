@@ -4,11 +4,10 @@
 
 {% block body_class %}cts{% endblock %}
 
-
 {% block content %}
-<div class="reader">
+<div class="bg-olive-50 flex pt-4 w-full">
   {# ── Left column: chapter navigation ── #}
-  <nav class="toc" id="navs">
+  <nav class="max-h-screen max-w-1/4 min-w-1/4 overflow-y-scroll px-8">
     <ul>
       {% for nav_item in toc.get("table_of_contents", []) %}
         {% with item = nav_item %}
@@ -19,8 +18,8 @@
   </nav>
 
   {# ── Center column: Greek / Latin text ── #}
-  <div class="doc">
-    <div class="bibl">
+  <div class="max-w-1/2 mx-4">
+    <div class="bg-white card mb-4 p-4 shadow-sm">
       {% with item = zotero_item %}
         {% include "components/BibliographicItem.html.jinja" %}
       {% endwith %}

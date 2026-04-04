@@ -138,11 +138,11 @@ def setup():
 
         text_containers = load_passage_from_urn(urn, JSON_DIR)
 
+        if text_containers is None or len(text_containers) == 0:
+            abort(404)
+
         if text_containers[0]["urn"] != urn:
             return redirect(f"/{text_containers[0]["urn"]}")
-
-        if text_containers is None:
-            abort(404)
 
         toc = load_toc_from_urn(urn, JSON_DIR)
         zotero_data = read_zotero_json()

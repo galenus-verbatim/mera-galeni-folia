@@ -7,11 +7,11 @@
     {{- token.text -}}{% if token.whitespace %} {% endif %}
   {%- endfor -%}
 {%- elif tagname == 'lb' -%}
-<br /><a class="lb" id="l{{ text_container.n }}" href="#l{{ text_container.n }}">{{ text_container.n }}</a>
+<br /><a class="tei-lb mr-4" id="l{{ text_container.n }}" href="#l{{ text_container.n }}">{{ text_container.n }}</a>
 {%- elif tagname == "milestone" -%}
-<span class="milestone" data-attributes="{{ text_container }}"></span>
+<span class="tei-milestone" data-attributes="{{ text_container }}">&nbsp;</span>
 {%- elif tagname == 'pb' -%}
-<span class="pb" data-n="{{ text_container.n }}" id="p{{ text_container.n }}"></span>
+<span class="float-right tei-pb" data-n="{{ text_container.n }}" id="p{{ text_container.n }}"></span>
 {%- else -%}
   {%- set element_map = element_map | default({'head': 'h2', 'l': 'span', 'lg': 'div', 'p': 'p', 'quote': 'blockquote'}) -%}
   {%- set html_tag = element_map.get(tagname, 'span') -%}

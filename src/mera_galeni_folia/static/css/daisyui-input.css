@@ -4,3 +4,16 @@
 @source not "./daisyui{,*}.mjs";
 
 @plugin "./daisyui.mjs";
+
+
+.tei-head {
+    @apply font-bold text-amber-600 text-center text-xl;
+}
+
+.tei-lb {
+    @apply text-zinc-500 text-xs;
+}
+
+.tei-milestone {
+    @apply inline-block bg-amber-600 mx-2;
+}
