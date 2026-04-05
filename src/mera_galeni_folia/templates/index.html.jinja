@@ -107,14 +107,14 @@
     </ul>
   </div>
 
-  <div id="biblio" class="max-h-screen max-w-1/2 overflow-y-scroll px-8">
-    <main>
-      {% for bib_item in items %}
-        {% with item = bib_item %}
+  <div id="biblio" class="max-h-screen max-w-1/2 mt-4 overflow-y-scroll px-8">
+    {% for bib_item in items %}
+      {% with item = bib_item %}
+        <div class="card mb-4 p-4 shadow-sm">
           {% include "components/BibliographicItem.html.jinja" %}
-        {% endwith %}
-      {% endfor %}
-    </main>
+        </div>
+      {% endwith %}
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

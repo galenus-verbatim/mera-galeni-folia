@@ -37,9 +37,9 @@ ZOTERO_JSON_PATH = (
 
 def fetch_opera():
     now = time.time()
-    yesterday = now - (60 * 60 * 24)
+    one_week_ago = now - (60 * 60 * 24 * 7)
 
-    if ZOTERO_JSON_PATH.exists() and ZOTERO_JSON_PATH.stat().st_mtime > yesterday:
+    if ZOTERO_JSON_PATH.exists() and ZOTERO_JSON_PATH.stat().st_mtime > one_week_ago:
         print("Not updating Zotero JSON")
         return None
 

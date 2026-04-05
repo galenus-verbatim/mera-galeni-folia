@@ -18,7 +18,7 @@
   </nav>
 
   {# ── Center column: Greek / Latin text ── #}
-  <div class="max-w-1/2 mx-4">
+  <div class="max-w-2/3 mx-4">
     <div class="bg-white card mb-4 p-4 shadow-sm">
       {% with item = zotero_item %}
         {% include "components/BibliographicItem.html.jinja" %}
@@ -33,8 +33,8 @@
     </div>
   </div>
 
-  {# ── Right column: IIIF facsimile viewer ── #}
-  {% if image_vars %}
+  {# ── Right column: IIIF facsimile viewer (hidden while we figure out access to numerabilis' IIIF server) ── #}
+  {% if false %}
     <div id="pagimage">
       <header id="image_nav">
         <a class="prev" id="image_prev" title="Page précédente">&#9664;</a>
@@ -48,11 +48,5 @@
 {% endblock %}
 
 {% block scripts %}
-{% if image_vars %}
-<script>
-{{ image_vars | safe }}
-</script>
-{% endif %}
-<script src="https://cdn.jsdelivr.net/npm/openseadragon@5.0/build/openseadragon/openseadragon.min.js"></script>
 <script src="{{ url_for('static', filename='js/galenus.js') }}"></script>
 {% endblock %}

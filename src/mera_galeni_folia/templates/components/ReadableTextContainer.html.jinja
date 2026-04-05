@@ -7,9 +7,13 @@
     {{- token.text -}}{% if token.whitespace %} {% endif %}
   {%- endfor -%}
 {%- elif tagname == 'lb' -%}
-<br /><a class="tei-lb mr-4" id="l{{ text_container.n }}" href="#l{{ text_container.n }}">{{ text_container.n }}</a>
+<br /><span class="tei-lb inline-block select-none w-8" id="l{{ text_container.n }}"><a href="#l{{ text_container.n }}">{{ text_container.n }}</a></span>
 {%- elif tagname == "milestone" -%}
-<span class="tei-milestone" data-attributes="{{ text_container }}">&nbsp;</span>
+<span
+  class="tei-milestone"
+  data-attributes="{{ text_container }}"
+  title="{%- if text_container.unit == "ed1page"%}Bâle{%- elif text_container.unit == "ed2page" %}Chartier{% endif %} {{ text_container.n }}"
+>&nbsp;</span>
 {%- elif tagname == 'pb' -%}
 <span class="float-right tei-pb" data-n="{{ text_container.n }}" id="p{{ text_container.n }}"></span>
 {%- else -%}
