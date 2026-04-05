@@ -177,14 +177,18 @@ def setup():
         if imgkuhn is not None:
             image_vars = f"var imgkuhn = {json.dumps(imgkuhn)};"
 
-        return render_template(
-            "reading.html.jinja",
-            edition_title=toc.get("title", ""),
-            toc=toc,
-            current_urn=urn,
-            text_containers=text_containers,
-            image_vars=image_vars,
-            zotero_item=zotero_item,
+        return (
+            render_template(
+                "reading.html.jinja",
+                edition_title=toc.get("title", ""),
+                toc=toc,
+                current_urn=urn,
+                text_containers=text_containers,
+                image_vars=image_vars,
+                zotero_item=zotero_item,
+            ),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
         )
 
     return app
