@@ -72,19 +72,27 @@ def setup():
         for key, info in SORT_ORDERS.items():
             sorted_lists[key] = info["sort_fn"](zotero_data)
 
-        return render_template(
-            "index.html.jinja",
-            items=items,
-            sorted_lists=sorted_lists,
-            sort_orders=SORT_ORDERS,
-            default_sort="kuehn",
+        return (
+            render_template(
+                "index.html.jinja",
+                items=items,
+                sorted_lists=sorted_lists,
+                sort_orders=SORT_ORDERS,
+                default_sort="kuehn",
+            ),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
         )
 
-    @app.route("/recherche")
+    @app.route("/recherche/")
     def text_search():
-        return render_template("text_search.html.jinja")
+        return (
+            render_template("text_search.html.jinja"),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
+        )
 
-    @app.route("/titres")
+    @app.route("/titres/")
     def titres():
         editions = load_editions()
         zotero_data = read_zotero_json()
@@ -127,8 +135,10 @@ def setup():
             "phil",
         ]
 
-        return render_template(
-            "search.html.jinja", editions=editions, all_tags=all_tags
+        return (
+            render_template("search.html.jinja", editions=editions, all_tags=all_tags),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
         )
 
     @app.route("/<path:urn>")
