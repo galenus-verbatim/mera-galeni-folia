@@ -2,70 +2,60 @@
 
 {% block title %}Titres — Galenus Verbatim{% endblock %}
 
-{% block tab_titres %}selected{% endblock %}
+{% block tab_titres %}tab-active{% endblock %}
 
 {% block content %}
-<div class="search-panel">
-  <h1>Sélection des Titres</h1>
+<div class="p-8">
+  <h1 class="font-bold text-xl">Sélection des Titres</h1>
 
-  <div class="controls">
-    <div class="controls-row">
-      <div class="control-group">
-        <label for="afficher">Afficher :</label>
-        <select id="afficher" disabled>
-          <option value="sort-cmg" selected>Abbréviation CMG</option>
-          <option value="sort-latin">Titre latin</option>
-          <option value="sort-grec">Titre grec</option>
-          <option value="sort-francais">Titre français</option>
-          <option value="sort-anglais">Titre anglais</option>
-          <option value="sort-cgt">Abbréviation CGT</option>
-        </select>
-      </div>
-
-      <div class="control-group">
-        <label for="trier">Trier :</label>
-        <select id="trier" disabled>
+  <div class="flex flex">
+    <div class="max-w-1/2 min-w-1/4 mr-8 bg-olive-200 px-4 pt-4 mbrounded-sm shadow-md">
+      <fieldset class="fieldset mb-4">
+        <label class="label">Trier :</label>
+        <select id="trier" class="select" disabled>
           <option value="auteur">Par auteur</option>
           <option value="titre">Par titre</option>
           <option value="matiere" selected>Par matière</option>
         </select>
-      </div>
+      </fieldset>
 
-      <button type="button" id="tout-cocher">Tout cocher/décocher</button>
-
-      <div class="control-group">
-        <input type="checkbox" id="ignorer-doublons" />
-        <label for="ignorer-doublons">Ignorer doublons</label>
-      </div>
+      <fieldset class="fieldset">
+        <label class="label">
+          <input type="checkbox" class="checkbox bg-olive-100" id="ignorer-doublons" />
+          <span class="text-md">Ignorer doublons</span>
+        </label>
+      </fieldset>
     </div>
 
-    <div class="controls-row">
-      <div class="control-group">
-        <input type="checkbox" id="gal" />
-        <label for="gal">Gal.</label>
-      </div>
+    <div class="max-w-1/2 bg-olive-200 px-4 pt-4 rounded-sm shadow-md">
+      <fieldset class="fieldset flex">
+        <input type="radio" class="radio bg-olive-100" id="toutes" name="author" value="Toutes" checked="true" />
+        <label class="label mr-4" for="gal">Toutes</label>
 
-      <div class="control-group">
-        <input type="checkbox" id="ps-gal" />
-        <label for="ps-gal">Ps.-Gal.</label>
-      </div>
+        <input type="radio" class="radio bg-olive-100" id="gal" name="author" value="Galenus" />
+        <label class="label mr-4" for="gal">Gal.</label>
 
-      <div class="control-group">
+        <input type="radio" class="radio bg-olive-100" id="ps-gal" name="author" value="Pseudo-Galen" />
+        <label class="label mr-4" for="ps-gal">Ps.-Gal.</label>
+      </fieldset>
+
+      <fieldset class="fieldset">
         <span>Gommettes :</span>
-        <div class="gommettes">
+        <div class="flex">
           {%- for tag in all_tags %}
           <div class="control-group">
-            <input type="checkbox" id="_{{ tag }}" value="_{{ tag }}" class="gommette" />
-            <label for="_{{ tag }}">{{ tag }}.</label>
+            <input type="checkbox" class="checkbox bg-olive-100" id="_{{ tag }}" value="_{{ tag }}" class="gommette" />
+            <label class="label mr-4" for="_{{ tag }}">{{ tag }}.</label>
           </div>
           {%- endfor %}
         </div>
-      </div>
+        <button class="bg-olive-50 hover:bg-olive-100 btn btn-outline" type="button" id="tout-cocher">Tout cocher/décocher</button>
+      </fieldset>
     </div>
   </div>
 
-  <div class="editions-table-wrap">
-    <table id="editions-table" class="editions-table">
+  <div class="overflow-auto max-h-1/2-screen">
+    <table id="editions-table" class="table">
       <thead>
         <tr>
           <th>Editeur(s)</th>
@@ -77,7 +67,7 @@
       </thead>
       <tbody>
         {%- for edition in editions %}
-        <tr data-cts="{{ edition.cts }}">
+        <tr class="edition-row hover:bg-olive-200" data-cts="{{ edition.cts }}" data-authors="{{ edition.authors }}">
           <td>{{ (edition.editors or "").split(",")[0] }}</td>
           <td>
             <a href="{{ url_for('reading', urn=edition.cts) }}" title="{{ edition.cts }}" class="text-amber-600">
@@ -99,8 +89,8 @@
 <script type="module">
   import { filterEditions } from "{{ url_for('static', filename='js/zotero.js') }}";
 
-  document.querySelectorAll('.gommette').forEach(cb => {
-    cb.addEventListener('change', filterEditions);
+  document.querySelectorAll('.gommette').forEach(el => {
+    el.addEventListener('change', filterEditions);
   });
 
   document.getElementById('tout-cocher').addEventListener('click', () => {
@@ -118,5 +108,28 @@
   document.getElementById('ignorer-doublons').addEventListener('change', () => {
     filterEditions(true);
   });
+
+  document.querySelectorAll('input[name="author"]').forEach(el => {
+    el.addEventListener('change', evt => {
+      const author = evt.target.value;
+      const rows = document.getElementsByClassName("edition-row");
+
+      if (author === "Toutes") {
+        for (el of rows) {
+          el.classList.remove("hidden");
+        }
+
+        return;
+      }
+
+      for (el of rows) {
+        if (author === el.dataset.authors) {
+          el.classList.remove("hidden");
+        } else {
+          el.classList.add("hidden");
+        }
+      }
+    })
+  })
 </script>
 {% endblock %}

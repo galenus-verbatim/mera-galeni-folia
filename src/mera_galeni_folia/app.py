@@ -1,7 +1,7 @@
 import json
-import pprint
 
 from pathlib import Path
+from typing import Any
 
 from flask import abort, redirect, render_template, url_for
 
@@ -17,7 +17,6 @@ from mera_galeni_folia.reading import (
     get_iiif_config,
     load_editions,
     load_images_config,
-    parse_nav_html,
 )
 from mera_galeni_folia.zotero import SORT_ORDERS, fetch_opera, read_zotero_json
 
@@ -28,7 +27,7 @@ JSON_DIR = (ROOT_DIR / "tei_json").absolute()
 IMAGES_DATA = load_images_config()
 
 
-def _extract_cts_urn(extra: str) -> str | None:
+def _extract_cts_urn(extra: str | Any) -> str | None:
     """Extract a CTS URN from a Zotero item's 'extra' field."""
     if not isinstance(extra, str):
         return None

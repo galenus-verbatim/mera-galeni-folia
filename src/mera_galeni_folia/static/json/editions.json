@@ -20,6 +20,26 @@
 		"publisher": null
 	},
 	{
+		"id": 2,
+		"cts": "urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2",
+		"file": "tlg0057.tlg001.1st1K-grc2",
+		"epoch": 1687259035.217704534,
+		"bytes": 4409,
+		"nav": "<nav xmlns=\"http://www.w3.org/1999/xhtml\">\n  <ul class=\"tree\">\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:1\">Capitulum 1</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:2\">Capitulum 2</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:3\">Capitulum 3</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:4\">Capitulum 4</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:5\">Capitulum 5</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:6\">Capitulum 6</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:7\">Capitulum 7</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:8\">Capitulum 8</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:9\">Capitulum 9</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:10\">Capitulum 10</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:11\">Capitulum 11</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:12\">Capitulum 12</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:13\">Capitulum 13</a>\n    </li>\n    <li>\n      <a href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2:14\">Capitulum 14</a>\n    </li>\n  </ul>\n</nav>\n",
+		"bibl": "<section id=\"urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2\" class=\"editio grc verbatim textusperseus fichtner001\">\n    <div class=\"opus_tituli\">\n      <h4 class=\"opus_titlemain\"><span class=\"authors\">Galenus.</span> <em class=\"title\"><em class=\"title\">Exhortatio ad medicinam – Protrepticus</em></em> <span class=\"shortTitle\">(<em class=\"title\">Protr.</em>)</span> <a target=\"_blank\" rel=\"noopener\" class=\"fichtner external\" href=\"https://cmg.bbaw.de/epubl/online/Bibl/Galen-Bibliographie_001.pdf\">[n° 001 Fichtner]</a> <a target=\"_blank\" rel=\"noopener\" class=\"gallat external\" href=\"https://www.galenolatino.com/opere.php?id=14&amp;l=e&amp;p=1\">[GalLat]</a></h4>\n      <div class=\"titletr original-title\">\n        <em class=\"title\">Προτρεπτικὸς ἐπ’ ἰατρικήν</em>\n      </div>\n      <div class=\"titletr french-title\">\n        <em class=\"title\">Exhortation à l’étude de la médecine</em>\n      </div>\n      <div class=\"titletr english-title\"><em class=\"title\">Exhortation to Study the Arts</em> (<em class=\"title short\">Protr.</em>)</div>\n      <a class=\"editio verbatim\" href=\"./urn:cts:greekLit:tlg0057.tlg001.1st1K-grc1\"><label>altera editio: </label><em class=\"title\">Adhortatio ad artes addiscendas</em><span class=\"editors\">, ed. Kühn</span>, 1821, <span class=\"volume\">vol. 1</span>, <span class=\"pages\">p. 1-39</span>. <span class=\"urn\">urn:cts:greekLit:tlg0057.tlg001.1st1K-grc1</span></a>\n      <div class=\"editio critica\"><label>editio critica: </label>Barigazzi, 1991; Boudon-Millot, 2000.</div>\n      <div><label>translatio Latina: </label><em class=\"title\">Adhortatio ad artes addiscendas</em>, 1821, <span class=\"volume\">vol. 1</span>, <span class=\"pages\">p. 1-39</span>. <span class=\"urn\">urn:cts:greekLit:tlg0057.tlg001.verbatim-lat1</span></div>\n      <div class=\"editio critica\"><label>translationes recentiores: </label>Walther, 1936 (deu); Barigazzi, 1991 (ita); Singer, 1997 (eng); Boudon-Millot, 2000 (fra); Martinez Manzano, 2002 (spa).</div>\n    </div>\n    <h1 class=\"editio\"><a class=\"title\" href=\"https://galenus-verbatim.huma-num.fr/urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2\"><em class=\"title\">Protrepticus</em></a><span class=\"editors\">, ed. Kaibel</span>, 1894<span class=\"scope\">, p. 1-22</span>. <span class=\"urn\">urn:cts:greekLit:tlg0057.tlg001.1st1K-grc2</span></h1>\n  </section>",
+		"title": "Adhortatio ad artes addiscendas",
+		"date": "1894",
+		"authors": "Galenus",
+		"editors": "Kaibel, Georg",
+		"language": null,
+		"book_title": null,
+		"volume": null,
+		"series": null,
+		"page_start": "1",
+		"page_end": "22",
+		"publisher": null
+	},
+	{
 		"id": 3,
 		"cts": "urn:cts:greekLit:tlg0057.tlg002.1st1K-grc1",
 		"file": "tlg0057.tlg002.1st1K-grc1",
