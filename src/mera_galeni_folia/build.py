@@ -56,8 +56,6 @@ def main():
     app.config.update(
         FREEZER_BASE_URL=os.getenv("FREEZER_BASE_URL", ""),
         FREEZER_DEFAULT_MIMETYPE="text/html",
-        FREEZER_DESTINATION=Path(__file__).resolve().parent.parent.parent.absolute()
-        / "build",
         FREEZER_IGNORE_404_NOT_FOUND=True,
     )
 
