@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def _format_critical_edition(edition: dict) -> str:
     """Format a critical edition for display: 'LastName, Date'."""
     editor = None
