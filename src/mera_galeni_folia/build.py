@@ -1,5 +1,3 @@
-from pathlib import Path
-
 def _format_critical_edition(edition: dict) -> str:
     """Format a critical edition for display: 'LastName, Date'."""
     editor = None
@@ -56,7 +54,10 @@ def main():
     app.config.update(
         FREEZER_BASE_URL=os.getenv("FREEZER_BASE_URL", ""),
         FREEZER_DEFAULT_MIMETYPE="text/html",
+        FREEZER_DESTINATION=Path(__file__).resolve().parent.parent.parent.absolute()
+        / "build",
         FREEZER_IGNORE_404_NOT_FOUND=True,
+        FREEZER_REDIRECT_POLICY="ignore",
     )
 
     freezer = Freezer(app)
