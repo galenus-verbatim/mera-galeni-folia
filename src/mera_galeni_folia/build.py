@@ -60,7 +60,6 @@ def main():
         FREEZER_DESTINATION=Path(__file__).resolve().parent.parent.parent.absolute()
         / "build",
         FREEZER_IGNORE_404_NOT_FOUND=True,
-        FREEZER_REDIRECT_POLICY="ignore",
     )
 
     freezer = Freezer(app)

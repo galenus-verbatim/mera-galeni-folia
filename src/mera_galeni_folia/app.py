@@ -151,7 +151,7 @@ def setup():
             abort(404)
 
         if text_containers[0]["urn"] != urn:
-            return redirect(f"/{text_containers[0]["urn"]}")
+            urn = text_containers[0]["urn"]
 
         toc = load_toc_from_urn(urn, JSON_DIR)
         zotero_data = read_zotero_json()
