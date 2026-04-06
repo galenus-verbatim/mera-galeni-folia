@@ -141,7 +141,7 @@ def setup():
             {"Content-Type": "text/html; charset=utf-8"},
         )
 
-    @app.route("/<path:urn>")
+    @app.route("/<path:urn>/")
     def reading(urn):
         """Text reader page for a given CTS URN."""
 
