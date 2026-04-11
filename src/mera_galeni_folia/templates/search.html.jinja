@@ -49,22 +49,22 @@
       <thead>
         <tr>
           <th :aria-sort="`${sortBy === 'editors' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
-            <button @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'greek_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
-            <button @click="updateSort('greek_title')">Titre grec</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('greek_title')">Titre grec</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'latin_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}` ">
-            <button @click="updateSort('latin_title')">Titre latin</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('latin_title')">Titre latin</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'french_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
-            <button @click="updateSort('french_title')">Titre français</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('french_title')">Titre français</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'english_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
-            <button @click="updateSort('english_title')">Titre anglais</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('english_title')">Titre anglais</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'tags' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
-            <button @click="updateSort('tags')">Gommettes</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('tags')">Gommettes</button><span aria-hidden="true"></span>
           </th>
         </tr>
       </thead>

@@ -1,6 +1,6 @@
 # Mera Galeni Folia
 
-"Just the pages of Galen"
+Purely Galen's pages.
 
 ## About
 
