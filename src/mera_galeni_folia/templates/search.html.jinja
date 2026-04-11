@@ -5,80 +5,84 @@
 {% block tab_titres %}tab-active{% endblock %}
 
 {% block content %}
-<div class="p-8">
+<div class="p-8" x-data="search">
   <h1 class="font-bold text-xl">Sélection des Titres</h1>
 
-  <div class="flex flex">
-    <div class="max-w-1/2 min-w-1/4 mr-8 bg-olive-200 px-4 pt-4 mbrounded-sm shadow-md">
-      <fieldset class="fieldset mb-4">
-        <label class="label">Trier :</label>
-        <select id="trier" class="select" disabled>
-          <option value="auteur">Par auteur</option>
-          <option value="titre">Par titre</option>
-          <option value="matiere" selected>Par matière</option>
-        </select>
+  <div class="flex">
+    <div class="bg-olive-200 p-8 rounded-sm shadow-md">
+      <fieldset class="fieldset flex">
+        <input type="radio" class="radio bg-olive-100" id="toutes" name="author" x-model="selectedAuthor" value="Toutes" checked="true" />
+        <label class="label mr-4" for="gal">Toutes</label>
+
+        <input type="radio" class="radio bg-olive-100" id="gal" name="author" x-model="selectedAuthor" value="Galenus" />
+        <label class="label mr-4" for="gal">Gal.</label>
+
+        <input type="radio" class="radio bg-olive-100" id="ps-gal" name="author" x-model="selectedAuthor" value="Pseudo-Galen" />
+        <label class="label mr-4" for="ps-gal">Ps.-Gal.</label>
       </fieldset>
 
       <fieldset class="fieldset">
+        <span>Gommettes : </span>
+        <div class="flex">
+          <template x-for="tag in allTags">
+            <div class="control-group">
+              <input type="checkbox" class="gommette checkbox bg-olive-100" :id="`_${tag}`" :value="`_${tag}`" x-model="selectedTags" />
+              <label class="label mr-4" :for="`_${tag}`" x-text="`${tag}.`"></label>
+            </div>
+          </div>
+        </template>
+      </fieldset>
+
+      <fieldset class="fieldset">
+      <button class="bg-olive-50 hover:bg-olive-100 btn btn-outline my-4" type="button" @click="clearSelectedTags" :disabled="selectedTags.length === 0">Tout décocher</button>
         <label class="label">
-          <input type="checkbox" class="checkbox bg-olive-100" id="ignorer-doublons" />
+          <input type="checkbox" class="checkbox bg-olive-100" x-model="ignoreDuplicates" />
           <span class="text-md">Ignorer doublons</span>
         </label>
       </fieldset>
     </div>
 
-    <div class="max-w-1/2 bg-olive-200 px-4 pt-4 rounded-sm shadow-md">
-      <fieldset class="fieldset flex">
-        <input type="radio" class="radio bg-olive-100" id="toutes" name="author" value="Toutes" checked="true" />
-        <label class="label mr-4" for="gal">Toutes</label>
-
-        <input type="radio" class="radio bg-olive-100" id="gal" name="author" value="Galenus" />
-        <label class="label mr-4" for="gal">Gal.</label>
-
-        <input type="radio" class="radio bg-olive-100" id="ps-gal" name="author" value="Pseudo-Galen" />
-        <label class="label mr-4" for="ps-gal">Ps.-Gal.</label>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <span>Gommettes :</span>
-        <div class="flex">
-          {%- for tag in all_tags %}
-          <div class="control-group">
-            <input type="checkbox" class="gommette checkbox bg-olive-100" id="_{{ tag }}" value="_{{ tag }}" />
-            <label class="label mr-4" for="_{{ tag }}">{{ tag }}.</label>
-          </div>
-          {%- endfor %}
-        </div>
-        <button class="bg-olive-50 hover:bg-olive-100 btn btn-outline" type="button" id="tout-cocher">Tout cocher/décocher</button>
-      </fieldset>
-    </div>
   </div>
 
   <div class="overflow-auto max-h-1/2-screen">
-    <table id="editions-table" class="table">
+    <table class="table w-full">
       <thead>
         <tr>
-          <th>Editeur(s)</th>
-          <th>Titre grec</th>
-          <th>Titre latin</th>
-          <th>Titre français</th>
-          <th>Titre anglais</th>
+          <th :aria-sort="`${sortBy === 'editors' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
+            <button @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
+          </th>
+          <th :aria-sort="`${sortBy === 'greek_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
+            <button @click="updateSort('greek_title')">Titre grec</button><span aria-hidden="true"></span>
+          </th>
+          <th :aria-sort="`${sortBy === 'latin_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}` ">
+            <button @click="updateSort('latin_title')">Titre latin</button><span aria-hidden="true"></span>
+          </th>
+          <th :aria-sort="`${sortBy === 'french_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
+            <button @click="updateSort('french_title')">Titre français</button><span aria-hidden="true"></span>
+          </th>
+          <th :aria-sort="`${sortBy === 'english_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
+            <button @click="updateSort('english_title')">Titre anglais</button><span aria-hidden="true"></span>
+          </th>
+          <th :aria-sort="`${sortBy === 'tags' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
+            <button @click="updateSort('tags')">Gommettes</button><span aria-hidden="true"></span>
+          </th>
         </tr>
       </thead>
       <tbody>
-        {%- for edition in editions %}
-        <tr class="edition-row hover:bg-olive-200" data-cts="{{ edition.cts }}" data-authors="{{ edition.authors }}" data-tags="{{ " ".join(edition.get("tags", [])) }}">
-          <td>{{ (edition.editors or "").split(",")[0] }}</td>
-          <td>
-            <a href="{{ url_for('reading', urn=edition.cts) }}" title="{{ edition.cts }}" class="text-amber-600">
-              {{ edition.greek_title or "" }}
-            </a>
-          </td>
-          <td>{{ edition.latin_title or edition.title or "" }}</td>
-          <td>{{ edition.french_title or "" }}</td>
-          <td>{{ edition.english_title or "" }}</td>
-        </tr>
-        {%- endfor %}
+        <template x-for="edition in editions" :key="edition.cts">
+          <template x-if="selectedAuthor === 'Toutes' || selectedAuthor === edition.authors">
+            <tr class="hover:bg-olive-200">
+              <td x-text="editorLastName(edition.editors)"></td>
+              <td>
+                <a :href="`/${edition.cts}`" :title="edition.cts" class="text-amber-600" x-text="edition.greek_title"></a>
+              </td>
+              <td x-text="edition.latin_title || edition.title"></td>
+              <td x-text="edition.french_title"></td>
+              <td x-text="edition.english_title"></td>
+              <td x-text="edition.tags?.join(', ').replaceAll('_', '')"></td>
+            </tr>
+          </template>
+        </template>
       </tbody>
     </table>
   </div>
@@ -86,90 +90,118 @@
 {% endblock %}
 
 {% block scripts %}
+<script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
-  const allEditions = {{ editions|tojson }}
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('search', () => ({
+      allTags: {{all_tags}},
+      allEditions: {{editions|tojson}},
+      clearSelectedTags() {
+        this.selectedTags = [];
+      },
+      get editions() { return this.filterEditions() },
+      editorLastName(editor) { return editor.split(', ')[0] },
+      filterEditions() {
+        let editionsFiltered = this.allEditions;
 
-  function filterEditions() {
-    const gommettes = Array.from(
-      document.querySelectorAll(".gommette:checked"),
-    ).map((cb) => cb.value);
-
-    const tbody = document.querySelector("#editions-table tbody");
-
-    if (!tbody) return;
-
-    tbody.querySelectorAll("tr").forEach((row) => {
-      if (gommettes.length === 0) {
-        row.hidden = false;
-      } else {
-        const rowTags = row.dataset.tags.split(' ');
-
-        for (let g of gommettes) {
-          if (rowTags.indexOf(g.toLowerCase()) > -1) {
-            row.hidden = false;
-          } else {
-            row.hidden = true;
-          }
+        if (this.selectedTags.length > 0) {
+          editionsFiltered = editionsFiltered.filter(e => {
+            return this.selectedTags.every(t => e.tags.includes(t));
+          })
         }
-      }
-    });
 
-    const shouldDeduplicate =
-      document.getElementById("ignorer-doublons")?.checked ?? false;
-    if (shouldDeduplicate) {
-      const seen = new Set();
-      tbody.querySelectorAll("tr:not([hidden])").forEach((row) => {
-        const workUrn = row.dataset.cts.replace(/\.[^.]+$/, "");
-        if (seen.has(workUrn)) {
-          row.hidden = true;
+        return this.sortEditions(editionsFiltered);
+      },
+      ignoreDuplicates: false,
+      sortAscending: true,
+      sortBy: 'tags',
+      selectedAuthor: 'Toutes', // | 'Galenus' | 'Pseudo-Galen'
+      selectedTags: [],
+      sortEditions(editionsFiltered) {
+        let editionsSorted = editionsFiltered;
+
+        if (this.sortBy === 'editors') {
+          editionsSorted = editionsFiltered.toSorted((a, b) => {
+            const aEditor = this.editorLastName(a.editors)
+            const bEditor = this.editorLastName(b.editors)
+
+            if (this.sortAscending) return -aEditor.localeCompare(bEditor);
+
+            return aEditor.localeCompare(bEditor);
+          })
+        } else if (this.sortBy === 'tags') {
+          editionsSorted = editionsFiltered.toSorted((a, b) => {
+            const aTagsCleaned = a.tags.map(t => t.replace('_', ''));
+            const bTagsCleaned = b.tags.map(t => t.replace('_', ''));
+            const minTagIndexA = Math.min(aTagsCleaned.map(t => this.allTags.indexOf(t)))
+            const minTagIndexB = Math.min(bTagsCleaned.map(t => this.allTags.indexOf(t)))
+
+            if (this.sortAscending) {
+              return minTagIndexA - minTagIndexB;
+            }
+
+            return minTagIndexB - minTagIndexA;
+          })
         } else {
-          seen.add(workUrn);
-        }
-      });
-    }
-  }
+          editionsSorted = editionsFiltered.toSorted((a, b) => {
+            const aField = a[this.sortBy] || a['title'] || '';
+            const bField = b[this.sortBy] || b['title'] || '';
 
-  document.querySelectorAll('.gommette').forEach(el => {
-    el.addEventListener('change', filterEditions);
-  });
+            if (this.sortAscending) return -aField.localeCompare(bField);
 
-  document.getElementById('tout-cocher').addEventListener('click', () => {
-    const gommettes = document.querySelectorAll(".gommette:checked");
-
-    if (gommettes.length === 0) {
-      document.querySelectorAll('.gommette').forEach(g => g.checked = true);
-    } else {
-      gommettes.forEach(g => g.checked = false);
-    }
-
-    filterEditions();
-  });
-
-  document.getElementById('ignorer-doublons').addEventListener('change', () => {
-    filterEditions(true);
-  });
-
-  document.querySelectorAll('input[name="author"]').forEach(el => {
-    el.addEventListener('change', evt => {
-      const author = evt.target.value;
-      const rows = document.getElementsByClassName("edition-row");
-
-      if (author === "Toutes") {
-        for (el of rows) {
-          el.classList.remove("hidden");
+            return aField.localeCompare(bField);
+          })
         }
 
-        return;
+        if (this.ignoreDuplicates) {
+          let seenURNs = {};
+
+          editionsSorted = editionsSorted.filter(e => {
+            const ctsURN = e.cts.split(':')[3];
+            const withoutVersion = ctsURN.split('.').slice(0, 2).join('.');
+
+            if (seenURNs[withoutVersion]) {
+              return false;
+            }
+
+            seenURNs[withoutVersion] = true;
+
+            return true;
+          });
+        }
+
+        return editionsSorted;
+      },
+
+      updateSort(sortColumn) {
+        // if the current sortBy column is clicked
+        // again, flip the sort direction
+        if (this.sortBy === sortColumn) {
+          return this.sortAscending = !this.sortAscending;
+        }
+
+        this.sortBy = sortColumn;
+        this.sortAscending = false;
       }
-
-      for (el of rows) {
-        if (author === el.dataset.authors) {
-          el.classList.remove("hidden");
-        } else {
-          el.classList.add("hidden");
-        }
-      }
-    })
+    }))
   })
 </script>
+
+<style>
+  th[aria-sort="ascending"] span::after {
+    color: currentColor;
+    content: "▼";
+    font-size: 100%;
+    margin-left: 4px;
+    top: 0;
+  }
+
+  th[aria-sort="descending"] span::after {
+    color: currentColor;
+    content: "▲";
+    font-size: 100%;
+    margin-left: 4px;
+    top: 0;
+  }
+</style>
 {% endblock %}

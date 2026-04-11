@@ -109,11 +109,12 @@ def setup():
                     "english_title": opus.get("englishTitle"),
                 }
 
+                addable_tags = [t for t in opus["tags"] if t.startswith("_") and t != "_opus"]
                 if urn_to_tags.get(cts_urn) is not None:
                     print(f"Already saw cts URN {cts_urn}")
-                    urn_to_tags[cts_urn] += opus["tags"]
+                    urn_to_tags[cts_urn] += addable_tags
                 else:
-                    urn_to_tags[cts_urn] = opus["tags"]
+                    urn_to_tags[cts_urn] = addable_tags
 
         # Enrich editions with multi-language titles
         for edition in editions:
@@ -142,6 +143,7 @@ def setup():
             if edition_tags:
                 edition["tags"] = edition_tags
 
+        # the order of `all_tags` is important for sorting
         all_tags = [
             "gen",
             "anat",
@@ -149,7 +151,7 @@ def setup():
             "nosol",
             "therap",
             "pharm",
-            "Hipp",
+            "hipp",
             "phil",
         ]
 
