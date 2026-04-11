@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from flask import abort, redirect, render_template, url_for
+from flask import abort, render_template, url_for
 
 from kodon_py.config import default_config
 from kodon_py.server import create_app, load_passage_from_urn, load_toc_from_urn
@@ -50,9 +50,11 @@ def setup():
 
     fetch_opera()
 
+    editions = load_editions()
+    zotero_data = read_zotero_json()
+
     @app.route("/")
     def index():
-        zotero_data = read_zotero_json()
 
         for item in zotero_data:
             for edition in item.get("criticalEditions", []):
@@ -94,26 +96,30 @@ def setup():
 
     @app.route("/titres/")
     def titres():
-        editions = load_editions()
-        zotero_data = read_zotero_json()
-
         # Build lookup from work-level CTS URN to multi-language titles
-        cts_to_titles: dict[str, dict] = {}
+        urn_to_titles: dict[str, dict] = {}
+        urn_to_tags: dict[str, list] = {}
         for opus in zotero_data:
             cts_urn = opus.get("ctsURN")
             if cts_urn:
-                cts_to_titles[cts_urn] = {
+                urn_to_titles[cts_urn] = {
                     "greek_title": opus.get("greekTitle"),
                     "latin_title": opus.get("latinTitle"),
                     "french_title": opus.get("frenchTitle"),
                     "english_title": opus.get("englishTitle"),
                 }
 
+                if urn_to_tags.get(cts_urn) is not None:
+                    print(f"Already saw cts URN {cts_urn}")
+                    urn_to_tags[cts_urn] += opus["tags"]
+                else:
+                    urn_to_tags[cts_urn] = opus["tags"]
+
         # Enrich editions with multi-language titles
         for edition in editions:
-            edition_cts = edition.get("cts", "")
+            edition_urn = edition.get("cts", "")
             titles = next(
-                (t for cts, t in cts_to_titles.items() if edition_cts.startswith(cts)),
+                (t for urn, t in urn_to_titles.items() if edition_urn.startswith(urn)),
                 None,
             )
             if titles:
@@ -123,6 +129,18 @@ def setup():
                 edition.setdefault("latin_title", edition.get("title"))
                 edition.setdefault("french_title", None)
                 edition.setdefault("english_title", None)
+
+            edition_tags = next(
+                (
+                    tags
+                    for urn, tags in urn_to_tags.items()
+                    if edition_urn.startswith(urn)
+                ),
+                None,
+            )
+
+            if edition_tags:
+                edition["tags"] = edition_tags
 
         all_tags = [
             "gen",

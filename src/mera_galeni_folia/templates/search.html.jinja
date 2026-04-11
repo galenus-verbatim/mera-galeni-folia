@@ -44,7 +44,7 @@
         <div class="flex">
           {%- for tag in all_tags %}
           <div class="control-group">
-            <input type="checkbox" class="checkbox bg-olive-100" id="_{{ tag }}" value="_{{ tag }}" class="gommette" />
+            <input type="checkbox" class="gommette checkbox bg-olive-100" id="_{{ tag }}" value="_{{ tag }}" />
             <label class="label mr-4" for="_{{ tag }}">{{ tag }}.</label>
           </div>
           {%- endfor %}
@@ -67,7 +67,7 @@
       </thead>
       <tbody>
         {%- for edition in editions %}
-        <tr class="edition-row hover:bg-olive-200" data-cts="{{ edition.cts }}" data-authors="{{ edition.authors }}">
+        <tr class="edition-row hover:bg-olive-200" data-cts="{{ edition.cts }}" data-authors="{{ edition.authors }}" data-tags="{{ " ".join(edition.get("tags", [])) }}">
           <td>{{ (edition.editors or "").split(",")[0] }}</td>
           <td>
             <a href="{{ url_for('reading', urn=edition.cts) }}" title="{{ edition.cts }}" class="text-amber-600">
@@ -86,8 +86,48 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="module">
-  import { filterEditions } from "{{ url_for('static', filename='js/zotero.js') }}";
+<script>
+  const allEditions = {{ editions|tojson }}
+
+  function filterEditions() {
+    const gommettes = Array.from(
+      document.querySelectorAll(".gommette:checked"),
+    ).map((cb) => cb.value);
+
+    const tbody = document.querySelector("#editions-table tbody");
+
+    if (!tbody) return;
+
+    tbody.querySelectorAll("tr").forEach((row) => {
+      if (gommettes.length === 0) {
+        row.hidden = false;
+      } else {
+        const rowTags = row.dataset.tags.split(' ');
+
+        for (let g of gommettes) {
+          if (rowTags.indexOf(g.toLowerCase()) > -1) {
+            row.hidden = false;
+          } else {
+            row.hidden = true;
+          }
+        }
+      }
+    });
+
+    const shouldDeduplicate =
+      document.getElementById("ignorer-doublons")?.checked ?? false;
+    if (shouldDeduplicate) {
+      const seen = new Set();
+      tbody.querySelectorAll("tr:not([hidden])").forEach((row) => {
+        const workUrn = row.dataset.cts.replace(/\.[^.]+$/, "");
+        if (seen.has(workUrn)) {
+          row.hidden = true;
+        } else {
+          seen.add(workUrn);
+        }
+      });
+    }
+  }
 
   document.querySelectorAll('.gommette').forEach(el => {
     el.addEventListener('change', filterEditions);
