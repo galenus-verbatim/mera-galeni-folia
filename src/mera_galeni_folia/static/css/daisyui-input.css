@@ -5,9 +5,16 @@
 
 @plugin "./daisyui.mjs";
 
+.span[data-rend="indent"] {
+    text-indent: 2em;
+}
+
+.span[data-rend="noindent"] {
+    text-indent: 0;
+}
 
 .tei-head {
-    @apply font-bold text-amber-600 text-center text-xl;
+    @apply font-bold text-yellow-700 text-center text-xl;
 }
 
 .tei-lb {
@@ -15,5 +22,5 @@
 }
 
 .tei-milestone {
-    @apply inline-block bg-amber-600 mx-2;
+    @apply inline-block bg-yellow-700 mx-2;
 }

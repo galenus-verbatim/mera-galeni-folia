@@ -5,9 +5,9 @@
         <em>{{ item.title }} ({{ item.shortTitle }})</em>
         </strong>
         <div>
-        <a class="text-amber-600" href="{{ item.fichtnerURL }}">[N&ordm; {{ item.callNumber }} Ficht.]</a>
+        <a class="text-yellow-700" href="{{ item.fichtnerURL }}">[N&ordm; {{ item.callNumber }} Ficht.]</a>
         {% if item.galLatURL %}
-        <a class="text-amber-600" href="{{ item.galLatURL }}">[Gal Lat.]</a>
+        <a class="text-yellow-700" href="{{ item.galLatURL }}">[Gal Lat.]</a>
         {% endif %}
         </div>
         <div>
@@ -26,7 +26,7 @@
         {# Verbatim editions, sorted by date #}
         {% for edition in item.verbatimEditions|sort(attribute='date') %}
         <div>
-            <a class="text-amber-600" href="{{ edition._route }}">
+            <a class="text-yellow-700" href="{{ edition._route }}">
             <em>{{ edition.title }}</em>,
             <span>ed. {{ edition.creators | selectattr('creatorType', 'equalto', 'editor') | map(attribute='lastName') | first | default('') }}</span>,
             <span>{{ edition.date }}</span>,
