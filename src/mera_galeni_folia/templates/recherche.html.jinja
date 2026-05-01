@@ -1,14 +1,14 @@
 {% extends "base.html.jinja" %}
 
-{% block title %}Titres — Galenus Verbatim{% endblock %}
+{% block title %}Recherche — Galenus Verbatim{% endblock %}
 
-{% block tab_titres %}tab-active{% endblock %}
+{% block tab_recherche %}tab-active{% endblock %}
 
 {% block content %}
 <div class="p-8" x-data="search">
   <h1 class="font-bold text-xl">Sélection des Titres</h1>
 
-  <div class="flex">
+  <div class="flex justify-between">
     <div class="bg-olive-200 p-8 rounded-sm shadow-md">
       <fieldset class="fieldset flex">
         <input type="radio" class="radio bg-olive-100" id="toutes" name="author" x-model="selectedAuthor" value="Toutes" checked="true" />
@@ -22,7 +22,7 @@
       </fieldset>
 
       <fieldset class="fieldset">
-        <span>Gommettes : </span>
+        <span>Sujets : </span>
         <div class="flex">
           <template x-for="tag in allTags">
             <div class="control-group">
@@ -34,7 +34,12 @@
       </fieldset>
 
       <fieldset class="fieldset">
-      <button class="bg-olive-50 hover:bg-olive-100 btn btn-outline my-4" type="button" @click="clearSelectedTags" :disabled="selectedTags.length === 0">Tout décocher</button>
+      <button
+        class="bg-olive-50 hover:bg-olive-100 btn btn-outline my-4"
+        type="button"
+        @click="clearSelectedTags"
+        :disabled="selectedTags.length === 0">Tout décocher
+      </button>
         <label class="label">
           <input type="checkbox" class="checkbox bg-olive-100" x-model="ignoreDuplicates" />
           <span class="text-md">Ignorer doublons</span>
@@ -42,9 +47,22 @@
       </fieldset>
     </div>
 
+    <div class="w-1/2">
+      <fieldset class="fieldset">
+        <label class="input w-full">
+          <span class="label">Recherche par lemme ou forme</span>
+          <input
+            id="cts"
+            name="cts"
+            placeholder="μεταφορά"
+            type="text"
+          />
+        </label>
+      </fieldset>
+    </div>
   </div>
 
-  <div class="overflow-auto max-h-1/2-screen">
+  <div class="overflow-auto max-h-1/2-screen mt-4">
     <table class="table w-full">
       <thead>
         <tr>

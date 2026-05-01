@@ -7,9 +7,8 @@
     'Noto Color Emoji';
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
-    --color-amber-600: oklch(66.6% 0.179 58.318);
-    --color-yellow-600: oklch(68.1% 0.162 75.834);
     --color-yellow-700: oklch(55.4% 0.135 66.442);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-zinc-500: oklch(55.2% 0.016 285.938);
     --color-zinc-600: oklch(44.2% 0.017 285.786);
     --color-zinc-900: oklch(21% 0.006 285.885);
@@ -17,6 +16,7 @@
     --color-olive-100: oklch(96.6% 0.005 106.5);
     --color-olive-200: oklch(93% 0.007 106.5);
     --color-olive-300: oklch(88% 0.011 106.6);
+    --color-olive-500: oklch(58% 0.031 107.3);
     --color-white: #fff;
     --spacing: 0.25rem;
     --text-xs: 0.75rem;
@@ -1699,6 +1699,9 @@
   .max-h-screen {
     max-height: 100vh;
   }
+  .w-1\/2 {
+    width: calc(1 / 2 * 100%);
+  }
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
@@ -1808,14 +1811,14 @@
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
   }
-  .text-amber-600 {
-    color: var(--color-amber-600);
+  .text-gray-500 {
+    color: var(--color-gray-500);
   }
   .text-neutral-content {
     color: var(--color-neutral-content);
   }
-  .text-yellow-600 {
-    color: var(--color-yellow-600);
+  .text-olive-500 {
+    color: var(--color-olive-500);
   }
   .text-yellow-700 {
     color: var(--color-yellow-700);

@@ -7,15 +7,17 @@
 {% block content %}
 <div class="bg-olive-50 flex pt-4 w-full">
   {# ── Left column: chapter navigation ── #}
-  <nav class="max-h-screen max-w-1/4 min-w-1/4 overflow-y-scroll px-8">
-    <ul>
-      {% for nav_item in toc.get("table_of_contents", []) %}
-        {% with item = nav_item %}
-          {% include 'components/NavigationItem.html.jinja' %}
-        {% endwith %}
-      {% endfor %}
-    </ul>
-  </nav>
+  {% if text_containers[0].subtype != "work" %}
+    <nav class="max-h-screen max-w-1/4 min-w-1/4 overflow-y-scroll px-8">
+      <ul>
+        {% for nav_item in toc.get("table_of_contents", []) %}
+          {% with item = nav_item %}
+            {% include 'components/NavigationItem.html.jinja' %}
+          {% endwith %}
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
 
   {# ── Center column: Greek / Latin text ── #}
   <div class="max-w-2/3 mx-4">

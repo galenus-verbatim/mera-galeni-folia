@@ -27,6 +27,24 @@ JSON_DIR = (ROOT_DIR / "tei_json").absolute()
 IMAGES_DATA = load_images_config()
 
 
+def _assign_line_ids(text_containers, current_page_n=None):
+    for text_container in text_containers:
+        if text_container.get("tagname") == "pb":
+            current_page_n = text_container["n"]
+
+        if text_container.get("tagname") == "lb":
+            text_container["html_id"] = (
+                f"p{current_page_n}l{text_container.get('n', '0')}"
+            )
+
+        if len(text_container.get("children", [])) > 0:
+            current_page_n = _assign_line_ids(
+                text_container["children"], current_page_n
+            )
+
+    return current_page_n
+
+
 def _extract_cts_urn(extra: str | Any) -> str | None:
     """Extract a CTS URN from a Zotero item's 'extra' field."""
     if not isinstance(extra, str):
@@ -86,7 +104,7 @@ def setup():
             {"Content-Type": "text/html; charset=utf-8"},
         )
 
-    @app.route("/recherche/")
+    @app.route("/text_search/")
     def text_search():
         return (
             render_template("text_search.html.jinja"),
@@ -94,8 +112,8 @@ def setup():
             {"Content-Type": "text/html; charset=utf-8"},
         )
 
-    @app.route("/titres/")
-    def titres():
+    @app.route("/recherche/")
+    def search():
         # Build lookup from work-level CTS URN to multi-language titles
         urn_to_titles: dict[str, dict] = {}
         urn_to_tags: dict[str, list] = {}
@@ -109,7 +127,9 @@ def setup():
                     "english_title": opus.get("englishTitle"),
                 }
 
-                addable_tags = [t for t in opus["tags"] if t.startswith("_") and t != "_opus"]
+                addable_tags = [
+                    t for t in opus["tags"] if t.startswith("_") and t != "_opus"
+                ]
                 if urn_to_tags.get(cts_urn) is not None:
                     print(f"Already saw cts URN {cts_urn}")
                     urn_to_tags[cts_urn] += addable_tags
@@ -156,7 +176,9 @@ def setup():
         ]
 
         return (
-            render_template("search.html.jinja", editions=editions, all_tags=all_tags),
+            render_template(
+                "recherche.html.jinja", editions=editions, all_tags=all_tags
+            ),
             200,
             {"Content-Type": "text/html; charset=utf-8"},
         )
@@ -205,6 +227,8 @@ def setup():
         image_vars = None
         if imgkuhn is not None:
             image_vars = f"var imgkuhn = {json.dumps(imgkuhn)};"
+
+        _assign_line_ids(text_containers)
 
         return (
             render_template(

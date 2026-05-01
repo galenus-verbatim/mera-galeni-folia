@@ -14,7 +14,6 @@ wheels/
 zotero_test.json
 out
 tmp
-__pycache__
 tei_json
 *.sqlite
 

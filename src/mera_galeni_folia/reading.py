@@ -3,24 +3,10 @@ from __future__ import annotations
 from typing import Any
 
 import json
-import re
 
 from pathlib import Path
 
 JSON_DIR = Path(__file__).resolve().parent / "static" / "json"
-
-
-def parse_nav_html(nav_html: str) -> list[dict[str, str]]:
-    """Extract chapter URNs and labels from editions.json nav HTML.
-
-    Returns a list of {"urn": "...", "label": "..."} dicts.
-    """
-    if not nav_html:
-        return []
-    chapters: list[dict[str, str]] = []
-    for match in re.finditer(r'href="\./([^"]+)"[^>]*>([^<]+)<', nav_html):
-        chapters.append({"urn": match.group(1), "label": match.group(2).strip()})
-    return chapters
 
 
 def load_editions(editions_path: str | Path | None = None) -> list[dict]:

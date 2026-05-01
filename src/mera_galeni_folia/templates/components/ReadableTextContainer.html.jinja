@@ -11,21 +11,22 @@
   {%- if text_container.get("rend") == "rule" -%}
     <hr data-attributes="{{ text_container }}" />
   {%- else -%}
-    <span class="tei-lb inline-block select-none w-8"
-      id="l{{ text_container.n }}"
+    <span
+      id="{{ text_container.html_id }}"
+      class="tei-lb inline-block select-none w-8"
       data-attributes="{{ text_container }}"
       data-rend="{{ text_container.get("rend") }}">
-      <a href="#l{{ text_container.n }}">{{ text_container.n }}</a>
+      <a href="#{{ text_container.html_id }}">{{ text_container.n }}</a>
     </span>
   {%- endif -%}
 {%- elif tagname == "milestone" -%}
 <span
-  class="tei-milestone"
+  class="tei-milestone cursor-pointer"
   data-attributes="{{ text_container }}"
   title="{%- if text_container.unit == "ed1page"%}Bâle{%- elif text_container.unit == "ed2page" %}Chartier{% endif %} {{ text_container.n }}"
 >&nbsp;</span>
 {%- elif tagname == 'pb' -%}
-<span class="float-right tei-pb" data-n="{{ text_container.n }}" id="p{{ text_container.n }}"></span>
+<span class="float-right tei-pb text-olive-500" data-n="{{ text_container.n }}" id="p{{ text_container.n }}">{{ text_container.n }}</span>
 {%- else -%}
   {%- set element_map = element_map | default({'head': 'h2', 'l': 'span', 'lg': 'div', 'p': 'p', 'quote': 'blockquote'}) -%}
   {%- set html_tag = element_map.get(tagname, 'span') -%}
