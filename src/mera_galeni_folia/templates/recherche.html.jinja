@@ -8,8 +8,8 @@
 <div class="p-8" x-data="search">
   <h1 class="font-bold text-xl">Sélection des Titres</h1>
 
-  <div class="flex justify-between">
-    <div class="bg-olive-200 p-8 rounded-sm shadow-md">
+  <div class="flex">
+    <div class="bg-olive-200 p-8 rounded-sm shadow-md w-full">
       <fieldset class="fieldset flex">
         <input type="radio" class="radio bg-olive-100" id="toutes" name="author" x-model="selectedAuthor" value="Toutes" checked="true" />
         <label class="label mr-4" for="gal">Toutes</label>
@@ -46,26 +46,28 @@
         </label>
       </fieldset>
     </div>
-
-    <div class="w-1/2">
-      <fieldset class="fieldset">
-        <label class="input w-full">
-          <span class="label">Recherche par lemme ou forme</span>
-          <input
-            id="cts"
-            name="cts"
-            placeholder="μεταφορά"
-            type="text"
-          />
-        </label>
-      </fieldset>
-    </div>
   </div>
+
+  <div class="w-full mt-4">
+    <fieldset class="fieldset">
+      <label class="input w-full">
+        <span class="label">Recherche par lemme ou forme</span>
+        <input
+          id="cts"
+          name="cts"
+          placeholder="μεταφορά"
+          type="text"
+        />
+      </label>
+    </fieldset>
+  </div>
+
 
   <div class="overflow-auto max-h-1/2-screen mt-4">
     <table class="table w-full">
       <thead>
         <tr>
+          <th><span>Limiter la recherche</span></th>
           <th :aria-sort="`${sortBy === 'editors' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
             <button class="cursor-pointer" @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
           </th>
@@ -82,7 +84,10 @@
             <button class="cursor-pointer" @click="updateSort('english_title')">Titre anglais</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'tags' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
-            <button class="cursor-pointer" @click="updateSort('tags')">Gommettes</button><span aria-hidden="true"></span>
+            <button class="cursor-pointer" @click="updateSort('tags')">Sujets</button><span aria-hidden="true"></span>
+          </th>
+          <th aria-sort="none">
+            <span>Détails</span>
           </th>
         </tr>
       </thead>
@@ -90,7 +95,10 @@
         <template x-for="edition in editions" :key="edition.cts">
           <template x-if="selectedAuthor === 'Toutes' || selectedAuthor === edition.authors">
             <tr class="hover:bg-olive-200">
-              <td x-text="editorLastName(edition.editors)"></td>
+              <td><input type="checkbox" class="checkbox bg-olive-50" /></td>
+              <td>
+                <a :href="edition.url" :title="edition.url" x-text="editorLastName(edition.editors)" />
+              </td>
               <td>
                 <a :href="`/${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title"></a>
               </td>
@@ -98,6 +106,13 @@
               <td x-text="edition.french_title"></td>
               <td x-text="edition.english_title"></td>
               <td x-text="edition.tags?.join(', ').replaceAll('_', '')"></td>
+              <td>
+                <a :href="`/#${edition.cts.split('.').slice(0, -1).join('.')}`" title="more info" class="text-yellow-700" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  </svg>
+                </a>
+              </td>
             </tr>
           </template>
         </template>

@@ -117,6 +117,8 @@ def setup():
         # Build lookup from work-level CTS URN to multi-language titles
         urn_to_titles: dict[str, dict] = {}
         urn_to_tags: dict[str, list] = {}
+        urls: dict[str, str] = {}
+
         for opus in zotero_data:
             cts_urn = opus.get("ctsURN")
             if cts_urn:
@@ -135,6 +137,8 @@ def setup():
                     urn_to_tags[cts_urn] += addable_tags
                 else:
                     urn_to_tags[cts_urn] = addable_tags
+
+                urls[cts_urn] = opus.get("url")
 
         # Enrich editions with multi-language titles
         for edition in editions:
@@ -162,6 +166,11 @@ def setup():
 
             if edition_tags:
                 edition["tags"] = edition_tags
+
+            url = next(url for urn, url in urls.items() if edition_urn.startswith(urn))
+
+            if url:
+                edition["url"] = url
 
         # the order of `all_tags` is important for sorting
         all_tags = [
