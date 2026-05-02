@@ -29,17 +29,17 @@
               <input type="checkbox" class="gommette checkbox bg-olive-100" :id="`_${tag}`" :value="`_${tag}`" x-model="selectedTags" />
               <label class="label mr-4" :for="`_${tag}`" x-text="`${tag}.`"></label>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
       </fieldset>
 
       <fieldset class="fieldset">
-      <button
-        class="bg-olive-50 hover:bg-olive-100 btn btn-outline my-4"
-        type="button"
-        @click="clearSelectedTags"
-        :disabled="selectedTags.length === 0">Tout décocher
-      </button>
+        <button
+          class="bg-olive-50 hover:bg-olive-100 btn btn-outline my-4"
+          type="button"
+          @click="clearSelectedTags"
+          :disabled="selectedTags.length === 0">Tout décocher
+        </button>
         <label class="label">
           <input type="checkbox" class="checkbox bg-olive-100" x-model="ignoreDuplicates" />
           <span class="text-md">Ignorer doublons</span>
@@ -49,32 +49,56 @@
   </div>
 
   <div class="w-full mt-4">
-    <fieldset class="fieldset">
-      <label class="input w-full">
+    <fieldset class="fieldset flex items-end gap-4">
+      <label class="input flex-grow">
         <span class="label">Recherche par lemme ou forme</span>
         <input
-          id="cts"
-          name="cts"
+          id="search-input"
+          name="search"
           placeholder="μεταφορά"
-          type="text"
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          :disabled="!indexLoaded"
+          x-model="searchQuery"
+          @input.debounce.300ms="runSearch()"
         />
       </label>
+      <label class="label">
+        <input type="checkbox" class="toggle" x-model="searchByForm" @change="runSearch()" />
+        Rechercher par forme ?
+      </label>
+      <button
+        x-show="!indexLoaded"
+        :disabled="indexLoading"
+        @click="loadSearchIndex()"
+        class="bg-olive-50 hover:bg-olive-100 btn btn-outline btn-sm"
+        type="button"
+        x-text="indexLoading ? 'Chargement…' : 'Charger l\'index'"
+      ></button>
     </fieldset>
   </div>
-
 
   <div class="overflow-auto max-h-1/2-screen mt-4">
     <table class="table w-full">
       <thead>
         <tr>
-          <th><span>Limiter la recherche</span></th>
+          <th>
+            <span>Limiter la recherche</span>
+            <p>
+              <label class="label mt-4">
+                <input type="checkbox" class="checkbox" @click="toggleAllWorks" />
+                Toutes ?
+              </label>
+            </p>
+          </th>
           <th :aria-sort="`${sortBy === 'editors' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
             <button class="cursor-pointer" @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'greek_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
             <button class="cursor-pointer" @click="updateSort('greek_title')">Titre grec</button><span aria-hidden="true"></span>
           </th>
-          <th :aria-sort="`${sortBy === 'latin_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}` ">
+          <th :aria-sort="`${sortBy === 'latin_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
             <button class="cursor-pointer" @click="updateSort('latin_title')">Titre latin</button><span aria-hidden="true"></span>
           </th>
           <th :aria-sort="`${sortBy === 'french_title' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
@@ -91,114 +115,142 @@
           </th>
         </tr>
       </thead>
-      <tbody>
-        <template x-for="edition in editions" :key="edition.cts">
-          <template x-if="selectedAuthor === 'Toutes' || selectedAuthor === edition.authors">
-            <tr class="hover:bg-olive-200">
-              <td><input type="checkbox" class="checkbox bg-olive-50" /></td>
-              <td>
-                <a :href="edition.url" :title="edition.url" x-text="editorLastName(edition.editors)" />
-              </td>
-              <td>
-                <a :href="`/${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title"></a>
-              </td>
-              <td x-text="edition.latin_title || edition.title"></td>
-              <td x-text="edition.french_title"></td>
-              <td x-text="edition.english_title"></td>
-              <td x-text="edition.tags?.join(', ').replaceAll('_', '')"></td>
-              <td>
-                <a :href="`/#${edition.cts.split('.').slice(0, -1).join('.')}`" title="more info" class="text-yellow-700" target="_blank">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>
-                </a>
-              </td>
-            </tr>
-          </template>
-        </template>
-      </tbody>
+
+      <template x-for="edition in editions" :key="edition.cts">
+        <tbody>
+          <tr
+            :class="{
+              'cursor-pointer': editionIsClickable(edition),
+              'cursor-default': !editionIsClickable(edition),
+              'bg-olive-300 hover:bg-olive-400': editionHasResults(edition),
+              'hover:bg-olive-200': editionIsClickable(edition) && !editionHasResults(edition),
+            }"
+            :aria-expanded="openSlideouts[edition.cts] ? 'true' : 'false'"
+            @click="editionIsClickable(edition) && (openSlideouts[edition.cts] = !openSlideouts[edition.cts])"
+          >
+            <td @click.stop>
+              <input type="checkbox" class="checkbox bg-olive-50" x-model="selectedWorks" :id="edition.cts" :value="edition.cts" />
+            </td>
+            <td>
+              <a :href="edition.url" :title="edition.url" x-text="editorLastName(edition.editors)" @click.stop />
+            </td>
+            <td>
+              <a :href="`/${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title" @click.stop></a>
+            </td>
+            <td x-text="edition.latin_title || edition.title"></td>
+            <td x-text="edition.french_title"></td>
+            <td x-text="edition.english_title"></td>
+            <td x-text="edition.tags?.join(', ').replaceAll('_', '')"></td>
+            <td>
+              <a :href="`/#${edition.cts.split('.').slice(0, -1).join('.')}`" title="more info" class="text-yellow-700" target="_blank" @click.stop>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+              </a>
+            </td>
+          </tr>
+          <tr x-show="openSlideouts[edition.cts]" x-collapse>
+            <td colspan="8" class="bg-olive-50 px-8 py-2">
+              <ul class="text-sm space-y-1">
+                <template x-for="result in searchResults.filter(r => r.chapter_urn.startsWith(edition.cts + ':'))" :key="result.chapter_urn">
+                  <li>
+                    <a :href="`/${result.chapter_urn}`" class="text-yellow-700" x-text="result.chapter_urn.split(':').pop()"></a>
+                    <span class="text-gray-500 ml-2" x-text="result.language === 'grc' ? 'grec' : 'latin'"></span>
+                  </li>
+                </template>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+
     </table>
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-wasm.js"></script>
+<script defer src="{{ url_for('static', filename='vendor/js/alpinejs.collapse.js') }}"></script>
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
+      // --- edition browsing state ---
       allTags: {{all_tags}},
       allEditions: {{editions|tojson}},
-      clearSelectedTags() {
-        this.selectedTags = [];
-      },
-      get editions() { return this.filterEditions() },
-      editorLastName(editor) { return editor.split(', ')[0] },
-      filterEditions() {
-        let editionsFiltered = this.allEditions;
-
-        if (this.selectedTags.length > 0) {
-          editionsFiltered = editionsFiltered.filter(e => {
-            return this.selectedTags.every(t => e.tags.includes(t));
-          })
-        }
-
-        return this.sortEditions(editionsFiltered);
-      },
       ignoreDuplicates: false,
       sortAscending: true,
       sortBy: 'tags',
-      selectedAuthor: 'Toutes', // | 'Galenus' | 'Pseudo-Galen'
+      selectedAuthor: 'Toutes',
       selectedTags: [],
+      selectedWorks: [],
+      openSlideouts: {},
+
+      // --- full-text search state ---
+      db: null,
+      indexLoading: false,
+      indexLoaded: false,
+      searchByForm: false,
+      searchQuery: '',
+      searchResults: [],
+
+      // --- edition browsing methods ---
+      clearSelectedTags() { this.selectedTags = []; },
+      get editions() { return this.filterEditions(); },
+      editorLastName(editor) { return editor.split(', ')[0]; },
+
+      filterEditions() {
+        let editionsFiltered = this.allEditions;
+
+        if (this.selectedAuthor !== 'Toutes') {
+          editionsFiltered = editionsFiltered.filter(e => e.authors === this.selectedAuthor);
+        }
+        if (this.selectedTags.length > 0) {
+          editionsFiltered = editionsFiltered.filter(e =>
+            this.selectedTags.every(t => e.tags.includes(t))
+          );
+        }
+        return this.sortEditions(editionsFiltered);
+      },
+
       sortEditions(editionsFiltered) {
         let editionsSorted = editionsFiltered;
-
         if (this.sortBy === 'editors') {
           editionsSorted = editionsFiltered.toSorted((a, b) => {
-            const aEditor = this.editorLastName(a.editors)
-            const bEditor = this.editorLastName(b.editors)
-
-            if (this.sortAscending) return -aEditor.localeCompare(bEditor);
-
-            return aEditor.localeCompare(bEditor);
-          })
+            const aEditor = this.editorLastName(a.editors);
+            const bEditor = this.editorLastName(b.editors);
+            return this.sortAscending
+              ? -aEditor.localeCompare(bEditor)
+              : aEditor.localeCompare(bEditor);
+          });
         } else if (this.sortBy === 'tags') {
           editionsSorted = editionsFiltered.toSorted((a, b) => {
             const aTagsCleaned = a.tags.map(t => t.replace('_', ''));
             const bTagsCleaned = b.tags.map(t => t.replace('_', ''));
-            const minTagIndexA = Math.min(aTagsCleaned.map(t => this.allTags.indexOf(t)))
-            const minTagIndexB = Math.min(bTagsCleaned.map(t => this.allTags.indexOf(t)))
-
-            if (this.sortAscending) {
-              return minTagIndexA - minTagIndexB;
-            }
-
-            return minTagIndexB - minTagIndexA;
-          })
+            const minTagIndexA = Math.min(aTagsCleaned.map(t => this.allTags.indexOf(t)));
+            const minTagIndexB = Math.min(bTagsCleaned.map(t => this.allTags.indexOf(t)));
+            return this.sortAscending
+              ? minTagIndexA - minTagIndexB
+              : minTagIndexB - minTagIndexA;
+          });
         } else {
           editionsSorted = editionsFiltered.toSorted((a, b) => {
             const aField = a[this.sortBy] || a['title'] || '';
             const bField = b[this.sortBy] || b['title'] || '';
-
-            if (this.sortAscending) return -aField.localeCompare(bField);
-
-            return aField.localeCompare(bField);
-          })
+            return this.sortAscending
+              ? -aField.localeCompare(bField)
+              : aField.localeCompare(bField);
+          });
         }
 
         if (this.ignoreDuplicates) {
           let seenURNs = {};
-
           editionsSorted = editionsSorted.filter(e => {
             const ctsURN = e.cts.split(':')[3];
             const withoutVersion = ctsURN.split('.').slice(0, 2).join('.');
-
-            if (seenURNs[withoutVersion]) {
-              return false;
-            }
-
+            if (seenURNs[withoutVersion]) return false;
             seenURNs[withoutVersion] = true;
-
             return true;
           });
         }
@@ -206,18 +258,145 @@
         return editionsSorted;
       },
 
-      updateSort(sortColumn) {
-        // if the current sortBy column is clicked
-        // again, flip the sort direction
-        if (this.sortBy === sortColumn) {
-          return this.sortAscending = !this.sortAscending;
-        }
+      toggleAllWorks(evt) {
+        this.selectedWorks = evt.target.checked
+          ? this.editions.map(ed => ed.cts)
+          : [];
+      },
 
+      updateSort(sortColumn) {
+        if (this.sortBy === sortColumn) {
+          this.sortAscending = !this.sortAscending;
+          return;
+        }
         this.sortBy = sortColumn;
         this.sortAscending = false;
-      }
-    }))
-  })
+      },
+
+      // --- full-text search methods ---
+      editionHasResults(edition) {
+        return this.searchResults.some(r => r.chapter_urn.startsWith(edition.cts + ':'));
+      },
+
+      editionIsClickable(edition) {
+        return this.editionHasResults(edition);
+      },
+
+      async init() {
+        try {
+          const buf = await this._loadFromCache();
+          if (!buf) return;
+          const SQL = await initSqlJs({
+            locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
+          });
+          this.db = new SQL.Database(new Uint8Array(buf));
+          this.indexLoaded = true;
+        } catch (e) {
+          // Cache miss or IDB error — fall through to show the load button.
+        }
+      },
+
+      _openIdb() {
+        return new Promise((resolve, reject) => {
+          const req = indexedDB.open('galenus-search', 1);
+          req.onupgradeneeded = (e) => e.target.result.createObjectStore('index');
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      },
+
+      async _loadFromCache() {
+        const idb = await this._openIdb();
+        return new Promise((resolve, reject) => {
+          const req = idb.transaction('index', 'readonly').objectStore('index').get('search-index');
+          req.onsuccess = () => resolve(req.result ?? null);
+          req.onerror = () => reject(req.error);
+        });
+      },
+
+      async _saveToCache(buf) {
+        const idb = await this._openIdb();
+        return new Promise((resolve, reject) => {
+          const tx = idb.transaction('index', 'readwrite');
+          tx.objectStore('index').put(buf, 'search-index');
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+      },
+
+      _stripDiacritics(str) {
+        return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+      },
+
+      _buildFtsQuery(raw) {
+        const normalized = this._stripDiacritics(raw.trim());
+        if (!normalized) return null;
+        const sanitized = normalized.replace(/["()*^]/g, '').trim();
+        if (!sanitized) return null;
+        const words = sanitized.split(/\s+/).filter(Boolean);
+        if (words.length === 0) return null;
+        const phrase = words.length === 1 ? words[0] : `"${words.join(' ')}"`;
+        return this.searchByForm ? `form:${phrase}` : `lemma:${phrase}`;
+      },
+
+      async loadSearchIndex() {
+        this.indexLoading = true;
+        try {
+          const SQL = await initSqlJs({
+            locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
+          });
+          const res = await fetch('/static/search-index.sqlite');
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const buf = await res.arrayBuffer();
+          this.db = new SQL.Database(new Uint8Array(buf));
+          this.indexLoaded = true;
+          this._saveToCache(buf).catch(() => {});
+        } catch (err) {
+          alert(`Erreur de chargement de l'index : ${err.message}`);
+        } finally {
+          this.indexLoading = false;
+        }
+      },
+
+      runSearch() {
+        if (!this.db) return;
+        const ftsQuery = this._buildFtsQuery(this.searchQuery);
+        if (!ftsQuery) {
+          this.searchResults = [];
+          return;
+        }
+        try {
+          const params = [ftsQuery];
+          let workFilter = '';
+          if (this.selectedWorks.length > 0) {
+            const placeholders = this.selectedWorks.map(() => 't.token_urn LIKE ?').join(' OR ');
+            workFilter = `AND (${placeholders})`;
+            this.selectedWorks.forEach(cts => params.push(cts + ':%'));
+          }
+          const stmt = this.db.prepare(`
+            SELECT t.token_urn, t.title, t.language,
+                   CASE WHEN instr(t.token_urn, '@') > 0
+                        THEN substr(t.token_urn, 1, instr(t.token_urn, '@') - 1)
+                        ELSE t.token_urn END AS chapter_urn
+            FROM tokens t
+            JOIN (SELECT rowid FROM search_fts WHERE search_fts MATCH ?) AS fts
+              ON t.id = fts.rowid
+            ${workFilter}
+            GROUP BY chapter_urn
+            LIMIT 50
+          `);
+          stmt.bind(params);
+          const rows = [];
+          while (stmt.step()) rows.push(stmt.getAsObject());
+          stmt.free();
+          this.searchResults = rows;
+        } catch (err) {
+          console.error('Search error:', err);
+          this.searchResults = [];
+        }
+      },
+    }));
+  });
 </script>
 
 <style>

@@ -104,14 +104,6 @@ def setup():
             {"Content-Type": "text/html; charset=utf-8"},
         )
 
-    @app.route("/text_search/")
-    def text_search():
-        return (
-            render_template("text_search.html.jinja"),
-            200,
-            {"Content-Type": "text/html; charset=utf-8"},
-        )
-
     @app.route("/recherche/")
     def search():
         # Build lookup from work-level CTS URN to multi-language titles

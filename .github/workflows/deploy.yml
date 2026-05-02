@@ -48,6 +48,23 @@ jobs:
         if: steps.cache-tei.outputs.cache-hit != 'true'
         run: uv run kodon ingest parse ./galenus_cts/data
 
+      - name: Cache Stanza models
+        uses: actions/cache@v5
+        with:
+          path: ~/stanza_resources
+          key: stanza-grc-la
+
+      - name: Cache search index
+        id: cache-search-index
+        uses: actions/cache@v5
+        with:
+          path: src/mera_galeni_folia/static/search-index.sqlite
+          key: search-index-${{ steps.checkout-galenus-cts.outputs.ref }}-${{ hashFiles('src/mera_galeni_folia/build_search_index.py') }}
+
+      - name: Build search index
+        if: steps.cache-search-index.outputs.cache-hit != 'true'
+        run: uv run galenus-index
+
       - name: Build site
         # Output directory is controlled by mera_galeni_folia.build:main.
         # Update the path below if the build command writes to a different directory.

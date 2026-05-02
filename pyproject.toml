@@ -20,7 +20,7 @@ dev = [
 ]
 
 [tool.uv.sources]
-kodon-py = { git = "https://github.com/pletcher/kodon-py" }
+kodon-py = { path = "../../PerseusCode/kodon-py", editable = true }
 
 [project.scripts]
 galenus = "mera_galeni_folia.build:main"
