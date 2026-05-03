@@ -1,4 +1,5 @@
 import json
+import os
 
 from pathlib import Path
 from typing import Any
@@ -201,7 +202,10 @@ def setup():
 
         return (
             render_template(
-                "recherche.html.jinja", editions=editions, all_tags=all_tags
+                "recherche.html.jinja",
+                editions=editions,
+                all_tags=all_tags,
+                BASE_URL=os.getenv("FREEZER_BASE_URL", "//127.0.0.1:5000/"),
             ),
             200,
             {"Content-Type": "text/html; charset=utf-8"},
