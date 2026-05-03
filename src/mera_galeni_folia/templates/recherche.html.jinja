@@ -345,7 +345,7 @@
           const SQL = await initSqlJs({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
           });
-          const res = await fetch(url_for('static', filename='search-index.sqlite'));
+          const res = await fetch("{{ url_for('static', filename='search-index.sqlite') }}");
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const buf = await res.arrayBuffer();
           this.db = new SQL.Database(new Uint8Array(buf));
