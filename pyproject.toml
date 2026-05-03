@@ -9,6 +9,7 @@ dependencies = [
     "kodon-py",
     "lxml>=6.0.0",
     "lxml-stubs>=0.5.1",
+    "markdown>=3.10.2",
     "pyzotero>=1.6.11",
     "stanza>=1.11.0",
 ]

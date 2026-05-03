@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import markdown
+
 from flask import abort, render_template, url_for
 
 from kodon_py.config import default_config
@@ -23,6 +25,8 @@ from mera_galeni_folia.zotero import SORT_ORDERS, fetch_opera, read_zotero_json
 APP_DIR = Path(__file__).resolve().parent
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 JSON_DIR = (ROOT_DIR / "tei_json").absolute()
+
+UPDATES_MARKDOWN = APP_DIR / "static" / "markdown" / "actualites.md"
 
 IMAGES_DATA = load_images_config()
 
@@ -100,6 +104,25 @@ def setup():
                 sort_orders=SORT_ORDERS,
                 default_sort="kuehn",
             ),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
+        )
+
+    @app.route("/credits/")
+    def credits():
+        return (
+            render_template("credits.html.jinja"),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
+        )
+
+    @app.route("/novitates/")
+    def novitates():
+        with open(UPDATES_MARKDOWN) as f:
+            markdown_content = markdown.markdown(f.read())
+
+        return (
+            render_template("novitates.html.jinja", markdown_content=markdown_content),
             200,
             {"Content-Type": "text/html; charset=utf-8"},
         )

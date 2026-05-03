@@ -3,6 +3,8 @@
 @source not "./tailwindcss";
 @source not "./daisyui{,*}.mjs";
 
+
+@plugin "@tailwindcss/typography";
 @plugin "./daisyui.mjs";
 
 .span[data-rend="indent"] {

@@ -1,0 +1,13 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Novitates — Galenus Verbatim{% endblock %}
+
+{% block tab_novitates %}tab-active{% endblock %}
+
+{% block content %}
+
+<main class="bg-neutral-50 max-w-1/2 mx-auto my-8 p-4 prose rounded-sm shadow-md">
+  {{ markdown_content }}
+</main>
+
+{% endblock %}
