@@ -52,13 +52,15 @@ def main():
 
     from mera_galeni_folia.app import setup
 
+    FREEZER_DESTINATION = (
+        Path(__file__).resolve().parent.parent.parent.absolute() / "build"
+    )
     app = setup()
 
     app.config.update(
         FREEZER_BASE_URL=os.getenv("FREEZER_BASE_URL", ""),
         FREEZER_DEFAULT_MIMETYPE="text/html",
-        FREEZER_DESTINATION=Path(__file__).resolve().parent.parent.parent.absolute()
-        / "build",
+        FREEZER_DESTINATION=FREEZER_DESTINATION,
         FREEZER_IGNORE_404_NOT_FOUND=True,
     )
 

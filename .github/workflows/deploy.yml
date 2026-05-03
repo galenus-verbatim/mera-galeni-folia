@@ -66,8 +66,6 @@ jobs:
         run: uv run galenus-index
 
       - name: Build site
-        # Output directory is controlled by mera_galeni_folia.build:main.
-        # Update the path below if the build command writes to a different directory.
         run: uv run galenus
         env:
           FREEZER_BASE_URL: ${{ vars.FREEZER_BASE_URL }}
