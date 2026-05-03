@@ -324,7 +324,7 @@ wheels = [
 [[package]]
 name = "kodon-py"
 version = "0.1.0"
-source = { editable = "../../PerseusCode/kodon-py" }
+source = { git = "https://github.com/PerseusDLCode/kodon-py.git#f3174ba857344ffa5a66babfffbdb6453345a907" }
 dependencies = [
     { name = "click" },
     { name = "flask" },
@@ -333,19 +333,6 @@ dependencies = [
     { name = "numpy" },
     { name = "stanza" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "click", specifier = ">=8.1.0" },
-    { name = "flask", specifier = ">=3.1.2" },
-    { name = "lxml", specifier = ">=6.0.2" },
-    { name = "lxml-stubs", specifier = ">=0.5.1" },
-    { name = "numpy", specifier = "==2.4.1" },
-    { name = "stanza", specifier = ">=1.11.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.3" }]
 
 [[package]]
 name = "lxml"
@@ -502,7 +489,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "frozen-flask", specifier = ">=1.0.2" },
-    { name = "kodon-py", editable = "../../PerseusCode/kodon-py" },
+    { name = "kodon-py", git = "https://github.com/PerseusDLCode/kodon-py.git" },
     { name = "lxml", specifier = ">=6.0.0" },
     { name = "lxml-stubs", specifier = ">=0.5.1" },
     { name = "markdown", specifier = ">=3.10.2" },
