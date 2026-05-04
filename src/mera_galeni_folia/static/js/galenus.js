@@ -5,6 +5,8 @@ async function initCtsSearch() {
 
     let urlMap;
     try {
+        const BASE_URL =
+            document.getElementById("base-url").dataset["base-url"];
         const ctsIndexUrl = document.getElementById('cts-index').dataset['cts-index'];
         const resp = await fetch(ctsIndexUrl);
         const editions = await resp.json();
@@ -14,7 +16,7 @@ async function initCtsSearch() {
 
         for (const ed of editions) {
             for (const ref of ed.refs) {
-                const url = `/${ed.b}:${ref}/`;
+                const url = `${BASE_URL ? BASE_URL : "/"}${ed.b}:${ref}/`;
 
                 const kuehnKey = `${ed.v}.${ref}`;
                 urlMap.set(kuehnKey, url);

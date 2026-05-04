@@ -7,7 +7,7 @@ from typing import Any
 
 import markdown
 
-from flask import abort, jsonify, make_response, render_template, url_for
+from flask import abort, jsonify, render_template, url_for
 
 from kodon_py.config import default_config
 from kodon_py.server import create_app, load_passage_from_urn, load_toc_from_urn
@@ -28,6 +28,7 @@ APP_DIR = Path(__file__).resolve().parent
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 JSON_DIR = (ROOT_DIR / "tei_json").absolute()
 
+CTS_INDEX = APP_DIR / "static" / "json" / "cts_index.json"
 UPDATES_MARKDOWN = APP_DIR / "static" / "markdown" / "actualites.md"
 
 IMAGES_DATA = load_images_config()
@@ -61,6 +62,35 @@ def _extract_cts_urn(extra: str | Any) -> str | None:
     return None
 
 
+def write_cts_index(editions):
+    kuehn_editions = [
+        e for e in editions if (e.get("editors") or "").startswith("Kühn")
+    ]
+
+    result = []
+    for ed in kuehn_editions:
+        nav = ed.get("nav") or ""
+        vol = ed.get("volume") or ""
+        title = ed.get("title") or ""
+        base_urn = ed.get("cts") or ""
+
+        hrefs = re.findall(r'href="\./(urn:[^"]+)"', nav)
+        refs = [urn.rsplit(":", 1)[1] for urn in hrefs if ":" in urn]
+
+        if refs:
+            result.append(
+                {
+                    "t": title,
+                    "v": vol,
+                    "b": base_urn,
+                    "refs": refs,
+                }
+            )
+
+    with open(CTS_INDEX, "w") as f:
+        json.dump(result, f)
+
+
 def setup():
     config = default_config
 
@@ -77,9 +107,12 @@ def setup():
     editions = load_editions()
     zotero_data = read_zotero_json()
 
+    app.jinja_env.globals["BASE_URL"] = os.getenv("FREEZER_BASE_URL", "")
+
+    write_cts_index(editions)
+
     @app.route("/")
     def index():
-
         for item in zotero_data:
             for edition in item.get("criticalEditions", []):
                 edition["_formatted"] = _format_critical_edition(edition)
@@ -272,30 +305,6 @@ def setup():
             200,
             {"Content-Type": "text/html; charset=utf-8"},
         )
-
-    @app.route("/cts-index.json")
-    def cts_index():
-        kuehn_editions = [
-            e for e in editions
-            if (e.get("editors") or "").startswith("Kühn")
-        ]
-
-        result = []
-        for ed in kuehn_editions:
-            nav = ed.get("nav") or ""
-            vol = ed.get("volume") or ""
-            title = ed.get("title") or ""
-            base_urn = ed.get("cts") or ""
-
-            hrefs = re.findall(r'href="\./(urn:[^"]+)"', nav)
-            refs = [urn.rsplit(":", 1)[1] for urn in hrefs if ":" in urn]
-
-            if refs:
-                result.append({"t": title, "v": vol, "b": base_urn, "refs": refs})
-
-        resp = make_response(jsonify(result))
-        resp.headers["Cache-Control"] = "public, max-age=86400, immutable"
-        return resp
 
     return app
 

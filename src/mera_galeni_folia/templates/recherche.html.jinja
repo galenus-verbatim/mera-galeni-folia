@@ -174,7 +174,7 @@
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.collapse.js') }}"></script>
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
-  const BASE_URL = "{{ BASE_URL }}"
+  const BASE_URL = document.getElementById("base-url").dataset['base-url']
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
