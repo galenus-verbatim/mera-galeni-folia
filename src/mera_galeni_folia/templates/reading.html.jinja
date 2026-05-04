@@ -52,4 +52,19 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/galenus.js') }}"></script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", () => {
+    let hash = document.location.hash;
+
+    if (hash && hash.length > 0) {
+      hash = decodeURIComponent(hash);
+
+      const el = document.getElementById(hash.replace("#", ""));
+
+      el.classList.add("bg-yellow-400");
+
+      el.scrollIntoView();
+    }
+  });
+</script>
 {% endblock %}

@@ -154,7 +154,7 @@
               <ul class="text-sm space-y-1">
                 <template x-for="result in searchResults.filter(r => r.chapter_urn.startsWith(edition.cts + ':'))" :key="result.chapter_urn">
                   <li>
-                    <a :href="`/${result.url}`" class="text-yellow-700" x-text="result.token_urn"></a>
+                    <a :href="result.url" class="text-yellow-700" x-text="result.token_urn"></a>
                     <span class="text-gray-500 ml-2" x-text="result.language === 'grc' ? 'grec' : 'latin'"></span>
                   </li>
                 </template>
