@@ -27,9 +27,12 @@
       <input
         id="cts"
         name="cts"
+        list="cts-list"
         placeholder="URN CTS ou référérence Kühn brève (ex : 18b.26.4)"
         type="text"
+        autocomplete="off"
       />
+      <datalist id="cts-list"></datalist>
     </label>
     <div role="tablist" class="bg-olive-300 tabs tabs-box">
       <a href="{{ url_for('index') }}" class="tab {% block tab_opera %}{% endblock %}">Opera</a>
@@ -73,6 +76,7 @@
       <img height="64" width="64" style="opacity: 0.7;" src="{{ url_for('static', filename='images/enveloppe.png') }}" alt="enveloppe" />
     </a>
   </footer>
+  <script src="{{ url_for('static', filename='js/galenus.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

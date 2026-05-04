@@ -1,12 +1,13 @@
 import json
 import os
+import re
 
 from pathlib import Path
 from typing import Any
 
 import markdown
 
-from flask import abort, render_template, url_for
+from flask import abort, jsonify, make_response, render_template, url_for
 
 from kodon_py.config import default_config
 from kodon_py.server import create_app, load_passage_from_urn, load_toc_from_urn
@@ -271,6 +272,30 @@ def setup():
             200,
             {"Content-Type": "text/html; charset=utf-8"},
         )
+
+    @app.route("/cts-index.json")
+    def cts_index():
+        kuehn_editions = [
+            e for e in editions
+            if (e.get("editors") or "").startswith("Kühn")
+        ]
+
+        result = []
+        for ed in kuehn_editions:
+            nav = ed.get("nav") or ""
+            vol = ed.get("volume") or ""
+            title = ed.get("title") or ""
+            base_urn = ed.get("cts") or ""
+
+            hrefs = re.findall(r'href="\./(urn:[^"]+)"', nav)
+            refs = [urn.rsplit(":", 1)[1] for urn in hrefs if ":" in urn]
+
+            if refs:
+                result.append({"t": title, "v": vol, "b": base_urn, "refs": refs})
+
+        resp = make_response(jsonify(result))
+        resp.headers["Cache-Control"] = "public, max-age=86400, immutable"
+        return resp
 
     return app
 
