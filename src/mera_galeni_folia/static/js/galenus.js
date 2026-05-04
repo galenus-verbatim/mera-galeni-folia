@@ -5,7 +5,8 @@ async function initCtsSearch() {
 
     let urlMap;
     try {
-        const resp = await fetch("/cts-index.json");
+        const ctsIndexUrl = document.getElementById('cts-index').dataset['cts-index'];
+        const resp = await fetch(ctsIndexUrl);
         const editions = await resp.json();
 
         urlMap = new Map();
