@@ -2397,6 +2397,10 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
@@ -2510,6 +2514,9 @@
     }
   }
 }
+blockquote {
+  margin-top: 1em;
+}
 .span[data-rend="indent"] {
   text-indent: 2em;
 }
@@ -2523,6 +2530,9 @@
   --tw-font-weight: var(--font-weight-bold);
   font-weight: var(--font-weight-bold);
   color: var(--color-yellow-700);
+}
+.tei-l {
+  text-indent: 2em;
 }
 .tei-lb {
   font-size: var(--text-xs);

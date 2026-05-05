@@ -27,11 +27,20 @@
 >&nbsp;</span>
 {%- elif tagname == 'pb' -%}
 <span class="float-right tei-pb text-olive-500" data-n="{{ text_container.n }}" id="p{{ text_container.n }}">{{ text_container.n }}</span>
+{%- elif tagname == 'l' -%}
+  <div class="tei-l" data-n="{{ text_container.n }}">
+    <span class="float-right text-olive-500 text-xs">{{ text_container.n }}</span>
+    {%- for child in text_container.children or [] -%}
+      {%- with text_container = child -%}
+        {%- include 'components/ReadableTextContainer.html.jinja' -%}
+      {%- endwith -%}
+    {%- endfor -%}
+  </div>
 {%- else -%}
-  {%- set element_map = element_map | default({'head': 'h2', 'l': 'span', 'lg': 'div', 'p': 'p', 'quote': 'blockquote'}) -%}
+  {%- set element_map = element_map | default({'head': 'h2', 'lg': 'blockquote', 'p': 'p', 'quote': 'blockquote'}) -%}
   {%- set html_tag = element_map.get(tagname, 'span') -%}
   {%- set css_class = 'tei-' ~ (text_container.tagname or tagname) -%}
-<{{ html_tag }} class="{{ css_class }}">
+<{{ html_tag }} class="{{ css_class }}" data-attributes="{{ text_container }}">
   {%- for child in text_container.children or [] -%}
     {%- with text_container = child -%}
       {%- include 'components/ReadableTextContainer.html.jinja' -%}

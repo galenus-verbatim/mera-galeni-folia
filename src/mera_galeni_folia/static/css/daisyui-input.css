@@ -7,6 +7,10 @@
 @plugin "@tailwindcss/typography";
 @plugin "./daisyui.mjs";
 
+blockquote {
+    margin-top: 1em;
+}
+
 .span[data-rend="indent"] {
     text-indent: 2em;
 }
@@ -17,6 +21,10 @@
 
 .tei-head {
     @apply font-bold text-yellow-700 text-center text-xl;
+}
+
+.tei-l {
+    text-indent: 2em;
 }
 
 .tei-lb {
