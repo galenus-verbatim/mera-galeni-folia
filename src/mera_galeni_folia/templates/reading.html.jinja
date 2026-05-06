@@ -8,15 +8,13 @@
 <div class="bg-olive-50 flex pt-4 w-full">
   {# ── Left column: chapter navigation ── #}
   {% if text_containers[0].subtype != "work" %}
-    <nav class="max-h-screen max-w-1/4 min-w-1/4 overflow-y-scroll px-8">
-      <ul>
-        {% for nav_item in toc.get("table_of_contents", []) %}
-          {% with item = nav_item %}
-            {% include 'components/NavigationItem.html.jinja' %}
-          {% endwith %}
-        {% endfor %}
-      </ul>
-    </nav>
+    <ul class="menu [&_li>*]:rounded-none flex-nowrap max-h-screen overflow-y-auto max-w-1/4 min-w-1/4 px-4">
+      {% for nav_item in toc.get("table_of_contents", []) %}
+        {% with item = nav_item %}
+          {% include 'components/NavigationItem.html.jinja' %}
+        {% endwith %}
+      {% endfor %}
+    </ul>
   {% endif %}
 
   {# ── Center column: Greek / Latin text ── #}
