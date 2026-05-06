@@ -7,7 +7,7 @@ from typing import Any
 
 import markdown
 
-from flask import abort, jsonify, render_template, url_for
+from flask import abort, render_template, url_for
 
 from kodon_py.config import default_config
 from kodon_py.server import create_app, load_passage_from_urn, load_toc_from_urn
@@ -249,13 +249,18 @@ def setup():
     def reading(urn):
         """Text reader page for a given CTS URN."""
 
-        text_containers = load_passage_from_urn(urn, JSON_DIR)
+        passage = load_passage_from_urn(urn, JSON_DIR)
+
+        text_containers = passage["text_containers"]
 
         if text_containers is None or len(text_containers) == 0:
             abort(404)
 
         if text_containers[0]["urn"] != urn:
             urn = text_containers[0]["urn"]
+
+        previous_urn = passage["previous"]
+        next_urn = passage["next"]
 
         toc = load_toc_from_urn(urn, JSON_DIR)
         zotero_data = read_zotero_json()
@@ -295,11 +300,13 @@ def setup():
         return (
             render_template(
                 "reading.html.jinja",
-                edition_title=toc.get("title", ""),
-                toc=toc,
                 current_urn=urn,
-                text_containers=text_containers,
+                edition_title=toc.get("title", ""),
                 image_vars=image_vars,
+                next_urn=next_urn,
+                previous_urn=previous_urn,
+                text_containers=text_containers,
+                toc=toc,
                 zotero_item=zotero_item,
             ),
             200,
