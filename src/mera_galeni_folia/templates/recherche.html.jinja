@@ -55,7 +55,7 @@
         <input
           id="search-input"
           name="search"
-          placeholder="μεταφορά"
+          placeholder="E.g., μεταφορά ou *φορ*"
           type="search"
           autocomplete="off"
           spellcheck="false"
@@ -135,14 +135,14 @@
               <a :href="edition.url" :title="edition.url" x-text="editorLastName(edition.editors)" @click.stop />
             </td>
             <td>
-              <a :href="`/${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title" @click.stop></a>
+              <a :href="`${baseURL}${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title" @click.stop></a>
             </td>
             <td x-text="edition.latin_title || edition.title"></td>
             <td x-text="edition.french_title"></td>
             <td x-text="edition.english_title"></td>
             <td x-text="edition.tags?.join(', ').replaceAll('_', '')"></td>
             <td>
-              <a :href="`/#${edition.cts.split('.').slice(0, -1).join('.')}`" title="more info" class="text-yellow-700" target="_blank" @click.stop>
+              <a :href="`${baseURL}#${edition.cts.split('.').slice(0, -1).join('.')}`" title="more info" class="text-yellow-700" target="_blank" @click.stop>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                 </svg>
@@ -179,8 +179,9 @@
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
       // --- edition browsing state ---
-      allTags: {{all_tags}},
+      allTags: {{all_tags|tojson}},
       allEditions: {{editions|tojson}},
+      baseURL: BASE_URL,
       ignoreDuplicates: false,
       sortAscending: true,
       sortBy: 'tags',
@@ -230,8 +231,8 @@
           editionsSorted = editionsFiltered.toSorted((a, b) => {
             const aTagsCleaned = a.tags.map(t => t.replace('_', ''));
             const bTagsCleaned = b.tags.map(t => t.replace('_', ''));
-            const minTagIndexA = Math.min(aTagsCleaned.map(t => this.allTags.indexOf(t)));
-            const minTagIndexB = Math.min(bTagsCleaned.map(t => this.allTags.indexOf(t)));
+            const minTagIndexA = Math.min(...aTagsCleaned.map(t => this.allTags.indexOf(t)));
+            const minTagIndexB = Math.min(...bTagsCleaned.map(t => this.allTags.indexOf(t)));
             return this.sortAscending
               ? minTagIndexA - minTagIndexB
               : minTagIndexB - minTagIndexA;
@@ -298,49 +299,6 @@
         }
       },
 
-      _openIdb() {
-        return new Promise((resolve, reject) => {
-          const req = indexedDB.open('galenus-search', 1);
-          req.onupgradeneeded = (e) => e.target.result.createObjectStore('index');
-          req.onsuccess = () => resolve(req.result);
-          req.onerror = () => reject(req.error);
-        });
-      },
-
-      async _loadFromCache() {
-        const idb = await this._openIdb();
-        return new Promise((resolve, reject) => {
-          const req = idb.transaction('index', 'readonly').objectStore('index').get('search-index');
-          req.onsuccess = () => resolve(req.result ?? null);
-          req.onerror = () => reject(req.error);
-        });
-      },
-
-      async _saveToCache(buf) {
-        const idb = await this._openIdb();
-        return new Promise((resolve, reject) => {
-          const tx = idb.transaction('index', 'readwrite');
-          tx.objectStore('index').put(buf, 'search-index');
-          tx.oncomplete = resolve;
-          tx.onerror = () => reject(tx.error);
-        });
-      },
-
-      _stripDiacritics(str) {
-        return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-      },
-
-      _buildFtsQuery(raw) {
-        const normalized = this._stripDiacritics(raw.trim());
-        if (!normalized) return null;
-        const sanitized = normalized.replace(/["()*^]/g, '').trim();
-        if (!sanitized) return null;
-        const words = sanitized.split(/\s+/).filter(Boolean);
-        if (words.length === 0) return null;
-        const phrase = words.length === 1 ? words[0] : `"${words.join(' ')}"`;
-        return this.searchByForm ? `form:${phrase}` : `lemma:${phrase}`;
-      },
-
       async loadSearchIndex() {
         this.indexLoading = true;
         try {
@@ -362,19 +320,79 @@
 
       runSearch() {
         if (!this.db) return;
-        const ftsQuery = this._buildFtsQuery(this.searchQuery);
-        if (!ftsQuery) {
-          this.searchResults = [];
-          return;
+        const useLike = this._useLikeSearch(this.searchQuery);
+        if (useLike) {
+          this._runLikeSearch();
+        } else {
+          this._runFtsSearch();
         }
+      },
+
+      _buildFtsQuery(raw) {
+        const normalized = this._stripDiacritics(raw.trim());
+        if (!normalized) return null;
+        // Preserve * so FTS4 can treat trailing * as a prefix wildcard.
+        const sanitized = normalized.replace(/["()^]/g, '').trim();
+        if (!sanitized) return null;
+        const words = sanitized.split(/\s+/).filter(Boolean);
+        if (words.length === 0) return null;
+        // For multi-word queries strip * (FTS4 doesn't support prefix inside phrases).
+        const cleanWords = words.length === 1
+          ? words
+          : words.map(w => w.replace(/\*/g, ''));
+        const phrase = cleanWords.length === 1 ? cleanWords[0] : `"${cleanWords.join(' ')}"`;
+        const column = this.searchByForm ? 'form' : 'lemma';
+        return `${column}:${phrase}`;
+      },
+
+      _buildLikePattern(raw) {
+        const normalized = this._stripDiacritics(raw.trim());
+        if (!normalized) return null;
+        const pattern = normalized.replace(/["()^]/g, '').replace(/\*/g, '%').trim();
+        return pattern || null;
+      },
+
+      _buildWorkFilter(params) {
+        if (this.selectedWorks.length === 0) return '';
+        const placeholders = this.selectedWorks.map(() => 't.token_urn LIKE ?').join(' OR ');
+        this.selectedWorks.forEach(cts => params.push(cts + ':%'));
+        return `AND (${placeholders})`;
+      },
+
+      _collectRows(stmt) {
+        const rows = [];
+        while (stmt.step()) rows.push(stmt.getAsObject());
+        stmt.free();
+        return rows.map(row => ({
+          ...row,
+          url: `${BASE_URL}${row.chapter_urn}#${row.token_urn}`
+        }));
+      },
+
+      _openIdb() {
+        return new Promise((resolve, reject) => {
+          const req = indexedDB.open('galenus-search', 1);
+          req.onupgradeneeded = (e) => e.target.result.createObjectStore('index');
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      },
+
+      async _loadFromCache() {
+        const idb = await this._openIdb();
+        return new Promise((resolve, reject) => {
+          const req = idb.transaction('index', 'readonly').objectStore('index').get('search-index');
+          req.onsuccess = () => resolve(req.result ?? null);
+          req.onerror = () => reject(req.error);
+        });
+      },
+
+      _runFtsSearch() {
+        const ftsQuery = this._buildFtsQuery(this.searchQuery);
+        if (!ftsQuery) { this.searchResults = []; return; }
         try {
           const params = [ftsQuery];
-          let workFilter = '';
-          if (this.selectedWorks.length > 0) {
-            const placeholders = this.selectedWorks.map(() => 't.token_urn LIKE ?').join(' OR ');
-            workFilter = `AND (${placeholders})`;
-            this.selectedWorks.forEach(cts => params.push(cts + ':%'));
-          }
+          const workFilter = this._buildWorkFilter(params);
           const stmt = this.db.prepare(`
             SELECT t.token_urn, t.title, t.language,
                    CASE WHEN instr(t.token_urn, '@') > 0
@@ -388,18 +406,59 @@
             LIMIT 50
           `);
           stmt.bind(params);
-          const rows = [];
-          while (stmt.step()) rows.push(stmt.getAsObject());
-          stmt.free();
-          this.searchResults = rows.map(row => ({
-            ...row,
-            url: `${BASE_URL}${row.chapter_urn}#${row.token_urn}`
-          }));
+          this.searchResults = this._collectRows(stmt);
         } catch (err) {
           console.error('Search error:', err);
           this.searchResults = [];
         }
       },
+
+      _runLikeSearch() {
+        const likePattern = this._buildLikePattern(this.searchQuery);
+        if (!likePattern) { this.searchResults = []; return; }
+        const column = this.searchByForm ? 'form' : 'lemma';
+        try {
+          const params = [likePattern];
+          const workFilter = this._buildWorkFilter(params);
+          const stmt = this.db.prepare(`
+            SELECT t.token_urn, t.title, t.language,
+                   CASE WHEN instr(t.token_urn, '@') > 0
+                        THEN substr(t.token_urn, 1, instr(t.token_urn, '@') - 1)
+                        ELSE t.token_urn END AS chapter_urn
+            FROM tokens t
+            JOIN search_fts fts ON t.id = fts.rowid
+            WHERE fts.${column} LIKE ?
+            ${workFilter}
+            GROUP BY chapter_urn
+            LIMIT 50
+          `);
+          stmt.bind(params);
+          this.searchResults = this._collectRows(stmt);
+        } catch (err) {
+          console.error('Search error:', err);
+          this.searchResults = [];
+        }
+      },
+
+      async _saveToCache(buf) {
+        const idb = await this._openIdb();
+        return new Promise((resolve, reject) => {
+          const tx = idb.transaction('index', 'readwrite');
+          tx.objectStore('index').put(buf, 'search-index');
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+      },
+
+      _stripDiacritics(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      },
+
+      _useLikeSearch(raw) {
+        // Use LIKE when the query has a leading wildcard — FTS4 can't handle those.
+        return this._stripDiacritics(raw.trim()).startsWith('*');
+      },
+
     }));
   });
 </script>
