@@ -76,8 +76,8 @@
       <img height="64" width="64" style="opacity: 0.7;" src="{{ url_for('static', filename='images/enveloppe.png') }}" alt="enveloppe" />
     </a>
   </footer>
-  <div id="base-url" data-base-url="{{ BASE_URL }}" />
-  <div id="cts-index" data-cts-index="{{ url_for('static', filename='json/cts_index.json') }}" />
+  <div id="base-url" data-base-url="{{ BASE_URL }}"></div>
+  <div id="cts-index" data-cts-index="{{ url_for('static', filename='json/cts_index.json') }}"></div>
   <script src="{{ url_for('static', filename='js/galenus.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>

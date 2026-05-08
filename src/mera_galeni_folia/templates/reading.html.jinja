@@ -24,6 +24,14 @@
         {% include "components/BibliographicItem.html.jinja" %}
       {% endwith %}
     </div>
+    <div class="join grid grid-cols-2 py-8">
+      {% if previous_urn %}
+        <a class="join-item btn btn-outline" href="{{ url_for('reading', urn=previous_urn) }}">Previous</a>
+      {% endif %}
+      {% if next_urn %}
+        <a class="join-item btn btn-outline" href="{{  url_for('reading', urn=next_urn) }}">Next</a>
+      {% endif %}
+    </div>
     <div class="text">
       {% for container in text_containers %}
         {% with text_container = container %}

@@ -6,8 +6,8 @@ async function initCtsSearch() {
     let urlMap;
     try {
         const BASE_URL =
-            document.getElementById("base-url").dataset["base-url"];
-        const ctsIndexUrl = document.getElementById('cts-index').dataset['cts-index'];
+            document.getElementById("base-url").dataset["baseUrl"];
+        const ctsIndexUrl = document.getElementById('cts-index').dataset['ctsIndex'];
         const resp = await fetch(ctsIndexUrl);
         const editions = await resp.json();
 
