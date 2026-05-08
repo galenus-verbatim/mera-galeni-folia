@@ -40,7 +40,7 @@
   {%- set element_map = element_map | default({'head': 'h2', 'lg': 'blockquote', 'p': 'p', 'quote': 'blockquote'}) -%}
   {%- set html_tag = element_map.get(tagname, 'span') -%}
   {%- set css_class = 'tei-' ~ (text_container.tagname or tagname) -%}
-<{{ html_tag }} class="{{ css_class }}" data-attributes="{{ text_container }}">
+<{{ html_tag }} class="{{ css_class }}">
   {%- for child in text_container.children or [] -%}
     {%- with text_container = child -%}
       {%- include 'components/ReadableTextContainer.html.jinja' -%}
