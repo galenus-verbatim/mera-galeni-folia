@@ -320,6 +320,8 @@
 
       runSearch() {
         if (!this.db) return;
+        if (this.searchQuery === "*") return;
+
         const useLike = this._useLikeSearch(this.searchQuery);
         if (useLike) {
           this._runLikeSearch();
