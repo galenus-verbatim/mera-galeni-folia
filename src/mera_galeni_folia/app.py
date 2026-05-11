@@ -251,7 +251,7 @@ def setup():
 
         passage = load_passage_from_urn(urn, JSON_DIR)
 
-        text_containers = passage["text_containers"]
+        text_containers = passage.get("text_containers", [])
 
         if text_containers is None or len(text_containers) == 0:
             abort(404)
