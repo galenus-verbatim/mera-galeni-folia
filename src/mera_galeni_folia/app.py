@@ -29,6 +29,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 JSON_DIR = (ROOT_DIR / "tei_json").absolute()
 
 CTS_INDEX = APP_DIR / "static" / "json" / "cts_index.json"
+FAQ_MARKDOWN = APP_DIR / "static" / "markdown" / "faq.md"
 UPDATES_MARKDOWN = APP_DIR / "static" / "markdown" / "actualites.md"
 
 IMAGES_DATA = load_images_config()
@@ -147,6 +148,17 @@ def setup():
     def credits():
         return (
             render_template("credits.html.jinja"),
+            200,
+            {"Content-Type": "text/html; charset=utf-8"},
+        )
+
+    @app.route("/faq/")
+    def faq():
+        with open(FAQ_MARKDOWN) as f:
+            markdown_content = markdown.markdown(f.read())
+
+        return (
+            render_template("faq.html.jinja", markdown_content=markdown_content),
             200,
             {"Content-Type": "text/html; charset=utf-8"},
         )
