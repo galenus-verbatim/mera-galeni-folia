@@ -121,4 +121,9 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
+<style>
+  div.card:has(article:target) {
+    background-color: var(--color-gray-200, #e5e7eb);
+  }
+</style>
 {% endblock %}
