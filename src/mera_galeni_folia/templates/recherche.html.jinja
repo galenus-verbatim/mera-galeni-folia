@@ -83,15 +83,6 @@
     <table class="table w-full">
       <thead>
         <tr>
-          <th>
-            <span>Limiter la recherche</span>
-            <p>
-              <label class="label mt-4">
-                <input type="checkbox" class="checkbox" @click="toggleAllWorks" />
-                Toutes ?
-              </label>
-            </p>
-          </th>
           <th :aria-sort="`${sortBy === 'editors' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
             <button class="cursor-pointer" @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
           </th>
@@ -128,11 +119,9 @@
             :aria-expanded="openSlideouts[edition.cts] ? 'true' : 'false'"
             @click="editionIsClickable(edition) && (openSlideouts[edition.cts] = !openSlideouts[edition.cts])"
           >
-            <td @click.stop>
-              <input type="checkbox" class="checkbox bg-olive-50" x-model="selectedWorks" :id="edition.cts" :value="edition.cts" />
-            </td>
             <td>
-              <a :href="edition.url" :title="edition.url" x-text="editorLastName(edition.editors)" @click.stop />
+              <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'" class="text-xs"></span>
+              <span x-text="editorLastName(edition.editors)"></span>
             </td>
             <td>
               <a :href="`${baseURL}${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title" @click.stop></a>
@@ -259,12 +248,6 @@
         }
 
         return editionsSorted;
-      },
-
-      toggleAllWorks(evt) {
-        this.selectedWorks = evt.target.checked
-          ? this.editions.map(ed => ed.cts)
-          : [];
       },
 
       updateSort(sortColumn) {
