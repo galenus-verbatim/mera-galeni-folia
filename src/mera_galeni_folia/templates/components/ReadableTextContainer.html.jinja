@@ -36,6 +36,15 @@
       {%- endwith -%}
     {%- endfor -%}
   </div>
+
+{%- elif tagname == "label" -%}
+  <span class="tei-label" data-type="{{ text_container.get("type") }}">
+    {%- for child in text_container.children or [] -%}
+      {%- with text_container = child -%}
+        {%- include 'components/ReadableTextContainer.html.jinja' -%}
+      {%- endwith -%}
+    {%- endfor -%}
+  </span>
 {%- else -%}
   {%- set element_map = element_map | default({'head': 'h2', 'lg': 'blockquote', 'p': 'p', 'quote': 'blockquote'}) -%}
   {%- set html_tag = element_map.get(tagname, 'span') -%}

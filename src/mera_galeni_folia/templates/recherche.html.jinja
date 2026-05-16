@@ -124,7 +124,7 @@
             @click="editionIsClickable(edition) && (openSlideouts[edition.cts] = !openSlideouts[edition.cts])"
           >
             <td>
-              <span class="font-bold" x-text="`${edition.kuehnEditionVolume}.${(edition.kuehnEditionPages || '').split('-')[0]} [${edition.callNumber} Ficht.]`">
+              <span x-text="`${edition.kuehnEditionVolume}.${(edition.kuehnEditionPages || '').split('-')[0]} [${edition.callNumber} Ficht.]`">
             </td>
             <td>
               <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'" class="text-xs"></span>

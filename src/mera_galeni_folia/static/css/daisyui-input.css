@@ -27,6 +27,10 @@ blockquote {
     text-indent: 2em;
 }
 
+.tei-label[data-type="head"] {
+    @apply font-bold mr-2;
+}
+
 .tei-lb {
     @apply text-zinc-500 text-xs;
 }
