@@ -12,7 +12,7 @@
     <div class="bg-olive-200 p-8 rounded-sm shadow-md w-full">
       <fieldset class="fieldset flex">
         <input type="radio" class="radio bg-olive-100" id="toutes" name="author" x-model="selectedAuthor" value="Toutes" checked="true" />
-        <label class="label mr-4" for="gal">Toutes</label>
+        <label class="label mr-4" for="gal">Tout le corpus</label>
 
         <input type="radio" class="radio bg-olive-100" id="gal" name="author" x-model="selectedAuthor" value="Galenus" />
         <label class="label mr-4" for="gal">Gal.</label>
@@ -80,9 +80,13 @@
   </div>
 
   <div class="overflow-auto max-h-1/2-screen mt-4">
+    <span class="prose text-sm text-gray-500">Trier par : </span>
     <table class="table w-full">
       <thead>
         <tr>
+          <th :aria-sort="`${sortBy === 'page_kuehn' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
+            <button class="cursor-pointer" @click="updateSort('page_kuehn')">Page Kühn</button><span aria-hidden="true"></span>
+          </th>
           <th :aria-sort="`${sortBy === 'editors' ? (sortAscending ? 'ascending' : 'descending') : 'none'}`">
             <button class="cursor-pointer" @click="updateSort('editors')">Editeur(s)</button><span aria-hidden="true"></span>
           </th>
@@ -119,6 +123,9 @@
             :aria-expanded="openSlideouts[edition.cts] ? 'true' : 'false'"
             @click="editionIsClickable(edition) && (openSlideouts[edition.cts] = !openSlideouts[edition.cts])"
           >
+            <td>
+              <span class="font-bold" x-text="`${edition.kuehnEditionVolume}.${(edition.kuehnEditionPages || '').split('-')[0]} [${edition.callNumber} Ficht.]`">
+            </td>
             <td>
               <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'" class="text-xs"></span>
               <span x-text="editorLastName(edition.editors)"></span>
@@ -173,7 +180,7 @@
       baseURL: BASE_URL,
       ignoreDuplicates: false,
       sortAscending: true,
-      sortBy: 'tags',
+      sortBy: 'page_kuehn',
       selectedAuthor: 'Toutes',
       selectedTags: [],
       selectedWorks: [],
@@ -208,7 +215,17 @@
 
       sortEditions(editionsFiltered) {
         let editionsSorted = editionsFiltered;
-        if (this.sortBy === 'editors') {
+
+        if (this.sortBy === "page_kuehn") {
+          editionsSorted = editionsFiltered.toSorted((a, b) => {
+            const aFichtner = parseInt((a.callNumber || '0').replace(/[^\d]/, ""));
+            const bFichtner = parseInt((b.callNumber || '0').replace(/[^\d]/, ""));
+
+            return this.sortAscending
+              ? aFichtner - bFichtner
+              : bFichtner - aFichtner;
+          })
+        } else if (this.sortBy === 'editors') {
           editionsSorted = editionsFiltered.toSorted((a, b) => {
             const aEditor = this.editorLastName(a.editors);
             const bEditor = this.editorLastName(b.editors);

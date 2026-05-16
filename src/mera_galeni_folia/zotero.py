@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-import locale
+import re
 import time
 
 from pathlib import Path
@@ -230,7 +230,9 @@ def sort_by_latin_title(items: list[dict]) -> list[dict]:
 def sort_by_fichtner(items: list[dict]) -> list[dict]:
     """fichtner — numeric sort on callNumber."""
     with_cn = [i for i in items if i.get("callNumber")]
-    return sorted(with_cn, key=lambda i: _int_or_zero(i["callNumber"]))
+    return sorted(
+        with_cn, key=lambda i: _int_or_zero(re.sub(r"[^\d]", "", i["callNumber"]))
+    )
 
 
 def sort_by_kuehn(items: list[dict]) -> list[dict]:

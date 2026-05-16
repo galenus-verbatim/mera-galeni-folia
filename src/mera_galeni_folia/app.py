@@ -95,8 +95,8 @@ def write_cts_index(editions):
 def setup():
     config = default_config
 
-    config["static_folder"] = (APP_DIR / "static").absolute()
-    config["template_folder"] = (APP_DIR / "templates").absolute()
+    config["static_folder"] = (APP_DIR / "static").absolute()  # ty:ignore[invalid-assignment]
+    config["template_folder"] = (APP_DIR / "templates").absolute()  # ty:ignore[invalid-assignment]
 
     app = create_app(
         json_dir=JSON_DIR,
@@ -179,6 +179,7 @@ def setup():
         # Build lookup from work-level CTS URN to multi-language titles
         urn_to_titles: dict[str, dict] = {}
         urn_to_tags: dict[str, list] = {}
+        urn_to_kuehn: dict[str, dict] = {}
         urls: dict[str, str] = {}
 
         for opus in zotero_data:
@@ -200,9 +201,15 @@ def setup():
                 else:
                     urn_to_tags[cts_urn] = addable_tags
 
-                urls[cts_urn] = opus.get("url")
+                urn_to_kuehn[cts_urn] = {
+                    "kuehnEditionVolume": opus.get("kuehnEditionVolume"),
+                    "kuehnEditionPages": opus.get("kuehnEditionPages"),
+                    "callNumber": opus.get("callNumber"),
+                }
 
-        # Enrich editions with multi-language titles
+                urls[cts_urn] = opus.get("url")  # ty:ignore[invalid-assignment]
+
+        # Enrich editions with multi-language titles and Kuehn/Fichtner info
         for edition in editions:
             edition_urn = edition.get("cts", "")
             titles = next(
@@ -228,6 +235,21 @@ def setup():
 
             if edition_tags:
                 edition["tags"] = edition_tags
+
+            kuehn_info = next(
+                (
+                    info
+                    for urn, info in urn_to_kuehn.items()
+                    if edition_urn.startswith(urn)
+                ),
+                None,
+            )
+            if kuehn_info:
+                edition.update(kuehn_info)
+            else:
+                edition.setdefault("kuehnEditionVolume", None)
+                edition.setdefault("kuehnEditionPages", None)
+                edition.setdefault("callNumber", None)
 
             url = next(url for urn, url in urls.items() if edition_urn.startswith(urn))
 
@@ -301,7 +323,7 @@ def setup():
 
         imgkuhn = None
         if kuehn_volume is not None:
-            imgkuhn = get_iiif_config(IMAGES_DATA, cts_urn, kuehn_volume)
+            imgkuhn = get_iiif_config(IMAGES_DATA, str(cts_urn), kuehn_volume)
 
         image_vars = None
         if imgkuhn is not None:

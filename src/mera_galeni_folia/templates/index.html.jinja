@@ -54,7 +54,7 @@
     {# titLatAbbr (CMG) #}
     <ul id="list-titLatAbbr" class="list title-list"{{ ' hidden' if default_sort != 'titLatAbbr' else '' }}>
       {% for item in sorted_lists.titLatAbbr %}
-      <li class="list-row text-zinc-900>
+      <li class="list-row text-zinc-900">
         <a href="#{{ item.ctsURN }}">
           <div class="italic">{{ item.latinAbbreviatedTitle }} <span class="text-zinc-600">[{{ item.callNumber }}]</span></div>
         </a>
