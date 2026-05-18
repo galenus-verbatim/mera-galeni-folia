@@ -342,7 +342,6 @@ def setup():
         if kuehn_volume is not None:
             imgkuhn = get_iiif_config(IMAGES_DATA, str(urn), kuehn_volume)
 
-        print(imgkuhn)
         image_vars = None
         if imgkuhn is not None:
             image_vars = f"var imgkuhn = {json.dumps(imgkuhn)};"
