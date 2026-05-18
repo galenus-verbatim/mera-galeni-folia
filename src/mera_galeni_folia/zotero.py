@@ -70,6 +70,21 @@ def _get_collection_by_name(
     ]
 
 
+GITHUB_CTS_BASE = "https://github.com/galenus-verbatim/galenus_cts/tree/master/data"
+
+
+def _github_url_from_cts_urn(cts_urn: str | None) -> str | None:
+    if not cts_urn:
+        return None
+    parts = cts_urn.split(":")
+    if len(parts) < 4:
+        return None
+    work_parts = parts[3].split(".")
+    if len(work_parts) < 2:
+        return None
+    return f"{GITHUB_CTS_BASE}/{work_parts[0]}/{work_parts[1]}"
+
+
 def _parse_extra(extra: str | None) -> dict[str, str]:
     if not extra:
         return {}
@@ -171,6 +186,7 @@ def read_zotero_json(path: Path | None = None) -> list[dict[str, Any]]:
         ]
 
         extra = _parse_extra(opus.get("extra"))
+        cts_urn = extra.get("CTS URN")
 
         result: dict[str, Any] = {
             **opus,
@@ -178,7 +194,7 @@ def read_zotero_json(path: Path | None = None) -> list[dict[str, Any]]:
             "attachments": attachments,
             "author": author,
             "criticalEditions": critical_editions,
-            "ctsURN": extra.get("CTS URN"),
+            "ctsURN": cts_urn,
             "englishTitle": extra.get("English Title"),
             "englishShortTitle": extra.get("English Short Title"),
             "extra": extra,
@@ -186,6 +202,7 @@ def read_zotero_json(path: Path | None = None) -> list[dict[str, Any]]:
             "fichtnerURL": fichtner_url,
             "frenchTitle": extra.get("French Title"),
             "galLatURL": gal_lat_url,
+            "githubURL": _github_url_from_cts_urn(cts_urn),
             "greekTitle": extra.get("Original Title"),
             "kuehnEdition": kuehn_edition,
             "kuehnEditionKey": kuehn_edition["key"] if kuehn_edition else None,

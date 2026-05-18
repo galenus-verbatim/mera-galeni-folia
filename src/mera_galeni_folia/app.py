@@ -35,6 +35,19 @@ UPDATES_MARKDOWN = APP_DIR / "static" / "markdown" / "actualites.md"
 IMAGES_DATA = load_images_config()
 
 
+def _find_page_ns(
+    text_containers, first=None, last=None
+) -> tuple[str | None, str | None]:
+    for tc in text_containers:
+        if tc.get("tagname") == "pb":
+            n = tc.get("n")
+            if first is None:
+                first = n
+            last = n
+        first, last = _find_page_ns(tc.get("children", []), first, last)
+    return first, last
+
+
 def _assign_line_ids(text_containers, current_page_n=None):
     for text_container in text_containers:
         if text_container.get("tagname") == "pb":
@@ -296,7 +309,7 @@ def setup():
         previous_urn = passage["previous"]
         next_urn = passage["next"]
 
-        toc = load_toc_from_urn(urn, JSON_DIR)
+        toc = load_toc_from_urn(urn, JSON_DIR)  # ty: ignore
         zotero_data = read_zotero_json()
         zotero_item = None
 
@@ -316,28 +329,50 @@ def setup():
         for translation in zotero_item.get("modernTranslations", []):
             translation["_formatted"] = _format_modern_translation(translation)
         for edition in zotero_item.get("verbatimEditions", []):
-            cts_urn = _extract_cts_urn(edition.get("extra", ""))
-            edition["_route"] = url_for("reading", urn=cts_urn) if cts_urn else "#"
+            verbatim_edition_urn = _extract_cts_urn(edition.get("extra", ""))
+            edition["_route"] = (
+                url_for("reading", urn=verbatim_edition_urn)
+                if verbatim_edition_urn
+                else "#"
+            )
 
         kuehn_volume = zotero_item.get("kuehnEditionVolume")
 
         imgkuhn = None
         if kuehn_volume is not None:
-            imgkuhn = get_iiif_config(IMAGES_DATA, str(cts_urn), kuehn_volume)
+            imgkuhn = get_iiif_config(IMAGES_DATA, str(urn), kuehn_volume)
 
         image_vars = None
         if imgkuhn is not None:
             image_vars = f"var imgkuhn = {json.dumps(imgkuhn)};"
 
         _assign_line_ids(text_containers)
+        current_page_n, last_page_n = _find_page_ns(text_containers)
+
+        page_citation = None
+
+        if current_page_n == last_page_n:
+            page_citation = f"p. {str(current_page_n).split('.')[-1]}"
+        else:
+            page_citation = f"pp. {str(current_page_n).split('.')[-1]}–{str(last_page_n).split('.')[-1]}"
+
+        critical_edition = None
+        for edition in zotero_item.get("verbatimEditions", []):
+            verbatim_edition_urn = _extract_cts_urn(edition.get("extra", ""))
+
+            if str(urn).startswith(str(verbatim_edition_urn)):
+                critical_edition = edition
+                break
 
         return (
             render_template(
                 "reading.html.jinja",
+                critical_edition=critical_edition,
                 current_urn=urn,
                 edition_title=toc.get("title", ""),
                 image_vars=image_vars,
                 next_urn=next_urn,
+                page_citation=page_citation,
                 previous_urn=previous_urn,
                 text_containers=text_containers,
                 toc=toc,
