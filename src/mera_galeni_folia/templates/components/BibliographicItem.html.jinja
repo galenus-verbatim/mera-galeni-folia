@@ -62,9 +62,16 @@
         {% endif %}
         {% if item.modernTranslations %}
         <div>
-        <strong class="text-zinc-500">translationes recentiores</strong>
+        <strong class="text-zinc-600">translationes recentiores:</strong>
         <span>{{ item.modernTranslations | map(attribute='_formatted') | join('; ') }}</span>
         </div>
         {% endif %}
     </section>
+    {% if item.notes %}
+      <section class="mt-8 text-zinc-500 w-full">
+        {% for note in item.notes %}
+          <p>{{ note.note }}</p>
+        {% endfor %}
+      </section>
+    {% endif %}
 </article>

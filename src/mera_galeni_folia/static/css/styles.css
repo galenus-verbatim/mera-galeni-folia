@@ -11,6 +11,7 @@
     --color-yellow-700: oklch(55.4% 0.135 66.442);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-500: oklch(55.1% 0.027 264.364);
+    --color-zinc-400: oklch(70.5% 0.015 286.067);
     --color-zinc-500: oklch(55.2% 0.016 285.938);
     --color-zinc-600: oklch(44.2% 0.017 285.786);
     --color-zinc-900: oklch(21% 0.006 285.885);
@@ -2711,6 +2712,9 @@
   .text-yellow-700 {
     color: var(--color-yellow-700);
   }
+  .text-zinc-400 {
+    color: var(--color-zinc-400);
+  }
   .text-zinc-500 {
     color: var(--color-zinc-500);
   }
@@ -2744,6 +2748,44 @@
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .prose-zinc {
+    --tw-prose-body: oklch(37% 0.013 285.805);
+    --tw-prose-headings: oklch(21% 0.006 285.885);
+    --tw-prose-lead: oklch(44.2% 0.017 285.786);
+    --tw-prose-links: oklch(21% 0.006 285.885);
+    --tw-prose-bold: oklch(21% 0.006 285.885);
+    --tw-prose-counters: oklch(55.2% 0.016 285.938);
+    --tw-prose-bullets: oklch(87.1% 0.006 286.286);
+    --tw-prose-hr: oklch(92% 0.004 286.32);
+    --tw-prose-quotes: oklch(21% 0.006 285.885);
+    --tw-prose-quote-borders: oklch(92% 0.004 286.32);
+    --tw-prose-captions: oklch(55.2% 0.016 285.938);
+    --tw-prose-kbd: oklch(21% 0.006 285.885);
+    --tw-prose-kbd-shadows: color-mix(in oklab, oklch(21% 0.006 285.885) 10%, transparent);
+    --tw-prose-code: oklch(21% 0.006 285.885);
+    --tw-prose-pre-code: oklch(92% 0.004 286.32);
+    --tw-prose-pre-bg: oklch(27.4% 0.006 286.033);
+    --tw-prose-th-borders: oklch(87.1% 0.006 286.286);
+    --tw-prose-td-borders: oklch(92% 0.004 286.32);
+    --tw-prose-invert-body: oklch(87.1% 0.006 286.286);
+    --tw-prose-invert-headings: #fff;
+    --tw-prose-invert-lead: oklch(70.5% 0.015 286.067);
+    --tw-prose-invert-links: #fff;
+    --tw-prose-invert-bold: #fff;
+    --tw-prose-invert-counters: oklch(70.5% 0.015 286.067);
+    --tw-prose-invert-bullets: oklch(44.2% 0.017 285.786);
+    --tw-prose-invert-hr: oklch(37% 0.013 285.805);
+    --tw-prose-invert-quotes: oklch(96.7% 0.001 286.375);
+    --tw-prose-invert-quote-borders: oklch(37% 0.013 285.805);
+    --tw-prose-invert-captions: oklch(70.5% 0.015 286.067);
+    --tw-prose-invert-kbd: #fff;
+    --tw-prose-invert-kbd-shadows: rgb(255 255 255 / 10%);
+    --tw-prose-invert-code: #fff;
+    --tw-prose-invert-pre-code: oklch(87.1% 0.006 286.286);
+    --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
+    --tw-prose-invert-th-borders: oklch(44.2% 0.017 285.786);
+    --tw-prose-invert-td-borders: oklch(37% 0.013 285.805);
   }
   .btn-outline {
     @layer daisyui.l1 {

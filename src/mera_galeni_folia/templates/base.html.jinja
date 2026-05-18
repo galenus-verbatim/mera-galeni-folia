@@ -51,7 +51,7 @@
     </a>
   </div>
   {% block content %}{% endblock %}
-  <footer id="footer" class="bg-olive-200 flex justify-between footer sm:footer-horizontal p-10">
+  <footer id="footer" class="bg-olive-200 flex justify-between footer sm:footer-horizontal p-8">
     <a href="https://www.iufrance.fr/" title="Institut universitaire de France">
       <img height="64" width="64" alt="Institut Universitaire de France" src="{{ url_for('static', filename='images/logo_IUF.png') }}" />
     </a>
@@ -69,6 +69,12 @@
     </a>
     <a href="https://documentation.huma-num.fr/hebergement-web/" title="Site hébergé par Huma-Num">
       <img height="64" width="64" alt="Site hébergé par Huma-Num" src="{{ url_for('static', filename='images/logo_hn.png') }}" />
+    </a>
+    <a href="https://epidoc.stoa.org" title="EpiDoc">
+      <img height="64" width="64" alt="Site EpiDoc" src="{{ url_for('static', filename='images/EpiDoc_Logo.jpeg') }}" />
+    </a>
+    <a href="https://github.com/galenus-verbatim" title="GitHub">
+      <img height="64" width="64" alt="Source Galenus Verbatim" src="{{ url_for('static', filename='images/github_logo.svg') }}" />
     </a>
     <a
       aria-label="email-link"
