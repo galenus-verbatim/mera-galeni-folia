@@ -342,14 +342,13 @@ def setup():
         if kuehn_volume is not None:
             imgkuhn = get_iiif_config(IMAGES_DATA, str(urn), kuehn_volume)
 
+        print(imgkuhn)
         image_vars = None
         if imgkuhn is not None:
             image_vars = f"var imgkuhn = {json.dumps(imgkuhn)};"
 
         _assign_line_ids(text_containers)
         current_page_n, last_page_n = _find_page_ns(text_containers)
-
-        page_citation = None
 
         if current_page_n == last_page_n:
             page_citation = f"p. {str(current_page_n).split('.')[-1]}"

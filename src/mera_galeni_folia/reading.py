@@ -101,6 +101,7 @@ def get_iiif_config(
 
     return {
         "pdiff": vol_config.get("pdiff", 0),
+        "count": vol_config.get("count", 0),
         "vol": vol,
         "abbr": abbr,
         "url": vol_config.get("url", ""),

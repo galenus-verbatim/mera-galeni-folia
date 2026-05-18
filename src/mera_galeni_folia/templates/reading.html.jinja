@@ -18,7 +18,7 @@
   {% endif %}
 
   {# ── Center column: Greek / Latin text ── #}
-  <div class="max-w-2/3 mx-4">
+  <div class="max-w-1/3 mx-4">
     <div class="bg-white card mb-4 p-4 shadow-sm">
       {% with item = zotero_item %}
         {% include "components/BibliographicItem.html.jinja" %}
@@ -61,22 +61,23 @@
     </div>
   </div>
 
-  {# ── Right column: IIIF facsimile viewer (hidden while we figure out access to numerabilis' IIIF server) ── #}
-  {# —— Possible IIIF source: https://www.digitale-sammlungen.de/en/view/bsb10726624?page=300 —— #}
-  {% if false %}
-    <div id="pagimage">
-      <header id="image_nav">
-        <a class="prev" id="image_prev" title="Page précédente">&#9664;</a>
-        <span id="image_title"></span>
-        <a class="next" id="image_next" title="Page suivante">&#9654;</a>
-      </header>
-      <div id="osd-viewer" style="width:100%; height:600px;"></div>
-    </div>
-  {% endif %}
+  {# ── Right column: IIIF facsimile viewer ── #}
+  <div id="pagimage" class="h-full w-1/3">
+    <header id="image_nav" class="text-center">
+      <a class="prev" id="image_prev" title="Page précédente">&#9664;</a>
+      <span id="image_title"></span>
+      <a class="next" id="image_next" title="Page suivante">&#9654;</a>
+    </header>
+    <div id="osd-viewer" style="width:100%; height:600px;"></div>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+{% if image_vars %}
+<script>{{ image_vars | safe }}</script>
+{% endif %}
+<script src="{{ url_for('static', filename='vendor/js/openseadragon.min.js') }}"></script>
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", () => {
     let hash = document.location.hash;

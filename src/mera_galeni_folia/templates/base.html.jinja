@@ -87,7 +87,7 @@
   </footer>
   <div id="base-url" data-base-url="{{ BASE_URL }}"></div>
   <div id="cts-index" data-cts-index="{{ url_for('static', filename='json/cts_index.json') }}"></div>
-  <script src="{{ url_for('static', filename='js/galenus.js') }}"></script>
   {% block scripts %}{% endblock %}
+  <script src="{{ url_for('static', filename='js/galenus.js') }}"></script>
 </body>
 </html>
