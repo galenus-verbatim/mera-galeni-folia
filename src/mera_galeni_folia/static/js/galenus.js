@@ -71,7 +71,7 @@ if (osdContainer && typeof imgkuhn !== "undefined" && imgkuhn.count > 0) {
     const firstEditionPage = firstPb
         ? parseInt(String(firstPb.dataset.n).split(".").pop(), 10)
         : 1;
-    const initialPage = firstEditionPage + imgkuhn.pdiff - 2;
+    const initialPage = firstEditionPage + imgkuhn.pdiff - 1;
 
     const osdViewer = OpenSeadragon({
         id: "osd-viewer",
@@ -81,7 +81,7 @@ if (osdContainer && typeof imgkuhn !== "undefined" && imgkuhn.count > 0) {
         sequenceMode: true,
         preserveViewport: true,
         initialPage,
-        defaultZoomLevel: 1,
+        defaultZoomLevel: 0.5,
     });
 
     function goToEditionPage(editionPageStr) {
