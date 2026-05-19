@@ -1,0 +1,186 @@
+<div id="pagimage" class="h-full w-1/3" x-data="iiifViewer">
+  <header id="image_nav" class="text-center">
+    <a class="prev" id="image_prev" title="Page précédente" @click="prevPage()" style="cursor:pointer">&#9664;</a>
+    <span id="image_title">
+      <span x-html="titleText"></span>
+      <span x-show="recordUrl"> — <a target="_blank" class="external text-yellow-700 hover:text-yellow-600" :href="recordUrl">Numerabilis</a></span>
+    </span>
+    <a class="next" id="image_next" title="Page suivante" @click="nextPage()" style="cursor:pointer">&#9654;</a>
+  </header>
+  <div class="relative">
+    <div id="osd-viewer" style="width:100%; height:600px;"></div>
+    <div id="iiif-loading" class="absolute inset-0 flex items-center justify-center pointer-events-none" x-show="loading">
+      <svg class="iiif-spinner" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Chargement…" role="img">
+        <circle cx="28" cy="28" r="24" stroke="white" stroke-width="4" stroke-opacity="0.3"/>
+        <circle cx="28" cy="28" r="24" stroke="white" stroke-width="4" stroke-dasharray="37.7 113.1" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+  const OSD_PREFIX_URL =
+    'https://cdn.jsdelivr.net/npm/openseadragon@6.0.2/build/openseadragon/images/';
+
+  Alpine.data('iiifViewer', () => ({
+    loading: false,
+    titleText: '',
+    recordUrl: '',
+    activeEdition: null,
+    currentImageNo: 1,
+    configs: {},
+    _viewer: null,
+
+    init() {
+      const configs = {};
+      if (typeof imgkuhn !== 'undefined' && imgkuhn.count > 0) configs.kuhn = imgkuhn;
+      if (typeof imgbale !== 'undefined') configs.bale = imgbale;
+      if (typeof imgchartier !== 'undefined') configs.chartier = imgchartier;
+      this.configs = configs;
+
+      const editionNames = Object.keys(configs);
+      if (editionNames.length === 0) return;
+
+      const defaultEdition = editionNames[0];
+      const defaultConfig = configs[defaultEdition];
+      let initialImageNo = 1;
+      if (defaultEdition === 'kuhn') {
+        const firstPb = document.querySelector('.tei-pb');
+        if (firstPb) {
+          const p = parseInt(String(firstPb.dataset.n).split('.').pop(), 10);
+          if (!isNaN(p)) initialImageNo = p + this.effectivePdiff(defaultConfig, p);
+        }
+      }
+      this.switchEdition(defaultEdition, initialImageNo);
+
+      document.querySelectorAll('.tei-pb').forEach(span => {
+        span.style.cursor = 'pointer';
+        span.addEventListener('click', () => this.navigateToPage('kuhn', span.dataset.n));
+      });
+      document.querySelectorAll('.tei-milestone').forEach(span => {
+        const unit = span.dataset.unit;
+        if (unit === 'ed1page' && configs.bale)
+          span.addEventListener('click', () => this.navigateToPage('bale', span.dataset.n));
+        else if (unit === 'ed2page' && configs.chartier)
+          span.addEventListener('click', () => this.navigateToPage('chartier', span.dataset.n));
+      });
+    },
+
+    effectivePdiff(config, pageNum) {
+      let pdiff = config.pdiff;
+      for (const [threshold, newPdiff] of Object.entries(config.pholes || {})) {
+        if (pageNum >= parseInt(threshold, 10)) pdiff = newPdiff;
+      }
+      return pdiff;
+    },
+
+    padded(imageNo) {
+      return String(imageNo).padStart(4, '0');
+    },
+
+    updateTitle() {
+      if (!this.activeEdition) return;
+      const config = this.configs[this.activeEdition];
+      const p = this.padded(this.currentImageNo);
+      this.titleText = config.title.replace(/%%/g, p);
+      this.recordUrl = config.record ? config.record.replace(/%%/g, p) : '';
+    },
+
+    _makeTileSource(config, imageNo) {
+      return {
+        type: 'image',
+        url: config.url.replace(/%%/g, this.padded(imageNo)),
+        buildPyramid: false,
+        crossOriginPolicy: 'Anonymous',
+      };
+    },
+
+    _scheduleHide(viewer) {
+      const poll = () => {
+        if (viewer !== this._viewer) return;
+        const item = viewer.world.getItemAt(0);
+        if (item && item.getFullyLoaded()) { this.loading = false; return; }
+        requestAnimationFrame(poll);
+      };
+      requestAnimationFrame(poll);
+    },
+
+    _displayPage(imageNo) {
+      const config = this.configs[this.activeEdition];
+      this.currentImageNo = imageNo;
+      if (config.count > 0) {
+        this.loading = true;
+        this._viewer.goToPage(imageNo - 1);
+        this._scheduleHide(this._viewer);
+      } else {
+        this.openImage(config, imageNo);
+      }
+      this.updateTitle();
+    },
+
+    openImage(config, imageNo) {
+      this.loading = true;
+      this._viewer.open(this._makeTileSource(config, imageNo));
+      this._scheduleHide(this._viewer);
+    },
+
+    switchEdition(edition, imageNo) {
+      this.loading = true;
+      if (this._viewer) { this._viewer.destroy(); this._viewer = null; }
+      this.activeEdition = edition;
+      this.currentImageNo = imageNo;
+      const config = this.configs[edition];
+
+      const baseOptions = {
+        id: 'osd-viewer',
+        prefixUrl: OSD_PREFIX_URL,
+        defaultZoomLevel: 0.9,
+        preserveViewport: true,
+      };
+
+      if (config.count > 0) {
+        this._viewer = OpenSeadragon({
+          ...baseOptions,
+          tileSources: Array.from({ length: config.count }, (_, i) => this._makeTileSource(config, i + 1)),
+          sequenceMode: true,
+          initialPage: imageNo - 1,
+        });
+      } else {
+        this._viewer = OpenSeadragon({
+          ...baseOptions,
+          tileSources: [this._makeTileSource(config, imageNo)],
+          sequenceMode: false,
+        });
+      }
+
+      this._scheduleHide(this._viewer);
+      this.updateTitle();
+    },
+
+    navigateToPage(edition, n) {
+      const config = this.configs[edition];
+      if (!config) return;
+      const pageNum = parseInt(String(n).split('.').pop(), 10);
+      if (isNaN(pageNum)) return;
+      const imageNo = pageNum + this.effectivePdiff(config, pageNum);
+
+      if (this.activeEdition === edition && this._viewer) {
+        this._displayPage(imageNo);
+      } else {
+        this.switchEdition(edition, imageNo);
+      }
+    },
+
+    prevPage() {
+      this._displayPage(Math.max(1, this.currentImageNo - 1));
+    },
+
+    nextPage() {
+      const config = this.configs[this.activeEdition];
+      const max = config.count > 0 ? config.count : Infinity;
+      this._displayPage(Math.min(max, this.currentImageNo + 1));
+    },
+  }));
+});
+</script>

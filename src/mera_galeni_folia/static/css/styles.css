@@ -8,6 +8,7 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
     --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-yellow-600: oklch(68.1% 0.162 75.834);
     --color-yellow-700: oklch(55.4% 0.135 66.442);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-500: oklch(55.1% 0.027 264.364);
@@ -2939,6 +2940,13 @@
       }
     }
   }
+  .hover\:text-yellow-600 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-yellow-600);
+      }
+    }
+  }
   .sm\:footer-horizontal {
     @media (width >= 40rem) {
       @layer daisyui.l1.l2 {
@@ -3434,13 +3442,4 @@ blockquote {
       --tw-drop-shadow-size: initial;
     }
   }
-}
-
-@keyframes iiif-spin {
-  to { transform: rotate(360deg); }
-}
-.iiif-spinner circle:last-child {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: iiif-spin 0.9s linear infinite;
 }

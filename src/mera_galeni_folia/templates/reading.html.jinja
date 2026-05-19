@@ -62,22 +62,7 @@
   </div>
 
   {# ── Right column: IIIF facsimile viewer ── #}
-  <div id="pagimage" class="h-full w-1/3">
-    <header id="image_nav" class="text-center">
-      <a class="prev" id="image_prev" title="Page précédente">&#9664;</a>
-      <span id="image_title"></span>
-      <a class="next" id="image_next" title="Page suivante">&#9654;</a>
-    </header>
-    <div class="relative">
-      <div id="osd-viewer" style="width:100%; height:600px;"></div>
-      <div id="iiif-loading" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
-        <svg class="iiif-spinner" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Chargement…" role="img">
-          <circle cx="28" cy="28" r="24" stroke="white" stroke-width="4" stroke-opacity="0.3"/>
-          <circle cx="28" cy="28" r="24" stroke="white" stroke-width="4" stroke-dasharray="37.7 113.1" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </div>
-  </div>
+  {% include 'components/IIIFViewer.html.jinja' %}
 </div>
 {% endblock %}
 
@@ -86,6 +71,7 @@
 <script>{{ image_vars | safe }}</script>
 {% endif %}
 <script src="{{ url_for('static', filename='vendor/js/openseadragon.min.js') }}"></script>
+<script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", () => {
     let hash = document.location.hash;
