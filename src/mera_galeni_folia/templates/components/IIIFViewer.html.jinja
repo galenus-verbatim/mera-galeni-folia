@@ -49,7 +49,13 @@ document.addEventListener('alpine:init', () => {
         const firstPb = document.querySelector('.tei-pb');
         if (firstPb) {
           const p = parseInt(String(firstPb.dataset.n).split('.').pop(), 10);
-          if (!isNaN(p)) initialImageNo = p + this.effectivePdiff(defaultConfig, p);
+          if (!isNaN(p)) {
+            const firstToken = document.querySelector('.text span[id]');
+            const startsBeforePb = firstToken &&
+              (firstToken.compareDocumentPosition(firstPb) & Node.DOCUMENT_POSITION_FOLLOWING);
+            const startP = startsBeforePb ? p - 1 : p;
+            initialImageNo = startP + this.effectivePdiff(defaultConfig, startP);
+          }
         }
       }
       this.switchEdition(defaultEdition, initialImageNo);
