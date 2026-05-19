@@ -342,9 +342,29 @@ def setup():
         if kuehn_volume is not None:
             imgkuhn = get_iiif_config(IMAGES_DATA, str(urn), kuehn_volume)
 
-        image_vars = None
+        work_urn = str(urn).rsplit(":", 1)[0]
+        urn_image_map = IMAGES_DATA.get(work_urn, {})
+
+        imgbale = None
+        bale_vol = urn_image_map.get("bale")
+        if bale_vol:
+            imgbale = get_iiif_config(IMAGES_DATA, str(urn), bale_vol, edition="bale", abbr="B")
+
+        imgchartier = None
+        chartier_vol = urn_image_map.get("chartier")
+        if chartier_vol:
+            imgchartier = get_iiif_config(
+                IMAGES_DATA, str(urn), chartier_vol, edition="chartier", abbr="Ch"
+            )
+
+        image_parts = []
         if imgkuhn is not None:
-            image_vars = f"var imgkuhn = {json.dumps(imgkuhn)};"
+            image_parts.append(f"var imgkuhn = {json.dumps(imgkuhn)};")
+        if imgbale is not None:
+            image_parts.append(f"var imgbale = {json.dumps(imgbale)};")
+        if imgchartier is not None:
+            image_parts.append(f"var imgchartier = {json.dumps(imgchartier)};")
+        image_vars = "\n".join(image_parts) if image_parts else None
 
         _assign_line_ids(text_containers)
         current_page_n, last_page_n = _find_page_ns(text_containers)

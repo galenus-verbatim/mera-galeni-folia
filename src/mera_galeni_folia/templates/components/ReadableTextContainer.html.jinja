@@ -22,7 +22,8 @@
 {%- elif tagname == "milestone" -%}
 <span
   class="tei-milestone cursor-pointer"
-  data-attributes="{{ text_container }}"
+  data-unit="{{ text_container.unit }}"
+  data-n="{{ text_container.n }}"
   title="{%- if text_container.unit == "ed1page"%}Bâle{%- elif text_container.unit == "ed2page" %}Chartier{% endif %} {{ text_container.n }}"
 >&nbsp;</span>
 {%- elif tagname == 'pb' -%}

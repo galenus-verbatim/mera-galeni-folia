@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import json
+import re
 
 from pathlib import Path
 
@@ -99,11 +100,20 @@ def get_iiif_config(
     if not vol_config:
         return None
 
+    url_template = vol_config.get("url", "")
+    bibnum_match = re.search(r"bibnum:([^:]+):", url_template)
+    record = None
+    if bibnum_match:
+        bibnum = bibnum_match.group(1)
+        record = f"https://numerabilis.u-paris.fr/medica/bibliotheque-numerique/resultats/index.php?do=page&cote={bibnum}&p=%%"
+
     return {
         "pdiff": vol_config.get("pdiff", 0),
+        "pholes": vol_config.get("pholes", {}),
         "count": vol_config.get("count", 0),
         "vol": vol,
         "abbr": abbr,
-        "url": vol_config.get("url", ""),
+        "url": url_template,
         "title": vol_config.get("title", ""),
+        "record": record,
     }
