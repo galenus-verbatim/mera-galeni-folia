@@ -152,6 +152,7 @@
                   <li>
                     <a :href="result.url" class="text-yellow-700" x-text="result.token_urn"></a>
                     <span class="text-gray-500 ml-2" x-text="result.language === 'grc' ? 'grec' : 'latin'"></span>
+                    <span class="text-gray-700 ml-2 font-mono text-xs" x-html="_loadContext(result.id)"></span>
                   </li>
                 </template>
               </ul>
@@ -396,7 +397,7 @@
           const params = [ftsQuery];
           const workFilter = this._buildWorkFilter(params);
           const stmt = this.db.prepare(`
-            SELECT t.token_urn, t.title, t.language,
+            SELECT t.id, t.token_urn, t.title, t.language,
                    CASE WHEN instr(t.token_urn, '@') > 0
                         THEN substr(t.token_urn, 1, instr(t.token_urn, '@') - 1)
                         ELSE t.token_urn END AS chapter_urn
@@ -423,7 +424,7 @@
           const params = [likePattern];
           const workFilter = this._buildWorkFilter(params);
           const stmt = this.db.prepare(`
-            SELECT t.token_urn, t.title, t.language,
+            SELECT t.id, t.token_urn, t.title, t.language,
                    CASE WHEN instr(t.token_urn, '@') > 0
                         THEN substr(t.token_urn, 1, instr(t.token_urn, '@') - 1)
                         ELSE t.token_urn END AS chapter_urn
@@ -439,6 +440,29 @@
         } catch (err) {
           console.error('Search error:', err);
           this.searchResults = [];
+        }
+      },
+
+      _loadContext(matchId) {
+        try {
+          const stmt = this.db.prepare(`
+            SELECT t.original_form, t.token_urn, (t.id = ?) AS is_match
+            FROM tokens t
+            WHERE t.id BETWEEN ? - 3 AND ? + 3
+            ORDER BY t.id
+          `);
+          stmt.bind([matchId, matchId, matchId]);
+          const rows = [];
+          while (stmt.step()) rows.push(stmt.getAsObject());
+          stmt.free();
+          return rows
+            .map(r => r.is_match
+              ? `<strong>${r.original_form}</strong>`
+              : r.original_form)
+            .join(' ');
+        } catch (err) {
+          console.error('Context error:', err);
+          return '';
         }
       },
 

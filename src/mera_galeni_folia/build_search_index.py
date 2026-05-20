@@ -86,8 +86,8 @@ def _lemmatize_words(words: list[str], nlp: stanza.Pipeline) -> list[str]:
 
 def process_file(
     path: Path, pipelines: dict[str, stanza.Pipeline]
-) -> list[tuple[str, str, str, str, str]]:
-    """Return a list of (token_urn, title, language, form, lemma) tuples for *path*."""
+) -> list[tuple[str, str, str, str, str, str]]:
+    """Return a list of (token_urn, title, language, original_form, form, lemma) tuples for *path*."""
     data = json.loads(path.read_text(encoding="utf-8"))
     language: str = data.get("language", "")
     title: str = data.get("title", "")
@@ -108,7 +108,7 @@ def process_file(
     words = [t["text"] for _, t in word_positions]
     lemmas = _lemmatize_words(words, pipelines[language])
 
-    rows: list[tuple[str, str, str, str, str]] = []
+    rows: list[tuple[str, str, str, str, str, str]] = []
     for (_, token), lemma in zip(word_positions, lemmas):
         urn = token.get("urn", "")
         if not urn:
@@ -118,6 +118,7 @@ def process_file(
                 urn,
                 title,
                 language,
+                token["text"],
                 strip_diacritics(token["text"]),
                 strip_diacritics(lemma),
             )
@@ -139,10 +140,11 @@ def _init_db(dst_path: Path) -> sqlite3.Connection:
     dst.execute("PRAGMA cache_size=-64000")
     dst.execute("""
         CREATE TABLE tokens (
-            id        INTEGER PRIMARY KEY,
-            token_urn TEXT NOT NULL,
-            title     TEXT NOT NULL,
-            language  TEXT NOT NULL
+            id            INTEGER PRIMARY KEY,
+            token_urn     TEXT NOT NULL,
+            title         TEXT NOT NULL,
+            language      TEXT NOT NULL,
+            original_form TEXT NOT NULL
         )
     """)
     # FTS4: two columns so the JS can MATCH against form or lemma transparently.
@@ -184,13 +186,13 @@ def build(json_dir: Path = JSON_DIR, dst_path: Path = DST_PATH) -> None:
     next_id = 1
 
     for path in tqdm(json_files):
-        for token_urn, title, language, form, lemma in process_file(path, pipelines):
-            batch_tokens.append((next_id, token_urn, title, language))
+        for token_urn, title, language, original_form, form, lemma in process_file(path, pipelines):
+            batch_tokens.append((next_id, token_urn, title, language, original_form))
             batch_fts.append((next_id, form, lemma))
             next_id += 1
 
             if len(batch_tokens) >= BATCH_SIZE:
-                dst.executemany("INSERT INTO tokens VALUES (?,?,?,?)", batch_tokens)
+                dst.executemany("INSERT INTO tokens VALUES (?,?,?,?,?)", batch_tokens)
                 dst.executemany(
                     "INSERT INTO search_fts(rowid, form, lemma) VALUES (?,?,?)",
                     batch_fts,
@@ -200,7 +202,7 @@ def build(json_dir: Path = JSON_DIR, dst_path: Path = DST_PATH) -> None:
                 batch_fts.clear()
 
     if batch_tokens:
-        dst.executemany("INSERT INTO tokens VALUES (?,?,?,?)", batch_tokens)
+        dst.executemany("INSERT INTO tokens VALUES (?,?,?,?,?)", batch_tokens)
         dst.executemany(
             "INSERT INTO search_fts(rowid, form, lemma) VALUES (?,?,?)",
             batch_fts,
