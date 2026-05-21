@@ -55,7 +55,7 @@
         <input
           id="search-input"
           name="search"
-          placeholder="E.g., μεταφορά ou *φορ*"
+          placeholder="E.g., μεταφορα ou *φορ*"
           type="search"
           autocomplete="off"
           spellcheck="false"
@@ -121,14 +121,15 @@
               'hover:bg-olive-200': editionIsClickable(edition) && !editionHasResults(edition),
             }"
             :aria-expanded="openSlideouts[edition.cts] ? 'true' : 'false'"
-            @click="editionIsClickable(edition) && (openSlideouts[edition.cts] = !openSlideouts[edition.cts])"
+            @click="editionIsClickable(edition) && toggleSlideout(edition)"
           >
             <td>
+              <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'"
+                :class="openSlideouts[edition.cts] ? 'text-zinc-800' : 'text-sky-800'"></span>
               <span x-text="`${edition.kuehnEditionVolume}.${(edition.kuehnEditionPages || '').split('-')[0]} [${edition.callNumber} Ficht.]`">
             </td>
             <td>
-              <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'" class="text-xs"></span>
-              <span x-text="editorLastName(edition.editors)"></span>
+              <a :href="`${baseURL}#${edition.cts.split('.').slice(0, -1).join('.')}`" title="more info" class="text-yellow-700" target="_blank" @click.stop x-text="editorLastName(edition.editors)"></a>
             </td>
             <td>
               <a :href="`${baseURL}${edition.cts}`" :title="edition.cts" class="text-yellow-700" x-text="edition.greek_title" @click.stop></a>
@@ -151,7 +152,7 @@
                 <template x-for="result in searchResults.filter(r => r.chapter_urn.startsWith(edition.cts + ':'))" :key="result.chapter_urn">
                   <li>
                     <a :href="result.url" class="text-yellow-700" x-text="result.token_urn"></a>
-                    <span class="text-gray-700 ml-2 font-mono text-xs" x-html="_loadContext(result.id)"></span>
+                    <span class="text-gray-700 ml-2 font-mono text-xs" x-html="contextCache[result.id] || ''"></span>
                   </li>
                 </template>
               </ul>
@@ -171,6 +172,7 @@
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
   const BASE_URL = document.getElementById("base-url").dataset['base-url']
+  const CACHE_VERSION = 2
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
@@ -185,6 +187,7 @@
       selectedTags: [],
       selectedWorks: [],
       openSlideouts: {},
+      contextCache: {},
 
       // --- full-text search state ---
       db: null,
@@ -283,6 +286,20 @@
 
       editionIsClickable(edition) {
         return this.editionHasResults(edition);
+      },
+
+      toggleSlideout(edition) {
+        const opening = !this.openSlideouts[edition.cts];
+        this.openSlideouts[edition.cts] = opening;
+        if (opening) {
+          this.searchResults
+            .filter(r => r.chapter_urn.startsWith(edition.cts + ':'))
+            .forEach(r => {
+              if (!(r.id in this.contextCache)) {
+                this.contextCache[r.id] = this._loadContext(r.id);
+              }
+            });
+        }
       },
 
       async init() {
@@ -409,7 +426,17 @@
 
         return new Promise((resolve, reject) => {
           const req = idb.transaction('index', 'readonly').objectStore('index').get('search-index');
-          req.onsuccess = () => resolve(req.result ?? null);
+
+          req.onsuccess = () => {
+            const entry = req.result ?? null;
+
+            if (!entry || entry.version !== CACHE_VERSION) {
+              resolve(null);
+              return;
+            }
+
+            resolve(entry.buf);
+          };
           req.onerror = () => reject(req.error);
         });
       },
@@ -432,7 +459,7 @@
               ON t.id = fts.rowid
             ${workFilter}
             GROUP BY chapter_urn
-            LIMIT 50
+            LIMIT 1000
           `);
 
           stmt.bind(params);
@@ -511,7 +538,7 @@
 
         return new Promise((resolve, reject) => {
           const tx = idb.transaction('index', 'readwrite');
-          tx.objectStore('index').put(buf, 'search-index');
+          tx.objectStore('index').put({ version: CACHE_VERSION, buf }, 'search-index');
           tx.oncomplete = resolve;
           tx.onerror = () => reject(tx.error);
         });

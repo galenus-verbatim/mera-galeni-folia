@@ -1,86 +1,81 @@
 <article id="{{ item.ctsURN }}">
     <section class="opus">
         <strong>
-        {{ item.author.name if item.author else '' }}.
-        <em>{{ item.title }} ({{ item.shortTitle }})</em>
+            {{ item.author.name if item.author else '' }}.
+            <em>{{ item.title }} ({{ item.shortTitle }})</em>
         </strong>
         <div>
-        <a class="text-yellow-700" href="{{ item.fichtnerURL }}">[N&ordm; {{ item.callNumber }} Ficht.]</a>
-        {% if item.galLatURL %}
-        <a class="text-yellow-700" href="{{ item.galLatURL }}">[Gal Lat.]</a>
-        {% endif %}
-        <a class="text-yellow-700" href="{{ item.githubURL }}">[XML]</a>
+            <a class="text-yellow-700" href="{{ item.fichtnerURL }}">[N&ordm; {{ item.callNumber }} Ficht.]</a>
+            {% if item.galLatURL %}
+                <a class="text-yellow-700" href="{{ item.galLatURL }}">[Gal Lat.]</a>
+            {% endif %}
+            <a class="text-yellow-700" href="{{ item.githubURL }}">[XML]</a>
         </div>
         <div>
-        <span>{{ item.ctsURN }}</span>
+            <span>{{ item.ctsURN }}</span>
         </div>
         <div>
-        <span>{{ item.greekTitle or '' }}</span>
+            <span>{{ item.greekTitle or '' }}</span>
         </div>
         <div>
-        <em>{{ item.frenchTitle or '' }}</em>
+            <em>{{ item.frenchTitle or '' }}</em>
         </div>
         <div>
-        <em>{{ item.englishTitle or '' }}{% if item.englishShortTitle %} ({{ item.englishShortTitle }}){% endif %}</em>
+            <em>{{ item.englishTitle or '' }}{% if item.englishShortTitle %} ({{ item.englishShortTitle }}){% endif %}</em>
         </div>
         <div>
         {# Verbatim editions, sorted by date #}
         {% for edition in item.verbatimEditions|sort(attribute='date') %}
         <div>
             <a class="text-yellow-700" href="{{ edition._route }}">
-            <em>{{ edition.title }}</em>,
-            <span>ed. {{ edition.creators | selectattr('creatorType', 'equalto', 'editor') | map(attribute='lastName') | first | default('') }}</span>,
-            <span>{{ edition.date }}</span>,
-            {% if edition.volume %}
-            <span>vol. {{ edition.volume }}</span>,
-            {% endif %}
-            <span>pp. {{ edition.pages }}</span>.
-            <span>{{ edition.extra.split('CTS URN: ')[1] if edition.extra and 'CTS URN: ' in edition.extra else '' }}</span>
+                <em>{{ edition.title }}</em>,
+                <span>ed. {{ edition.creators | selectattr('creatorType', 'equalto', 'editor') | map(attribute='lastName') | first | default('') }}</span>,
+                <span>{{ edition.date }}</span>,
+                {% if edition.volume %}
+                <span>vol. {{ edition.volume }}</span>,
+                {% endif %}
+                <span>pp. {{ edition.pages }}</span>.
+                <span>{{ edition.extra.split('CTS URN: ')[1] if edition.extra and 'CTS URN: ' in edition.extra else '' }}</span>
             </a>
         </div>
         {% endfor %}
         </div>
         <div>
-        <strong class="text-zinc-600">editio(nes) critica(e):</strong>
-        <span>{{ item.criticalEditions | map(attribute='_formatted') | join('; ') }}</span>
+            <strong class="text-zinc-600">editio(nes) critica(e):</strong>
+            <span>{{ item.criticalEditions | map(attribute='_formatted') | join('; ') }}</span>
         </div>
         {% if item.kuehnEdition %}
-        <div>
-        <strong class="text-zinc-600">translatio Latina:</strong>
-        <span>{{ item.latinTitle }}, {{ item.kuehnEdition.date }}, vol. {{ item.kuehnEdition.volume }}, pp. {{ item.kuehnEdition.pages }}.</span>
-        {% set kuehn_extra = item.kuehnEdition.extra %}
-        {% if kuehn_extra is string %}
-            {% for line in kuehn_extra.split('\n') %}
-            {% if line.startswith('CTS URN: ') %}
-        <span>{{ line.split('CTS URN: ')[1] }}</span>
-            {% endif %}
-            {% endfor %}
-        {% elif kuehn_extra is mapping and kuehn_extra.get('CTS URN') %}
-        <span>{{ kuehn_extra['CTS URN'] }}</span>
-        {% endif %}
-        </div>
+            <div>
+                <strong class="text-zinc-600">translatio Latina:</strong>
+                <span>{{ item.latinTitle }}, {{ item.kuehnEdition.date }}, vol. {{ item.kuehnEdition.volume }}, pp. {{ item.kuehnEdition.pages }}.</span>
+                {% set kuehn_extra = item.kuehnEdition.extra %}
+                {% if kuehn_extra is string %}
+                    {% for line in kuehn_extra.split('\n') %}
+                        {% if line.startswith('CTS URN: ') %}
+                            <span>{{ line.split('CTS URN: ')[1] }}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% elif kuehn_extra is mapping and kuehn_extra.get('CTS URN') %}
+                    <span>{{ kuehn_extra['CTS URN'] }}</span>
+                {% endif %}
+            </div>
         {% endif %}
         {% if item.modernTranslations %}
-        <div>
-        <strong class="text-zinc-600">translationes recentiores:</strong>
-        {% for translation in item.modernTranslations %}
-            <span>
-                {{ translation._formatted }}
-                <a href="{{ translation.url }}" title="{{ translation.formatted }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                    </svg>
-                </a>
-            </span>
-        {% endfor %}
-        <span>{{ item.modernTranslations | map(attribute='_formatted') | join('; ') }}</span>
-        </div>
+            <div>
+                <strong class="text-zinc-600">translationes recentiores:</strong>
+                {% for translation in item.modernTranslations %}
+                    <span>
+                        {{ translation._formatted }}
+                        &ndash; <a href="{{ translation.url }}" title="{{ translation.formatted }}" class="text-yellow-700">source</a>{{ "; " if not loop.last else "" }}
+                    </span>
+                {% endfor %}
+            </div>
         {% endif %}
     </section>
     {% if item.notes %}
       <section class="mt-4 text-zinc-500 w-full">
         {% for note in item.notes %}
-          <p>{{ note.note }}</p>
+            <p>{{ note.note }}</p>
         {% endfor %}
       </section>
     {% endif %}
