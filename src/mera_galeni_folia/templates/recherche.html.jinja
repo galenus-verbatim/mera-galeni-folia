@@ -325,11 +325,27 @@
           const SQL = await initSqlJs({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
           });
-          const res = await fetch("{{ url_for('static', filename='search-index.sqlite') }}");
+          const res = await fetch("{{ url_for('static', filename='search-index.sqlite.gz') }}");
 
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-          const buf = await res.arrayBuffer();
+          const data = await res.arrayBuffer();
+          const header = new Uint8Array(data, 0, 2);
+          const isGzip = header[0] === 0x1f && header[1] === 0x8b;
+          let buf;
+          if (isGzip) {
+            const inputStream = new ReadableStream({
+              start(controller) {
+                controller.enqueue(new Uint8Array(data));
+                controller.close();
+              }
+            });
+            buf = await new Response(
+              inputStream.pipeThrough(new DecompressionStream('gzip'))
+            ).arrayBuffer();
+          } else {
+            buf = data;
+          }
 
           this.db = new SQL.Database(new Uint8Array(buf));
           this.indexLoaded = true;

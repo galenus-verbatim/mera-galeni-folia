@@ -17,7 +17,9 @@ Both columns store diacritic-stripped, lowercased text so the JS query
 (which also strips diacritics) matches correctly.
 """
 
+import gzip
 import json
+import shutil
 import sqlite3
 import unicodedata
 from pathlib import Path
@@ -215,7 +217,14 @@ def build(json_dir: Path = JSON_DIR, dst_path: Path = DST_PATH) -> None:
     dst.close()
 
     size = dst_path.stat().st_size
-    print(f"Done. {dst_path.name} ({size / 1024 / 1024:.1f} MB)")
+    print(f"Built {dst_path.name} ({size / 1024 / 1024:.1f} MB), compressing…")
+
+    gz_path = dst_path.with_suffix('.sqlite.gz')
+    with open(dst_path, 'rb') as f_in, gzip.open(gz_path, 'wb', compresslevel=9) as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
+    gz_size = gz_path.stat().st_size
+    print(f"Done. {gz_path.name} ({gz_size / 1024 / 1024:.1f} MB)")
 
 
 def main() -> None:
