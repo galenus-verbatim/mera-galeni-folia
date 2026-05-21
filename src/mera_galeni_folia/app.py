@@ -348,7 +348,9 @@ def setup():
         imgbale = None
         bale_vol = urn_image_map.get("bale")
         if bale_vol:
-            imgbale = get_iiif_config(IMAGES_DATA, str(urn), bale_vol, edition="bale", abbr="B")
+            imgbale = get_iiif_config(
+                IMAGES_DATA, str(urn), bale_vol, edition="bale", abbr="B"
+            )
 
         imgchartier = None
         chartier_vol = urn_image_map.get("chartier")

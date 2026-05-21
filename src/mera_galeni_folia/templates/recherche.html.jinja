@@ -151,7 +151,6 @@
                 <template x-for="result in searchResults.filter(r => r.chapter_urn.startsWith(edition.cts + ':'))" :key="result.chapter_urn">
                   <li>
                     <a :href="result.url" class="text-yellow-700" x-text="result.token_urn"></a>
-                    <span class="text-gray-500 ml-2" x-text="result.language === 'grc' ? 'grec' : 'latin'"></span>
                     <span class="text-gray-700 ml-2 font-mono text-xs" x-html="_loadContext(result.id)"></span>
                   </li>
                 </template>
@@ -204,7 +203,7 @@
         let editionsFiltered = this.allEditions;
 
         if (this.selectedAuthor !== 'Toutes') {
-          editionsFiltered = editionsFiltered.filter(e => e.authors === this.selectedAuthor);
+          editionsFiltered = editionsFiltered.filter(e => e.authors === this.selectedAuthor || e.authors.startsWith(this.selectedAuthor));
         }
         if (this.selectedTags.length > 0) {
           editionsFiltered = editionsFiltered.filter(e =>
@@ -289,10 +288,13 @@
       async init() {
         try {
           const buf = await this._loadFromCache();
+
           if (!buf) return;
+
           const SQL = await initSqlJs({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
           });
+
           this.db = new SQL.Database(new Uint8Array(buf));
           this.indexLoaded = true;
         } catch (e) {
@@ -307,8 +309,11 @@
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
           });
           const res = await fetch("{{ url_for('static', filename='search-index.sqlite') }}");
+
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
           const buf = await res.arrayBuffer();
+
           this.db = new SQL.Database(new Uint8Array(buf));
           this.indexLoaded = true;
           this._saveToCache(buf).catch(() => {});
@@ -324,6 +329,7 @@
         if (this.searchQuery === "*") return;
 
         const useLike = this._useLikeSearch(this.searchQuery);
+
         if (useLike) {
           this._runLikeSearch();
         } else {
@@ -333,39 +339,55 @@
 
       _buildFtsQuery(raw) {
         const normalized = this._stripDiacritics(raw.trim());
+
         if (!normalized) return null;
+
         // Preserve * so FTS4 can treat trailing * as a prefix wildcard.
         const sanitized = normalized.replace(/["()^]/g, '').trim();
+
         if (!sanitized) return null;
+
         const words = sanitized.split(/\s+/).filter(Boolean);
+
         if (words.length === 0) return null;
+
         // For multi-word queries strip * (FTS4 doesn't support prefix inside phrases).
         const cleanWords = words.length === 1
           ? words
           : words.map(w => w.replace(/\*/g, ''));
         const phrase = cleanWords.length === 1 ? cleanWords[0] : `"${cleanWords.join(' ')}"`;
         const column = this.searchByForm ? 'form' : 'lemma';
+
         return `${column}:${phrase}`;
       },
 
       _buildLikePattern(raw) {
         const normalized = this._stripDiacritics(raw.trim());
+
         if (!normalized) return null;
+
         const pattern = normalized.replace(/["()^]/g, '').replace(/\*/g, '%').trim();
+
         return pattern || null;
       },
 
       _buildWorkFilter(params) {
         if (this.selectedWorks.length === 0) return '';
+
         const placeholders = this.selectedWorks.map(() => 't.token_urn LIKE ?').join(' OR ');
+
         this.selectedWorks.forEach(cts => params.push(cts + ':%'));
+
         return `AND (${placeholders})`;
       },
 
       _collectRows(stmt) {
         const rows = [];
+
         while (stmt.step()) rows.push(stmt.getAsObject());
+
         stmt.free();
+
         return rows.map(row => ({
           ...row,
           url: `${BASE_URL}${row.chapter_urn}#${row.token_urn}`
@@ -375,6 +397,7 @@
       _openIdb() {
         return new Promise((resolve, reject) => {
           const req = indexedDB.open('galenus-search', 1);
+
           req.onupgradeneeded = (e) => e.target.result.createObjectStore('index');
           req.onsuccess = () => resolve(req.result);
           req.onerror = () => reject(req.error);
@@ -383,6 +406,7 @@
 
       async _loadFromCache() {
         const idb = await this._openIdb();
+
         return new Promise((resolve, reject) => {
           const req = idb.transaction('index', 'readonly').objectStore('index').get('search-index');
           req.onsuccess = () => resolve(req.result ?? null);
@@ -392,7 +416,9 @@
 
       _runFtsSearch() {
         const ftsQuery = this._buildFtsQuery(this.searchQuery);
+
         if (!ftsQuery) { this.searchResults = []; return; }
+
         try {
           const params = [ftsQuery];
           const workFilter = this._buildWorkFilter(params);
@@ -408,18 +434,24 @@
             GROUP BY chapter_urn
             LIMIT 50
           `);
+
           stmt.bind(params);
+
           this.searchResults = this._collectRows(stmt);
         } catch (err) {
           console.error('Search error:', err);
+
           this.searchResults = [];
         }
       },
 
       _runLikeSearch() {
         const likePattern = this._buildLikePattern(this.searchQuery);
+
         if (!likePattern) { this.searchResults = []; return; }
+
         const column = this.searchByForm ? 'form' : 'lemma';
+
         try {
           const params = [likePattern];
           const workFilter = this._buildWorkFilter(params);
@@ -435,10 +467,13 @@
             GROUP BY chapter_urn
             LIMIT 50
           `);
+
           stmt.bind(params);
+
           this.searchResults = this._collectRows(stmt);
         } catch (err) {
           console.error('Search error:', err);
+
           this.searchResults = [];
         }
       },
@@ -452,9 +487,13 @@
             ORDER BY t.id
           `);
           stmt.bind([matchId, matchId, matchId]);
+
           const rows = [];
+
           while (stmt.step()) rows.push(stmt.getAsObject());
+
           stmt.free();
+
           return rows
             .map(r => r.is_match
               ? `<strong>${r.original_form}</strong>`
@@ -462,12 +501,14 @@
             .join(' ');
         } catch (err) {
           console.error('Context error:', err);
+
           return '';
         }
       },
 
       async _saveToCache(buf) {
         const idb = await this._openIdb();
+
         return new Promise((resolve, reject) => {
           const tx = idb.transaction('index', 'readwrite');
           tx.objectStore('index').put(buf, 'search-index');
