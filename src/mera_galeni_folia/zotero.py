@@ -258,7 +258,9 @@ def sort_by_kuehn(items: list[dict]) -> list[dict]:
     return sorted(
         with_kuehn,
         key=lambda i: (
-            _int_or_zero(re.sub(r"[^\d]", "", (i.get("kuehnEditionVolume") or "").split("-")[0])),
+            _int_or_zero(
+                re.sub(r"[^\d]", "", (i.get("kuehnEditionVolume") or "").split("-")[0])
+            ),
             _int_or_zero((i.get("kuehnEditionPages") or "").split("-")[0]),
         ),
     )

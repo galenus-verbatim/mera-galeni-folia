@@ -76,28 +76,124 @@ def _extract_cts_urn(extra: str | Any) -> str | None:
     return None
 
 
-def write_cts_index(editions):
-    kuehn_editions = [
-        e for e in editions if (e.get("editors") or "").startswith("Kühn")
-    ]
+def _refs_from_metadata(cts_urn: str, json_dir: Path) -> list[str]:
+    """Return leaf-level passage refs by flattening the TOC.
 
+    For single-level texts (chapters only) this is identical to the old
+    behaviour.  For multi-level texts (book > chapter) it recurses into
+    subpassages so refs like "2.71" are returned instead of just "2".
+    """
+    parts = cts_urn.split(":")
+    if len(parts) < 4:
+        return []
+    work_parts = parts[3].split(".")
+    if len(work_parts) < 3:
+        return []
+    metadata_path = json_dir / work_parts[0] / work_parts[1] / f"{parts[3]}.metadata.json"
+    if not metadata_path.exists():
+        return []
+    with open(metadata_path, encoding="utf-8") as f:
+        metadata = json.load(f)
+
+    def collect_leaf_refs(entries: list) -> list[str]:
+        result = []
+        for entry in entries:
+            subpassages = entry.get("subpassages") or []
+            if subpassages:
+                result.extend(collect_leaf_refs(subpassages))
+            elif "urn" in entry:
+                result.append(entry["urn"].rsplit(":", 1)[1])
+        return result
+
+    return collect_leaf_refs(metadata.get("table_of_contents", []))
+
+
+def _get_first_pages_per_ref(cts_urn: str, json_dir: Path) -> dict[str, str]:
+    """Return a mapping of chapter ref -> first Kühn page n in that chapter.
+
+    Page n values are stored verbatim from the <pb n="..."> attribute
+    (e.g. "18b.926") so that multi-volume texts can be disambiguated in JS.
+    """
+    parts = cts_urn.split(":")
+    if len(parts) < 4:
+        return {}
+    work_parts = parts[3].split(".")
+    if len(work_parts) < 3:
+        return {}
+    json_path = json_dir / work_parts[0] / work_parts[1] / f"{parts[3]}.json"
+    if not json_path.exists():
+        return {}
+
+    with open(json_path, encoding="utf-8") as f:
+        work_data = json.load(f)
+
+    textparts = work_data.get("textparts", [])
+    # Use the full passage ref from the textpart URN (e.g. "2.71"), not just
+    # tp["n"] ("71"), so multi-level texts map correctly.
+    idx_to_ref = {
+        tp["index"]: tp["urn"].rsplit(":", 1)[1]
+        for tp in textparts
+        if tp.get("urn")
+    }
+
+    # Collect all <pb> elements recursively; each carries textpart_index and index.
+    all_pbs: list[tuple[int, int, str]] = []
+
+    def collect_pbs(elements: list) -> None:
+        for elem in elements:
+            if elem.get("tagname") == "pb":
+                all_pbs.append((
+                    elem.get("index", 0),
+                    elem.get("textpart_index", 0),
+                    elem.get("n", ""),
+                ))
+            collect_pbs(elem.get("children", []))
+
+    collect_pbs(work_data.get("elements", []))
+    all_pbs.sort(key=lambda x: x[0])
+
+    ref_to_first_page: dict[str, str] = {}
+    for _, tp_idx, page_n in all_pbs:
+        ref = idx_to_ref.get(tp_idx)
+        if ref and ref not in ref_to_first_page and page_n:
+            ref_to_first_page[ref] = page_n
+
+    return ref_to_first_page
+
+
+def write_cts_index(zotero_data: list[dict], json_dir: Path) -> None:
     result = []
-    for ed in kuehn_editions:
-        nav = ed.get("nav") or ""
-        vol = ed.get("volume") or ""
-        title = ed.get("title") or ""
-        base_urn = ed.get("cts") or ""
 
-        hrefs = re.findall(r'href="\./(urn:[^"]+)"', nav)
-        refs = [urn.rsplit(":", 1)[1] for urn in hrefs if ":" in urn]
+    for opus in zotero_data:
+        for ed in opus.get("verbatimEditions", []):
+            creators = ed.get("creators", [])
+            if not any(c.get("lastName") == "Kühn" for c in creators):
+                continue
 
-        if refs:
+            extra = ed.get("extra", "") or ""
+            cts_urn = None
+            for line in extra.split("\n"):
+                if line.startswith("CTS URN: "):
+                    cts_urn = line.split("CTS URN: ", 1)[1].strip()
+                    break
+
+            if not cts_urn:
+                continue
+
+            refs = _refs_from_metadata(cts_urn, json_dir)
+            if not refs:
+                continue
+
+            first_pages_map = _get_first_pages_per_ref(cts_urn, json_dir)
+            first_pages = [first_pages_map.get(str(ref), "") for ref in refs]
+
             result.append(
                 {
-                    "t": title,
-                    "v": vol,
-                    "b": base_urn,
+                    "t": ed.get("title") or "",
+                    "v": ed.get("volume") or "",
+                    "b": cts_urn,
                     "refs": refs,
+                    "first_pages": first_pages,
                 }
             )
 
@@ -123,7 +219,7 @@ def setup():
 
     app.jinja_env.globals["BASE_URL"] = os.getenv("FREEZER_BASE_URL", "")
 
-    write_cts_index(editions)
+    write_cts_index(zotero_data, JSON_DIR)
 
     @app.route("/")
     def index():
