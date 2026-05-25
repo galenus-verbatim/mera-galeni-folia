@@ -10,13 +10,6 @@ from pathlib import Path
 JSON_DIR = Path(__file__).resolve().parent / "static" / "json"
 
 
-def load_editions(editions_path: str | Path | None = None) -> list[dict]:
-    """Load editions.json, returning the list of edition dicts."""
-    if editions_path is None:
-        editions_path = JSON_DIR / "editions.json"
-    return json.loads(Path(editions_path).read_text(encoding="utf-8"))
-
-
 # Sample URL: https://numerabilis.u-paris.fr/iiif/2/bibnum:00013x02:0201/full/800,/0/default.jpg
 
 

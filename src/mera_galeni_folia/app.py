@@ -19,7 +19,6 @@ from mera_galeni_folia.build import (
 )
 from mera_galeni_folia.reading import (
     get_iiif_config,
-    load_editions,
     load_images_config,
 )
 from mera_galeni_folia.zotero import SORT_ORDERS, fetch_opera, read_zotero_json
@@ -89,7 +88,9 @@ def _refs_from_metadata(cts_urn: str, json_dir: Path) -> list[str]:
     work_parts = parts[3].split(".")
     if len(work_parts) < 3:
         return []
-    metadata_path = json_dir / work_parts[0] / work_parts[1] / f"{parts[3]}.metadata.json"
+    metadata_path = (
+        json_dir / work_parts[0] / work_parts[1] / f"{parts[3]}.metadata.json"
+    )
     if not metadata_path.exists():
         return []
     with open(metadata_path, encoding="utf-8") as f:
@@ -131,9 +132,7 @@ def _get_first_pages_per_ref(cts_urn: str, json_dir: Path) -> dict[str, str]:
     # Use the full passage ref from the textpart URN (e.g. "2.71"), not just
     # tp["n"] ("71"), so multi-level texts map correctly.
     idx_to_ref = {
-        tp["index"]: tp["urn"].rsplit(":", 1)[1]
-        for tp in textparts
-        if tp.get("urn")
+        tp["index"]: tp["urn"].rsplit(":", 1)[1] for tp in textparts if tp.get("urn")
     }
 
     # Collect all <pb> elements recursively; each carries textpart_index and index.
@@ -142,11 +141,13 @@ def _get_first_pages_per_ref(cts_urn: str, json_dir: Path) -> dict[str, str]:
     def collect_pbs(elements: list) -> None:
         for elem in elements:
             if elem.get("tagname") == "pb":
-                all_pbs.append((
-                    elem.get("index", 0),
-                    elem.get("textpart_index", 0),
-                    elem.get("n", ""),
-                ))
+                all_pbs.append(
+                    (
+                        elem.get("index", 0),
+                        elem.get("textpart_index", 0),
+                        elem.get("n", ""),
+                    )
+                )
             collect_pbs(elem.get("children", []))
 
     collect_pbs(work_data.get("elements", []))
@@ -162,6 +163,7 @@ def _get_first_pages_per_ref(cts_urn: str, json_dir: Path) -> dict[str, str]:
 
 
 def write_cts_index(zotero_data: list[dict], json_dir: Path) -> None:
+    print("\n\nBuilding rapid access\n\n")
     result = []
 
     for opus in zotero_data:
@@ -214,7 +216,6 @@ def setup():
 
     fetch_opera()
 
-    editions = load_editions()
     zotero_data = read_zotero_json()
 
     app.jinja_env.globals["BASE_URL"] = os.getenv("FREEZER_BASE_URL", "")
@@ -285,85 +286,44 @@ def setup():
 
     @app.route("/recherche/")
     def search():
-        # Build lookup from work-level CTS URN to multi-language titles
-        urn_to_titles: dict[str, dict] = {}
-        urn_to_tags: dict[str, list] = {}
-        urn_to_kuehn: dict[str, dict] = {}
-        urls: dict[str, str] = {}
+        editions = []
 
         for opus in zotero_data:
-            cts_urn = opus.get("ctsURN")
-            if cts_urn:
-                urn_to_titles[cts_urn] = {
-                    "greek_title": opus.get("greekTitle"),
-                    "latin_title": opus.get("latinTitle"),
-                    "french_title": opus.get("frenchTitle"),
-                    "english_title": opus.get("englishTitle"),
-                }
+            addable_tags = [
+                t for t in opus.get("tags", []) if t.startswith("_") and t != "_opus"
+            ]
 
-                addable_tags = [
-                    t for t in opus["tags"] if t.startswith("_") and t != "_opus"
-                ]
-                if urn_to_tags.get(cts_urn) is not None:
-                    print(f"Already saw cts URN {cts_urn}")
-                    urn_to_tags[cts_urn] += addable_tags
-                else:
-                    urn_to_tags[cts_urn] = addable_tags
+            author = opus.get("author")
+            authors = author.get("lastName", "Galenus") if author else "Galenus"
 
-                urn_to_kuehn[cts_urn] = {
-                    "kuehnEditionVolume": opus.get("kuehnEditionVolume"),
-                    "kuehnEditionPages": opus.get("kuehnEditionPages"),
-                    "callNumber": opus.get("callNumber"),
-                }
+            for ed in opus.get("verbatimEditions", []):
+                edition_cts_urn = _extract_cts_urn(ed.get("extra", ""))
+                if not edition_cts_urn:
+                    continue
 
-                urls[cts_urn] = opus.get("url")  # ty:ignore[invalid-assignment]
+                creators = ed.get("creators", [])
+                editors = "; ".join(
+                    f"{c.get('lastName', '')}, {c.get('firstName', '')}".strip(", ")
+                    for c in creators
+                    if c.get("creatorType") == "editor"
+                )
 
-        # Enrich editions with multi-language titles and Kuehn/Fichtner info
-        for edition in editions:
-            edition_urn = edition.get("cts", "")
-            titles = next(
-                (t for urn, t in urn_to_titles.items() if edition_urn.startswith(urn)),
-                None,
-            )
-            if titles:
-                edition.update(titles)
-            else:
-                edition.setdefault("greek_title", None)
-                edition.setdefault("latin_title", edition.get("title"))
-                edition.setdefault("french_title", None)
-                edition.setdefault("english_title", None)
-
-            edition_tags = next(
-                (
-                    tags
-                    for urn, tags in urn_to_tags.items()
-                    if edition_urn.startswith(urn)
-                ),
-                None,
-            )
-
-            if edition_tags:
-                edition["tags"] = edition_tags
-
-            kuehn_info = next(
-                (
-                    info
-                    for urn, info in urn_to_kuehn.items()
-                    if edition_urn.startswith(urn)
-                ),
-                None,
-            )
-            if kuehn_info:
-                edition.update(kuehn_info)
-            else:
-                edition.setdefault("kuehnEditionVolume", None)
-                edition.setdefault("kuehnEditionPages", None)
-                edition.setdefault("callNumber", None)
-
-            url = next(url for urn, url in urls.items() if edition_urn.startswith(urn))
-
-            if url:
-                edition["url"] = url
+                editions.append(
+                    {
+                        "cts": edition_cts_urn,
+                        "kuehnEditionVolume": opus.get("kuehnEditionVolume"),
+                        "kuehnEditionPages": opus.get("kuehnEditionPages"),
+                        "callNumber": opus.get("callNumber"),
+                        "editors": editors,
+                        "greek_title": opus.get("greekTitle"),
+                        "latin_title": opus.get("latinTitle"),
+                        "french_title": opus.get("frenchTitle"),
+                        "english_title": opus.get("englishTitle"),
+                        "tags": addable_tags,
+                        "authors": authors,
+                        "title": ed.get("title"),
+                    }
+                )
 
         # the order of `all_tags` is important for sorting
         all_tags = [
