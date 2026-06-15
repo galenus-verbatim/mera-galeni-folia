@@ -1,5 +1,1087 @@
 [
   {
+    "key": "XSWYS6RN",
+    "version": 20896,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/XSWYS6RN",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/XSWYS6RN",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Galen",
+      "parsedDate": "1984",
+      "numChildren": 0
+    },
+    "data": {
+      "key": "XSWYS6RN",
+      "version": 20896,
+      "itemType": "bookSection",
+      "title": "On the Use of Breathing",
+      "creators": [
+        {
+          "creatorType": "author",
+          "name": "Galen"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        }
+      ],
+      "abstractNote": "",
+      "bookTitle": "On Respiration and the Arteries. An edition with English translation and commentary of <hi>De usu respirationis</hi>, <hi>An in arteriis natura sanguis contineatur</hi>, <hi>De usu pulsuum</hi>, and <hi>De causis respirationis</hi>",
+      "series": "",
+      "seriesNumber": "",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "1984",
+      "publisher": "Princeton University Press",
+      "place": "Princeton, N.J.",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "pages": "viii+290",
+      "ISBN": "978-0-691-08286-8",
+      "DOI": "",
+      "citationKey": "Galenus/Galen1984",
+      "url": "https://www.sudoc.fr/008430950",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "grc;eng",
+      "libraryCatalog": "",
+      "callNumber": "021",
+      "rights": "",
+      "extra": "textus Graecus p. 80-132",
+      "tags": [
+        {
+          "tag": "*vérifiéNR"
+        },
+        {
+          "tag": "_edcrit"
+        },
+        {
+          "tag": "_transl"
+        }
+      ],
+      "collections": [
+        "2XYEX7QT",
+        "9QP457XQ"
+      ],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:49:12Z",
+      "dateModified": "2026-06-14T13:47:52Z"
+    }
+  },
+  {
+    "key": "E7YADQVX",
+    "version": 20895,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/E7YADQVX",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/E7YADQVX",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Galen",
+      "parsedDate": "1984",
+      "numChildren": 0
+    },
+    "data": {
+      "key": "E7YADQVX",
+      "version": 20895,
+      "itemType": "bookSection",
+      "title": "On the Causes of Breathing",
+      "creators": [
+        {
+          "creatorType": "author",
+          "name": "Galen"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        }
+      ],
+      "abstractNote": "",
+      "bookTitle": "On Respiration and the Arteries. An edition with English translation and commentary of <hi>De usu respirationis</hi>, <hi>An in arteriis natura sanguis contineatur</hi>, <hi>De usu pulsuum</hi>, and <hi>De causis respirationis</hi>",
+      "series": "",
+      "seriesNumber": "",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "1984",
+      "publisher": "Princeton University Press",
+      "place": "Princeton, N.J.",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "pages": "viii+290",
+      "ISBN": "978-0-691-08286-8",
+      "DOI": "",
+      "citationKey": "Galenus/Galen1984b",
+      "url": "https://www.sudoc.fr/008430950",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "grc;eng",
+      "libraryCatalog": "",
+      "callNumber": "020",
+      "rights": "",
+      "extra": "textus Graecus p. 240-244",
+      "tags": [
+        {
+          "tag": "*vérifiéNR"
+        },
+        {
+          "tag": "_edcrit"
+        },
+        {
+          "tag": "_transl"
+        }
+      ],
+      "collections": [
+        "2XYEX7QT",
+        "9QP457XQ"
+      ],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:49:07Z",
+      "dateModified": "2026-06-14T13:47:46Z"
+    }
+  },
+  {
+    "key": "T4KX22LN",
+    "version": 20894,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/T4KX22LN",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/T4KX22LN",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Galen",
+      "parsedDate": "1984",
+      "numChildren": 0
+    },
+    "data": {
+      "key": "T4KX22LN",
+      "version": 20894,
+      "itemType": "bookSection",
+      "title": "On the Use of the Pulse",
+      "creators": [
+        {
+          "creatorType": "author",
+          "name": "Galen"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        }
+      ],
+      "abstractNote": "",
+      "bookTitle": "On Respiration and the Arteries. An edition with English translation and commentary of <hi>De usu respirationis</hi>, <hi>An in arteriis natura sanguis contineatur</hi>, <hi>De usu pulsuum</hi>, and <hi>De causis respirationis</hi>",
+      "series": "",
+      "seriesNumber": "",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "1984",
+      "publisher": "Princeton University Press",
+      "place": "Princeton, N.J.",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "pages": "viii+290",
+      "ISBN": "978-0-691-08286-8",
+      "DOI": "",
+      "citationKey": "Galenus/Galen1984c",
+      "url": "https://www.sudoc.fr/008430950",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "grc;eng",
+      "libraryCatalog": "",
+      "callNumber": "032",
+      "rights": "",
+      "extra": "textus Graecus p. 194-226",
+      "tags": [
+        {
+          "tag": "*vérifiéNR"
+        },
+        {
+          "tag": "_edcrit"
+        },
+        {
+          "tag": "_transl"
+        }
+      ],
+      "collections": [
+        "2XYEX7QT",
+        "9QP457XQ"
+      ],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:49:07Z",
+      "dateModified": "2026-06-14T13:47:35Z"
+    }
+  },
+  {
+    "key": "EJKJL9F3",
+    "version": 20893,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/EJKJL9F3",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/EJKJL9F3",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Galen",
+      "parsedDate": "1984",
+      "numChildren": 0
+    },
+    "data": {
+      "key": "EJKJL9F3",
+      "version": 20893,
+      "itemType": "bookSection",
+      "title": "Whether Blood is Naturally Contained in the Arteries",
+      "creators": [
+        {
+          "creatorType": "author",
+          "name": "Galen"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "David J.",
+          "lastName": "Furley"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "James S.",
+          "lastName": "Wilkie"
+        }
+      ],
+      "abstractNote": "",
+      "bookTitle": "On Respiration and the Arteries. An edition with English translation and commentary of <hi>De usu respirationis</hi>, <hi>An in arteriis natura sanguis contineatur</hi>, <hi>De usu pulsuum</hi>, and <hi>De causis respirationis</hi>",
+      "series": "",
+      "seriesNumber": "",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "1984",
+      "publisher": "Princeton University Press",
+      "place": "Princeton, N.J.",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "pages": "viii+290",
+      "ISBN": "",
+      "DOI": "",
+      "citationKey": "Galenus/Galen1984a",
+      "url": "https://www.sudoc.fr/008430950",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "grc;eng",
+      "libraryCatalog": "",
+      "callNumber": "024",
+      "rights": "",
+      "extra": "textus Graecus p. 144-182",
+      "tags": [
+        {
+          "tag": "*vérifiéNR"
+        },
+        {
+          "tag": "_edcrit"
+        },
+        {
+          "tag": "_transl"
+        }
+      ],
+      "collections": [
+        "2XYEX7QT",
+        "9QP457XQ"
+      ],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:49:09Z",
+      "dateModified": "2026-06-14T13:47:29Z"
+    }
+  },
+  {
+    "key": "4AVR9M8W",
+    "version": 20861,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/4AVR9M8W",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/4AVR9M8W",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Nutton",
+      "parsedDate": "2016",
+      "numChildren": 1
+    },
+    "data": {
+      "key": "4AVR9M8W",
+      "version": 20861,
+      "itemType": "book",
+      "title": "La médecine antique. Traduit de l’anglais par Alexandre Hasnaoui. Préface de Jacques Jouanna",
+      "creators": [
+        {
+          "creatorType": "author",
+          "firstName": "Vivian",
+          "lastName": "Nutton"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "Alexandre",
+          "lastName": "Hasnaoui"
+        }
+      ],
+      "abstractNote": "",
+      "series": "Histoire",
+      "seriesNumber": "135",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "2016",
+      "publisher": "Les Belles Lettres",
+      "place": "Paris",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "numPages": "xxvi+562",
+      "ISBN": "978-2-251-38135-0",
+      "DOI": "",
+      "citationKey": "Nutton2016",
+      "url": "https://www.sudoc.fr/196866111",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "fra",
+      "libraryCatalog": "",
+      "callNumber": "",
+      "rights": "",
+      "extra": "[traduction de Ancient Medicine, 1re éd.: 2004; 2e éd. révisée: 2013]",
+      "tags": [
+        {
+          "tag": "*Ad medicinam pertinentes"
+        },
+        {
+          "tag": "*vérifiéNR"
+        }
+      ],
+      "collections": [
+        "DTQ8XZKP"
+      ],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:49:17Z",
+      "dateModified": "2026-06-11T16:22:01Z"
+    }
+  },
+  {
+    "key": "TWBSBNIR",
+    "version": 20858,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/TWBSBNIR",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/TWBSBNIR",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "https://api.zotero.org/groups/4571007/items/ZMPSQKZN",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "numChildren": 0
+    },
+    "data": {
+      "key": "TWBSBNIR",
+      "version": 20858,
+      "parentItem": "ZMPSQKZN",
+      "itemType": "note",
+      "note": "<div data-schema-version=\"9\"><p>Note: l’édition de V. Boudon-Millot (2007) restitue, au niveau de la lacune présente en 19.56.16 K, un large passage transmis par le Vlatadon 14 et absent des éditions précédentes.</p>\n</div>",
+      "tags": [],
+      "relations": {},
+      "dateAdded": "2026-06-11T10:51:28Z",
+      "dateModified": "2026-06-11T10:51:58Z"
+    }
+  },
+  {
+    "key": "HJESQ883",
+    "version": 20853,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/HJESQ883",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/HJESQ883",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "https://api.zotero.org/groups/4571007/items/T4SXSVFF",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "numChildren": 0
+    },
+    "data": {
+      "key": "HJESQ883",
+      "version": 20853,
+      "parentItem": "T4SXSVFF",
+      "itemType": "note",
+      "note": "<div data-schema-version=\"9\"><p>Note: l’édition de V. Boudon-Millot (2007) restitue, au niveau de la lacune présente en 19.30.4 K, un large passage transmis par le Vlatadon 14 et absent des éditions précédentes.</p>\n</div>",
+      "tags": [],
+      "relations": {},
+      "dateAdded": "2026-06-11T10:50:11Z",
+      "dateModified": "2026-06-11T10:50:51Z"
+    }
+  },
+  {
+    "key": "UZ77M6XG",
+    "version": 20847,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/UZ77M6XG",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/UZ77M6XG",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Galen",
+      "parsedDate": "2001",
+      "numChildren": 0
+    },
+    "data": {
+      "key": "UZ77M6XG",
+      "version": 20847,
+      "itemType": "bookSection",
+      "title": "De plenitudine",
+      "creators": [
+        {
+          "creatorType": "author",
+          "name": "Galen"
+        },
+        {
+          "creatorType": "editor",
+          "firstName": "Christoph",
+          "lastName": "Otte"
+        },
+        {
+          "creatorType": "translator",
+          "firstName": "Christoph",
+          "lastName": "Otte"
+        }
+      ],
+      "abstractNote": "",
+      "bookTitle": "Galen, De plenitudine. Kritische Edition, Übersetzung und Erläuterungen",
+      "series": "Serta Graeca. Beiträge zur Erforschung griechischer Texte",
+      "seriesNumber": "9",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "2001",
+      "publisher": "Ludwig Reichert Verlag",
+      "place": "Wiesbaden",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "pages": "x+134+7 pl.",
+      "ISBN": "",
+      "DOI": "",
+      "citationKey": "Galenus/Galen2001a",
+      "url": "https://www.sudoc.fr/060391324",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "grc;deu",
+      "libraryCatalog": "",
+      "callNumber": "053",
+      "rights": "",
+      "extra": "",
+      "tags": [
+        {
+          "tag": "*vérifiéNR"
+        },
+        {
+          "tag": "_edcrit"
+        },
+        {
+          "tag": "_transl"
+        }
+      ],
+      "collections": [
+        "2XYEX7QT",
+        "9QP457XQ"
+      ],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:49:12Z",
+      "dateModified": "2026-06-10T17:14:37Z"
+    }
+  },
+  {
+    "key": "NJJRGB9R",
+    "version": 20835,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/NJJRGB9R",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/NJJRGB9R",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "https://api.zotero.org/groups/4571007/items/NGDPEKP3",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8989645,
+        "username": "glorieux-f",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/glorieux-f",
+            "type": "text/html"
+          }
+        }
+      },
+      "lastModifiedByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      }
+    },
+    "data": {
+      "key": "NJJRGB9R",
+      "version": 20835,
+      "parentItem": "NGDPEKP3",
+      "itemType": "attachment",
+      "linkMode": "linked_url",
+      "title": "Fichtner Bibliographie",
+      "accessDate": "2022-01-29T22:31:24Z",
+      "url": "https://cmg.bbaw.de/fileadmin/Webdateien/Dateien/Galen-Bibliographie.pdf#5Fbookmark103",
+      "note": "",
+      "contentType": "",
+      "charset": "",
+      "tags": [],
+      "relations": {},
+      "dateAdded": "2023-05-20T15:48:50Z",
+      "dateModified": "2026-06-04T14:36:22Z"
+    }
+  },
+  {
+    "key": "4ZX2E7P8",
+    "version": 20834,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/4ZX2E7P8",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/4ZX2E7P8",
+        "type": "text/html"
+      },
+      "up": {
+        "href": "https://api.zotero.org/groups/4571007/items/GB9H5762",
+        "type": "application/json"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "numChildren": 0
+    },
+    "data": {
+      "key": "4ZX2E7P8",
+      "version": 20834,
+      "parentItem": "GB9H5762",
+      "itemType": "note",
+      "note": "<div data-schema-version=\"9\"><p><span style=\"color: rgb(112, 48, 160);\">Note sur le texte grec de Kühn, repris sur celui de Chartier: «Comme il ne disposait pas de manuscrits nous ayant transmis le texte en entier», puisque le texte de l’Aldine «s’interrompt à ἀκρίβειαν» [2.843.12&nbsp;K] «comme c’est le cas dans le </span><em><span style=\"color: rgb(112, 48, 160);\">Par. gr. </span></em><span style=\"color: rgb(112, 48, 160);\">&nbsp;2164, duquel elle dérive avec quelques corrections et fautres supplémentaires», «Chartier a transcrit les dix chapitres de la </span><em><span style=\"color: rgb(112, 48, 160);\">Basileensis</span></em><span style=\"color: rgb(112, 48, 160);\"> (qui est une copie de l’Aldine) et il a intégré le reste en collant les extraits d’Oribase et en complétant ce qui manquait avec une (mauvaise) rétroversion en grec de la traduction de Gadaldini. Chartier a inséré deux passages» [2.846.14-15 K; 2.847.14-848.8] «tirés d’Oribase qui ne viennent pas de l’</span><em><span style=\"color: rgb(112, 48, 160);\">Anatomie des nerfs</span></em><span style=\"color: rgb(112, 48, 160);\">, mais de l’</span><em><span style=\"color: rgb(112, 48, 160);\">Utilité des parties</span></em><span style=\"color: rgb(112, 48, 160);\">, et il omet de traduire en grec quelques passages que lui offrait le latin de Gadaldini» (Garofalo &amp; Debru [éd.] 2008, p. 19-20).</span></p>\n</div>",
+      "tags": [],
+      "relations": {},
+      "dateAdded": "2026-06-02T17:50:27Z",
+      "dateModified": "2026-06-02T18:05:47Z"
+    }
+  },
+  {
+    "key": "Z2K43H2F",
+    "version": 20828,
+    "library": {
+      "type": "group",
+      "id": 4571007,
+      "name": "Galenus-verbatim",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/groups/galenus-verbatim",
+          "type": "text/html"
+        }
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://api.zotero.org/groups/4571007/items/Z2K43H2F",
+        "type": "application/json"
+      },
+      "alternate": {
+        "href": "https://www.zotero.org/groups/galenus-verbatim/items/Z2K43H2F",
+        "type": "text/html"
+      }
+    },
+    "meta": {
+      "createdByUser": {
+        "id": 8975849,
+        "username": "etymologika",
+        "name": "",
+        "links": {
+          "alternate": {
+            "href": "https://www.zotero.org/etymologika",
+            "type": "text/html"
+          }
+        }
+      },
+      "creatorSummary": "Fabricius",
+      "parsedDate": "1972",
+      "numChildren": 1
+    },
+    "data": {
+      "key": "Z2K43H2F",
+      "version": 20828,
+      "itemType": "book",
+      "title": "Galens Exzerpte aus älteren Pharmakologen",
+      "creators": [
+        {
+          "creatorType": "author",
+          "firstName": "Cajus",
+          "lastName": "Fabricius"
+        }
+      ],
+      "abstractNote": "",
+      "series": "Ars Medica. Texte und Untersuchungen zur Quellenkunde der alten Medizin. II. Abteilung. Griechisch-lateinische Medizin",
+      "seriesNumber": "2",
+      "volume": "",
+      "numberOfVolumes": "",
+      "edition": "",
+      "date": "1972",
+      "publisher": "Walter de Gruyter",
+      "place": "Berlin; New York",
+      "originalDate": "",
+      "originalPublisher": "",
+      "originalPlace": "",
+      "format": "",
+      "numPages": "x+266",
+      "ISBN": "978-3-11-001802-8",
+      "DOI": "",
+      "citationKey": "Fabricius1972",
+      "url": "https://www.sudoc.fr/007634668",
+      "accessDate": "",
+      "ISSN": "",
+      "archive": "",
+      "archiveLocation": "",
+      "shortTitle": "",
+      "language": "deu",
+      "libraryCatalog": "",
+      "callNumber": "",
+      "rights": "",
+      "extra": "",
+      "tags": [
+        {
+          "tag": "*vérifiéNR"
+        }
+      ],
+      "collections": [
+        "DTQ8XZKP"
+      ],
+      "relations": {},
+      "dateAdded": "2025-09-21T18:45:42Z",
+      "dateModified": "2026-05-24T13:20:22Z"
+    }
+  },
+  {
     "key": "5ZTL5UER",
     "version": 20821,
     "library": {
@@ -3405,7 +4487,7 @@
       },
       "creatorSummary": "Galien",
       "parsedDate": "2007",
-      "numChildren": 0
+      "numChildren": 1
     },
     "data": {
       "key": "2KIWMGE7",
@@ -7921,76 +9003,6 @@
       "relations": {},
       "dateAdded": "2023-05-20T15:48:50Z",
       "dateModified": "2026-01-23T20:52:18Z"
-    }
-  },
-  {
-    "key": "NJJRGB9R",
-    "version": 20308,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/NJJRGB9R",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/NJJRGB9R",
-        "type": "text/html"
-      },
-      "up": {
-        "href": "https://api.zotero.org/groups/4571007/items/NGDPEKP3",
-        "type": "application/json"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 8975849,
-        "username": "etymologika",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/etymologika",
-            "type": "text/html"
-          }
-        }
-      }
-    },
-    "data": {
-      "key": "NJJRGB9R",
-      "version": 20308,
-      "parentItem": "NGDPEKP3",
-      "itemType": "attachment",
-      "linkMode": "linked_url",
-      "title": "Fichtner Bibliographie",
-      "accessDate": "2022-01-29T22:31:24Z",
-      "url": "https://cmg.bbaw.de/fileadmin/Webdateien/Dateien/Galen-Bibliographie.pdf#5Fbookmark101",
-      "note": "",
-      "contentType": "",
-      "charset": "",
-      "tags": [],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:48:50Z",
-      "dateModified": "2026-01-23T20:52:03Z"
     }
   },
   {
@@ -18653,137 +19665,6 @@
     }
   },
   {
-    "key": "T4KX22LN",
-    "version": 20386,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/T4KX22LN",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/T4KX22LN",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Galenus/Galen",
-      "parsedDate": "1984",
-      "numChildren": 0
-    },
-    "data": {
-      "key": "T4KX22LN",
-      "version": 20386,
-      "itemType": "bookSection",
-      "title": "De usu pulsuum",
-      "creators": [
-        {
-          "creatorType": "author",
-          "name": "Galenus/Galen"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        }
-      ],
-      "abstractNote": "",
-      "bookTitle": "On respiration and the arteries: an edition with English translation and commentary of De usu respirationis, An in arteriis natura sanguis contineatur, De usu pulsuum, and De causis respirationis",
-      "series": "",
-      "seriesNumber": "",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "1984",
-      "publisher": "Princeton University Press",
-      "place": "Princeton, N.J.",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "pages": "",
-      "ISBN": "978-0-691-08286-8",
-      "DOI": "",
-      "citationKey": "Galenus/Galen1984c",
-      "url": "",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "",
-      "language": "grc;eng",
-      "libraryCatalog": "",
-      "callNumber": "032",
-      "rights": "",
-      "extra": "",
-      "tags": [
-        {
-          "tag": "*pages à vérifier"
-        },
-        {
-          "tag": "_edcrit"
-        },
-        {
-          "tag": "_transl"
-        }
-      ],
-      "collections": [
-        "2XYEX7QT",
-        "9QP457XQ"
-      ],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:49:07Z",
-      "dateModified": "2026-01-10T17:27:03Z"
-    }
-  },
-  {
     "key": "45T9FWRM",
     "version": 20387,
     "library": {
@@ -20020,177 +20901,6 @@
     }
   },
   {
-    "key": "4AVR9M8W",
-    "version": 20362,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/4AVR9M8W",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/4AVR9M8W",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Nutton",
-      "parsedDate": "2016",
-      "numChildren": 1
-    },
-    "data": {
-      "key": "4AVR9M8W",
-      "version": 20362,
-      "itemType": "book",
-      "title": "La médecine antique",
-      "creators": [
-        {
-          "creatorType": "author",
-          "firstName": "Vivian",
-          "lastName": "Nutton"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "Alexandre",
-          "lastName": "Hasnaoui"
-        }
-      ],
-      "abstractNote": "",
-      "series": "Histoire",
-      "seriesNumber": "135",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "2016",
-      "publisher": "Les Belles Lettres",
-      "place": "Paris",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "numPages": "xxvi+562",
-      "ISBN": "978-2-251-38135-0",
-      "DOI": "",
-      "citationKey": "Nutton2016",
-      "url": "https://www.sudoc.fr/196866111",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "",
-      "language": "fra",
-      "libraryCatalog": "",
-      "callNumber": "",
-      "rights": "",
-      "extra": "[traduction de Ancient Medicine, 1re éd.: 2004; 2e éd. révisée: 2013]",
-      "tags": [
-        {
-          "tag": "*Ad medicinam pertinentes"
-        },
-        {
-          "tag": "*vérifiéNR"
-        }
-      ],
-      "collections": [
-        "DTQ8XZKP"
-      ],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:49:17Z",
-      "dateModified": "2026-01-09T18:10:52Z"
-    }
-  },
-  {
-    "key": "P7J4KUF3",
-    "version": 19954,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/P7J4KUF3",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/P7J4KUF3",
-        "type": "text/html"
-      },
-      "up": {
-        "href": "https://api.zotero.org/groups/4571007/items/4AVR9M8W",
-        "type": "application/json"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8975849,
-        "username": "etymologika",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/etymologika",
-            "type": "text/html"
-          }
-        }
-      }
-    },
-    "data": {
-      "key": "P7J4KUF3",
-      "version": 19954,
-      "parentItem": "4AVR9M8W",
-      "itemType": "attachment",
-      "linkMode": "linked_url",
-      "title": "Site de l'éditeur",
-      "accessDate": "",
-      "url": "https://www.lesbelleslettres.com/livre/9782251381350/la-medecine-antique",
-      "note": "",
-      "contentType": "",
-      "charset": "",
-      "tags": [],
-      "relations": {},
-      "dateAdded": "2026-01-09T18:08:42Z",
-      "dateModified": "2026-01-09T18:08:42Z"
-    }
-  },
-  {
     "key": "2BU5MNKS",
     "version": 19949,
     "library": {
@@ -21139,106 +21849,6 @@
       "relations": {},
       "dateAdded": "2025-09-21T18:45:43Z",
       "dateModified": "2025-09-21T18:45:43Z"
-    }
-  },
-  {
-    "key": "Z2K43H2F",
-    "version": 20362,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/Z2K43H2F",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/Z2K43H2F",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8975849,
-        "username": "etymologika",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/etymologika",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Fabricius",
-      "parsedDate": "1972",
-      "numChildren": 1
-    },
-    "data": {
-      "key": "Z2K43H2F",
-      "version": 20362,
-      "itemType": "book",
-      "title": "Galens Exzerpte aus älteren Pharmakologen",
-      "creators": [
-        {
-          "creatorType": "author",
-          "firstName": "Cajus",
-          "lastName": "Fabricius"
-        }
-      ],
-      "abstractNote": "",
-      "series": "Ars Medica. Texte und Untersuchungen zur Quellenkunde der alten Medizin. II. Abteilung, griechisch-lateinische Medizin",
-      "seriesNumber": "2",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "1972",
-      "publisher": "Walter de Gruyter",
-      "place": "Berlin – New York",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "numPages": "x + 266",
-      "ISBN": "978-3-11-001802-8",
-      "DOI": "",
-      "citationKey": "Fabricius1972",
-      "url": "",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "",
-      "language": "deu;grc",
-      "libraryCatalog": "",
-      "callNumber": "",
-      "rights": "",
-      "extra": "",
-      "tags": [],
-      "collections": [
-        "DTQ8XZKP"
-      ],
-      "relations": {},
-      "dateAdded": "2025-09-21T18:45:42Z",
-      "dateModified": "2025-09-21T18:45:42Z"
     }
   },
   {
@@ -30344,7 +30954,7 @@
         }
       },
       "creatorSummary": "Galenus",
-      "numChildren": 2
+      "numChildren": 3
     },
     "data": {
       "key": "ZMPSQKZN",
@@ -30449,7 +31059,7 @@
         }
       },
       "creatorSummary": "Galenus",
-      "numChildren": 2
+      "numChildren": 3
     },
     "data": {
       "key": "T4SXSVFF",
@@ -121563,127 +122173,6 @@
     }
   },
   {
-    "key": "UZ77M6XG",
-    "version": 20446,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/UZ77M6XG",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/UZ77M6XG",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Galenus/Galen",
-      "parsedDate": "2001",
-      "numChildren": 0
-    },
-    "data": {
-      "key": "UZ77M6XG",
-      "version": 20446,
-      "itemType": "bookSection",
-      "title": "De plenitudine",
-      "creators": [
-        {
-          "creatorType": "author",
-          "name": "Galenus/Galen"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "Christoph",
-          "lastName": "Otte"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "Christoph",
-          "lastName": "Otte"
-        }
-      ],
-      "abstractNote": "",
-      "bookTitle": "Galen, De plenitudine : Kritische Edition, Übersetzung und Erläuterungen.",
-      "series": "Serta Graeca, Beiträge zur Erforschung griechischer Texte",
-      "seriesNumber": "9,X",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "2001",
-      "publisher": "Dr. Ludwig Reichert",
-      "place": "Wiesbaden",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "pages": "",
-      "ISBN": "978-3-89500-160-4",
-      "DOI": "",
-      "citationKey": "Galenus/Galen2001a",
-      "url": "",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "",
-      "language": "grc;deu",
-      "libraryCatalog": "",
-      "callNumber": "053",
-      "rights": "",
-      "extra": "",
-      "tags": [
-        {
-          "tag": "*pages à vérifier"
-        },
-        {
-          "tag": "_edcrit"
-        },
-        {
-          "tag": "_transl"
-        }
-      ],
-      "collections": [
-        "2XYEX7QT",
-        "9QP457XQ"
-      ],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:49:12Z",
-      "dateModified": "2023-06-17T15:45:56Z"
-    }
-  },
-  {
     "key": "NQ2RBR9A",
     "version": 7947,
     "library": {
@@ -130933,137 +131422,6 @@
     }
   },
   {
-    "key": "E7YADQVX",
-    "version": 20386,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/E7YADQVX",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/E7YADQVX",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Galenus/Galen",
-      "parsedDate": "1984",
-      "numChildren": 0
-    },
-    "data": {
-      "key": "E7YADQVX",
-      "version": 20386,
-      "itemType": "bookSection",
-      "title": "De causis respirationis",
-      "creators": [
-        {
-          "creatorType": "author",
-          "name": "Galenus/Galen"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        }
-      ],
-      "abstractNote": "",
-      "bookTitle": "Galen. On Respiration and the Arteries. An Edition with English Translation and Commentary of De usu respirationis, An in arteriis natura sanguis contineatur, De usu pulsuum, and De causis respirationis.",
-      "series": "",
-      "seriesNumber": "",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "1984",
-      "publisher": "Princeton University Press",
-      "place": "Princeton, N.J.",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "pages": "",
-      "ISBN": "978-0-691-08286-8",
-      "DOI": "",
-      "citationKey": "Galenus/Galen1984b",
-      "url": "",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "On respiration and the arteries",
-      "language": "grc;eng",
-      "libraryCatalog": "",
-      "callNumber": "020",
-      "rights": "",
-      "extra": "",
-      "tags": [
-        {
-          "tag": "*pages à vérifier"
-        },
-        {
-          "tag": "_edcrit"
-        },
-        {
-          "tag": "_transl"
-        }
-      ],
-      "collections": [
-        "2XYEX7QT",
-        "9QP457XQ"
-      ],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:49:07Z",
-      "dateModified": "2023-05-21T13:13:56Z"
-    }
-  },
-  {
     "key": "QMFG79GE",
     "version": 20386,
     "library": {
@@ -131181,137 +131539,6 @@
       ],
       "relations": {},
       "dateAdded": "2023-05-20T15:49:07Z",
-      "dateModified": "2023-05-21T13:13:56Z"
-    }
-  },
-  {
-    "key": "EJKJL9F3",
-    "version": 20385,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/EJKJL9F3",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/EJKJL9F3",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Galenus/Galen",
-      "parsedDate": "1984",
-      "numChildren": 0
-    },
-    "data": {
-      "key": "EJKJL9F3",
-      "version": 20385,
-      "itemType": "bookSection",
-      "title": "An in arteriis natura sanguis contineatur",
-      "creators": [
-        {
-          "creatorType": "author",
-          "name": "Galenus/Galen"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        }
-      ],
-      "abstractNote": "",
-      "bookTitle": "On respiration and the arteries: an edition with English translation and commentary of De usu respirationis, An in arteriis natura sanguis contineatur, De usu pulsuum, and De causis respirationis",
-      "series": "",
-      "seriesNumber": "",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "1984",
-      "publisher": "Princeton University Press",
-      "place": "Princeton, N.J.",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "pages": "",
-      "ISBN": "",
-      "DOI": "",
-      "citationKey": "Galenus/Galen1984a",
-      "url": "",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "",
-      "language": "grc;eng",
-      "libraryCatalog": "",
-      "callNumber": "024",
-      "rights": "",
-      "extra": "",
-      "tags": [
-        {
-          "tag": "*pages à vérifier"
-        },
-        {
-          "tag": "_edcrit"
-        },
-        {
-          "tag": "_transl"
-        }
-      ],
-      "collections": [
-        "2XYEX7QT",
-        "9QP457XQ"
-      ],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:49:09Z",
       "dateModified": "2023-05-21T13:13:56Z"
     }
   },
@@ -132156,137 +132383,6 @@
       ],
       "relations": {},
       "dateAdded": "2023-05-20T15:49:13Z",
-      "dateModified": "2023-05-21T13:13:56Z"
-    }
-  },
-  {
-    "key": "XSWYS6RN",
-    "version": 20384,
-    "library": {
-      "type": "group",
-      "id": 4571007,
-      "name": "Galenus-verbatim",
-      "links": {
-        "alternate": {
-          "href": "https://www.zotero.org/groups/galenus-verbatim",
-          "type": "text/html"
-        }
-      }
-    },
-    "links": {
-      "self": {
-        "href": "https://api.zotero.org/groups/4571007/items/XSWYS6RN",
-        "type": "application/json"
-      },
-      "alternate": {
-        "href": "https://www.zotero.org/groups/galenus-verbatim/items/XSWYS6RN",
-        "type": "text/html"
-      }
-    },
-    "meta": {
-      "createdByUser": {
-        "id": 8989645,
-        "username": "glorieux-f",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/glorieux-f",
-            "type": "text/html"
-          }
-        }
-      },
-      "lastModifiedByUser": {
-        "id": 1043566,
-        "username": "Pletcher",
-        "name": "",
-        "links": {
-          "alternate": {
-            "href": "https://www.zotero.org/pletcher",
-            "type": "text/html"
-          }
-        }
-      },
-      "creatorSummary": "Galenus/Galen",
-      "parsedDate": "1984",
-      "numChildren": 0
-    },
-    "data": {
-      "key": "XSWYS6RN",
-      "version": 20384,
-      "itemType": "bookSection",
-      "title": "De usu respirationis",
-      "creators": [
-        {
-          "creatorType": "author",
-          "name": "Galenus/Galen"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "editor",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "David J.",
-          "lastName": "Furley"
-        },
-        {
-          "creatorType": "translator",
-          "firstName": "James S.",
-          "lastName": "Wilkie"
-        }
-      ],
-      "abstractNote": "",
-      "bookTitle": "On respiration and the arteries: an edition with English translation and commentary of De usu respirationis, An in arteriis natura sanguis contineatur, De usu pulsuum, and De causis respirationis",
-      "series": "",
-      "seriesNumber": "",
-      "volume": "",
-      "numberOfVolumes": "",
-      "edition": "",
-      "date": "1984",
-      "publisher": "Princeton University Press",
-      "place": "Princeton, N.J.",
-      "originalDate": "",
-      "originalPublisher": "",
-      "originalPlace": "",
-      "format": "",
-      "pages": "",
-      "ISBN": "978-0-691-08286-8",
-      "DOI": "",
-      "citationKey": "Galenus/Galen1984",
-      "url": "",
-      "accessDate": "",
-      "ISSN": "",
-      "archive": "",
-      "archiveLocation": "",
-      "shortTitle": "",
-      "language": "grc;eng",
-      "libraryCatalog": "",
-      "callNumber": "021",
-      "rights": "",
-      "extra": "",
-      "tags": [
-        {
-          "tag": "*pages à vérifier"
-        },
-        {
-          "tag": "_edcrit"
-        },
-        {
-          "tag": "_transl"
-        }
-      ],
-      "collections": [
-        "2XYEX7QT",
-        "9QP457XQ"
-      ],
-      "relations": {},
-      "dateAdded": "2023-05-20T15:49:12Z",
       "dateModified": "2023-05-21T13:13:56Z"
     }
   },
@@ -174166,7 +174262,7 @@
         }
       },
       "creatorSummary": "Galenus",
-      "numChildren": 2
+      "numChildren": 3
     },
     "data": {
       "key": "GB9H5762",
