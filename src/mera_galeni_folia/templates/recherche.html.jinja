@@ -172,7 +172,7 @@
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
   const BASE_URL = document.getElementById("base-url").dataset['base-url']
-  const CACHE_VERSION = 2
+  const CACHE_VERSION = 3
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
