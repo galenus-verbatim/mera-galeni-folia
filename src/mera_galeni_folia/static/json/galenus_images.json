@@ -119,6 +119,11 @@
             "url": "https://numerabilis.u-paris.fr/iiif/2/bibnum:45674x18b:%%/full/full/0/default.jpg",
             "title": "<a target=\"_blank\" class=\"external\" href=\"https://numerabilis.u-paris.fr/histmed/medica/page?45674x18b&p=%%\">Université Paris Cité, Bibliothèque numérique Medica</a>",
             "count": 1029
+        },
+        "19": {
+            "pdiff": 9,
+            "url": "https://numerabilis.u-paris.fr/iiif/2/bibnum:45674x19:%%/full/full/0/default.jpg",
+            "count": 782
         }
     },
     "bale": {
@@ -329,6 +334,7 @@
         "bale": "1",
         "chartier": "5"
     },
+    "urn:cts:greekLit:tlg0057.tlg033.1st1K-grc1": {},
     "urn:cts:greekLit:tlg0057.tlg034.1st1K-grc2": {
         "bale": "4",
         "chartier": "6"
@@ -341,6 +347,7 @@
         "bale": "3",
         "chartier": "6"
     },
+    "urn:cts:greekLit:tlg0057.tlg037.1st1K-grc1": {},
     "urn:cts:greekLit:tlg0057.tlg038.1st1K-grc1": {
         "bale": "3",
         "chartier": "6"

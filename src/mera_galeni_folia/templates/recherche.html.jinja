@@ -172,7 +172,6 @@
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
   const BASE_URL = document.getElementById("base-url").dataset['base-url']
-  const CACHE_VERSION = 3
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
@@ -302,23 +301,6 @@
         }
       },
 
-      async init() {
-        try {
-          const buf = await this._loadFromCache();
-
-          if (!buf) return;
-
-          const SQL = await initSqlJs({
-            locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
-          });
-
-          this.db = new SQL.Database(new Uint8Array(buf));
-          this.indexLoaded = true;
-        } catch (e) {
-          // Cache miss or IDB error — fall through to show the load button.
-        }
-      },
-
       async loadSearchIndex() {
         this.indexLoading = true;
         try {
@@ -349,7 +331,6 @@
 
           this.db = new SQL.Database(new Uint8Array(buf));
           this.indexLoaded = true;
-          this._saveToCache(buf).catch(() => {});
         } catch (err) {
           alert(`Erreur de chargement de l'index : ${err.message}`);
         } finally {
@@ -425,36 +406,6 @@
           ...row,
           url: `${BASE_URL}${row.chapter_urn}#${row.token_urn}`
         }));
-      },
-
-      _openIdb() {
-        return new Promise((resolve, reject) => {
-          const req = indexedDB.open('galenus-search', 1);
-
-          req.onupgradeneeded = (e) => e.target.result.createObjectStore('index');
-          req.onsuccess = () => resolve(req.result);
-          req.onerror = () => reject(req.error);
-        });
-      },
-
-      async _loadFromCache() {
-        const idb = await this._openIdb();
-
-        return new Promise((resolve, reject) => {
-          const req = idb.transaction('index', 'readonly').objectStore('index').get('search-index');
-
-          req.onsuccess = () => {
-            const entry = req.result ?? null;
-
-            if (!entry || entry.version !== CACHE_VERSION) {
-              resolve(null);
-              return;
-            }
-
-            resolve(entry.buf);
-          };
-          req.onerror = () => reject(req.error);
-        });
       },
 
       _runFtsSearch() {
@@ -547,17 +498,6 @@
 
           return '';
         }
-      },
-
-      async _saveToCache(buf) {
-        const idb = await this._openIdb();
-
-        return new Promise((resolve, reject) => {
-          const tx = idb.transaction('index', 'readwrite');
-          tx.objectStore('index').put({ version: CACHE_VERSION, buf }, 'search-index');
-          tx.oncomplete = resolve;
-          tx.onerror = () => reject(tx.error);
-        });
       },
 
       _stripDiacritics(str) {
