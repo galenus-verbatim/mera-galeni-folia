@@ -18,6 +18,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -58,17 +62,34 @@ jobs:
         id: cache-search-index
         uses: actions/cache@v5
         with:
-          path: src/mera_galeni_folia/static/search-index.sqlite
+          path: |
+            src/mera_galeni_folia/static/search-index.sqlite
+            src/mera_galeni_folia/static/search-index.sqlite.gz
           key: search-index-${{ steps.checkout-galenus-cts.outputs.ref }}-${{ hashFiles('src/mera_galeni_folia/build_search_index.py') }}
 
       - name: Build search index
         if: steps.cache-search-index.outputs.cache-hit != 'true'
         run: uv run galenus-index
 
+      - name: Publish search index as release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view search-index --repo "$GITHUB_REPOSITORY" || \
+            gh release create search-index --repo "$GITHUB_REPOSITORY" \
+              --title "Search index" \
+              --notes "Auto-published by deploy.yml; overwritten on every deploy. Too large to serve from GitHub Pages."
+          gh release upload search-index \
+            src/mera_galeni_folia/static/search-index.sqlite.gz \
+            --repo "$GITHUB_REPOSITORY" --clobber
+
       - name: Build site
         run: uv run galenus
         env:
           FREEZER_BASE_URL: ${{ vars.FREEZER_BASE_URL }}
+
+      - name: Remove search index from Pages artifact
+        run: rm -f build/static/search-index.sqlite build/static/search-index.sqlite.gz
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

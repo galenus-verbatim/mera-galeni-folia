@@ -172,6 +172,9 @@
 <script defer src="{{ url_for('static', filename='vendor/js/alpinejs.js') }}"></script>
 <script>
   const BASE_URL = document.getElementById("base-url").dataset['base-url']
+  // GitHub Pages truncates files over ~100MB, so the (~100MB+) search index
+  // is published as a release asset instead of a Pages-served static file.
+  const SEARCH_INDEX_URL = "https://github.com/galenus-verbatim/mera-galeni-folia/releases/download/search-index/search-index.sqlite.gz"
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
@@ -307,7 +310,7 @@
           const SQL = await initSqlJs({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}`,
           });
-          const res = await fetch("{{ url_for('static', filename='search-index.sqlite.gz') }}");
+          const res = await fetch(SEARCH_INDEX_URL);
 
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
@@ -327,6 +330,11 @@
             ).arrayBuffer();
           } else {
             buf = data;
+          }
+
+          const magic = new TextDecoder().decode(new Uint8Array(buf, 0, 16));
+          if (magic !== 'SQLite format 3\0') {
+            throw new Error('downloaded file is not a valid SQLite database (truncated or corrupted download?)');
           }
 
           this.db = new SQL.Database(new Uint8Array(buf));
