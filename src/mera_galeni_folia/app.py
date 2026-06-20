@@ -53,7 +53,7 @@ def _assign_line_ids(text_containers, current_page_n=None):
 
         if text_container.get("tagname") == "lb":
             text_container["html_id"] = (
-                f"p{current_page_n}l{text_container.get('n', '0')}"
+                f"l{current_page_n}.{text_container.get('n', '')}"
             )
 
         if len(text_container.get("children", [])) > 0:

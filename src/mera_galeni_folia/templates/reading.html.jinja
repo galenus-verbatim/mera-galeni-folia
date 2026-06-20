@@ -5,7 +5,7 @@
 {% block body_class %}cts{% endblock %}
 
 {% block content %}
-<div class="bg-olive-50 flex pt-4 w-full">
+<div class="bg-olive-50 flex pt-4 w-full" x-data="{ showViewer: true }">
   {# ── Left column: chapter navigation ── #}
   {% if text_containers[0].subtype != "work" %}
     <ul class="menu [&_li>*]:rounded-none flex-nowrap max-h-screen overflow-y-auto max-w-1/4 min-w-1/4 px-4">
@@ -18,7 +18,7 @@
   {% endif %}
 
   {# ── Center column: Greek / Latin text ── #}
-  <div class="max-w-1/3 mx-4">
+  <div class="mx-4 flex-1 min-w-0 transition-all duration-300 ease-in-out" :class="showViewer ? 'max-w-1/3' : 'max-w-none'">
     <div class="bg-white card mb-4 p-4 shadow-sm">
       {% with item = zotero_item %}
         {% include "components/BibliographicItem.html.jinja" %}
@@ -41,7 +41,7 @@
         <a class="join-item btn btn-outline" href="{{ url_for('reading', urn=previous_urn) }}">Previous</a>
       {% endif %}
       {% if next_urn %}
-        <a class="join-item btn btn-outline" href="{{  url_for('reading', urn=next_urn) }}">Next</a>
+        <a class="join-item btn btn-outline{% if not previous_urn %} col-start-2{% endif %}" href="{{  url_for('reading', urn=next_urn) }}">Next</a>
       {% endif %}
     </div>
     <div class="text">
@@ -62,7 +62,26 @@
   </div>
 
   {# ── Right column: IIIF facsimile viewer ── #}
-  {% include 'components/IIIFViewer.html.jinja' %}
+  <button
+    type="button"
+    @click="showViewer = !showViewer"
+    class="btn bg-olive-500 text-olive-100 hover:bg-olive-400 self-stretch mt-4 mb-8 shrink-0 w-8 px-0"
+    :aria-label="showViewer ? 'Masquer le fac-similé' : 'Afficher le fac-similé'"
+    :title="showViewer ? 'Masquer le fac-similé' : 'Afficher le fac-similé'"
+  >
+    <span x-text="showViewer ? '›' : '‹'"></span>
+  </button>
+  <div
+    class="shrink-0 overflow-hidden transition-all duration-300 ease-in-out"
+    :class="showViewer ? 'w-1/3' : 'w-0'"
+  >
+    <div
+      class="w-full h-full transition-transform duration-300 ease-in-out"
+      :class="showViewer ? 'translate-x-0' : 'translate-x-full'"
+    >
+      {% include 'components/IIIFViewer.html.jinja' %}
+    </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -81,9 +100,11 @@
 
       const el = document.getElementById(hash.replace("#", ""));
 
-      el.classList.add("bg-yellow-400");
+      if (el) {
+        el.classList.add("bg-yellow-400");
 
-      el.scrollIntoView();
+        el.scrollIntoView();
+      }
     }
   });
 </script>
