@@ -100,9 +100,25 @@ async function initCtsSearch() {
         return bestURL;
     }
 
+    // Resolve a page+line query like "18b.926.5" to a chapter URL with a
+    // line anchor. Falls back to null for anything that isn't
+    // "{vol}.{page}.{line}" with numeric page and line.
+    function resolveByLine(query) {
+        const parts = query.split('.');
+        if (parts.length !== 3) return null;
+        const [vol, page, line] = parts;
+        if (!/^\d+$/.test(page) || !/^\d+$/.test(line)) return null;
+
+        const pageQuery = `${vol}.${page}`;
+        const url = resolveByPage(pageQuery);
+        if (!url) return null;
+
+        return `${url}#l${pageQuery}.${line}`;
+    }
+
     function navigate() {
         const val = input.value.trim();
-        const url = urlMap.get(val) || resolveByPage(val);
+        const url = urlMap.get(val) || resolveByLine(val) || resolveByPage(val);
         if (url) location.href = url;
     }
 
