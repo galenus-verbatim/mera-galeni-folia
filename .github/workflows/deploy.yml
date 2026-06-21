@@ -76,7 +76,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: r2 object put galenus-search-index/search-index.sqlite.gz --file=src/mera_galeni_folia/static/search-index.sqlite.gz --content-type=application/gzip
+          command: r2 object put galenus-verbatim-search-index/search-index.sqlite.gz --file=src/mera_galeni_folia/static/search-index.sqlite.gz --content-type=application/x-gzip
 
       - name: Build site
         run: uv run galenus
