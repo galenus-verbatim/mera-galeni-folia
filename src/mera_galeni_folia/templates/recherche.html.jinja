@@ -173,8 +173,8 @@
 <script>
   const BASE_URL = document.getElementById("base-url").dataset['base-url']
   // GitHub Pages truncates files over ~100MB, so the (~100MB+) search index
-  // is published as a release asset instead of a Pages-served static file.
-  const SEARCH_INDEX_URL = "https://github.com/galenus-verbatim/mera-galeni-folia/releases/download/search-index/search-index.sqlite.gz"
+  // is published to Cloudflare R2 instead of a Pages-served static file.
+  const SEARCH_INDEX_URL = "https://pub-4be83e2b12974e25b3e6a94633c37cda.r2.dev/search-index.sqlite.gz"
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({

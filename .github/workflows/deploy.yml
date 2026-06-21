@@ -71,17 +71,12 @@ jobs:
         if: steps.cache-search-index.outputs.cache-hit != 'true'
         run: uv run galenus-index
 
-      - name: Publish search index as release asset
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release view search-index --repo "$GITHUB_REPOSITORY" || \
-            gh release create search-index --repo "$GITHUB_REPOSITORY" \
-              --title "Search index" \
-              --notes "Auto-published by deploy.yml; overwritten on every deploy. Too large to serve from GitHub Pages."
-          gh release upload search-index \
-            src/mera_galeni_folia/static/search-index.sqlite.gz \
-            --repo "$GITHUB_REPOSITORY" --clobber
+      - name: Upload search index to R2
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: r2 object put galenus-search-index/search-index.sqlite.gz --file=src/mera_galeni_folia/static/search-index.sqlite.gz --content-type=application/gzip
 
       - name: Build site
         run: uv run galenus
