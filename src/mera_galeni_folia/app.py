@@ -196,7 +196,14 @@ def _build_editions_data(zotero_data: list[dict]) -> tuple[list[dict], list[str]
                 }
             )
     all_tags = [
-        "gen", "anat", "physiol", "nosol", "therap", "pharm", "hipp", "phil",
+        "gen",
+        "anat",
+        "physiol",
+        "nosol",
+        "therap",
+        "pharm",
+        "hipp",
+        "phil",
     ]
     return editions, all_tags
 
