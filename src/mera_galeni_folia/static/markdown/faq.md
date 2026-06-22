@@ -1,5 +1,11 @@
 # Questions fréquentes
 
+## Sommaire
+
+- [À quoi sert Galenus verbatim ?](#s1)
+- [Quels sont les textes présents sur le site de Galenus verbatim ?](#s2)
+- [Ces textes font-ils autorité ?](#s3)
+- [Comment citer une œuvre galénique ?](#s4)
 
 <section>
 <p class="p noindent">Voici quelques questions-réponses en guise de mode d’emploi de ce site. N’hésitez pas à <a href="#" onmouseover="this.href='mailto:mailto:etymologika'+'\x40'+'gmail.com'">poser une question</a> pour enrichir cette page&nbsp;!</p>
@@ -7,7 +13,7 @@
 <section id="s1" class="div level1">
     <header>
 
-<h1 class="head">À quoi sert Galenus verbatim&nbsp;?<a class="bookmark" href="#s1"> </a></h1>
+<h1 class="head" id="a-quoi-sert">À quoi sert Galenus verbatim&nbsp;?<a class="bookmark" href="#s1"> </a></h1>
 
 </header>
 <p class="p noindent">L’objectif de <a class="external" href="https://galenus-verbatim.huma-num.fr">Galenus verbatim</a> est de mettre à disposition en accès libre un environnement de travail qui facilite le travail des spécialistes de Galien comme celui des personnes qui ne sont pas familières de ce corpus.</p>
@@ -24,68 +30,64 @@
 
 <p class="p">&nbsp;</p>
 
-
 </section>
-<section id="s2" class="div level1"> <header>
+<section id="s2" class="div level1">
+  <header>
 
-<h1 class="head">Quels sont les textes présents sur le site de Galenus verbatim&nbsp;?<a class="bookmark" href="#s2"> </a></h1>
+  <h1 class="head">Quels sont les textes présents sur le site de Galenus verbatim&nbsp;?<a class="bookmark" href="#s2"> </a></h1>
 
-</header>
-<p class="p noindent">Galenus verbatim publie des textes libres de droits, sous licence <a class="external" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0 International</a> (CC BY-SA 4.0).</p>
+  </header>
+  <p class="p noindent">Galenus verbatim publie des textes libres de droits, sous licence <a class="external" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0 International</a> (CC BY-SA 4.0).</p>
 
-<p class="p">On y trouve les traités publiés dans les volumes&nbsp;1&nbsp;à&nbsp;18b l’édition de C.G.&nbsp;Kühn, ainsi que quelques autres, qui proviennent du dépôt du projet <a class="external" href="https://opengreekandlatin.github.io/First1KGreek/">First Thousand Years of Greek</a><a class="noteref" href="#note2" id="note2_" epub:type="noteref">2</a>, publié sous licence CC BY-SA 4.0&nbsp;: celui-ci a repris les textes galéniques du <a class="external" href="https://www.graeco-arabic-studies.org/home.html">Digital Corpus for Graeco-Arabic Studies</a> et en a notamment enrichi les métadonnées pour les intégrer à la <a class="external" href="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0057/">Perseus Digital Library</a> (en omettant curieusement le texte du <i>Commentaire au Prorrhétique I d’Hippocrate</i> [16.489-840 K], que Galenus verbatim a donc directement repris au Digital Corpus for Graeco-Arabic Studies)<sup class="sup"><a class="noteref" href="#note3" id="note3_" epub:type="noteref">3</a></sup>. Deux textes de l’édition de C.G.&nbsp;Kühn qui sont présents dans la Perseus Digital Library, mais qui consistent en des compilations d’extraits de textes provenant d’autres traités édités par Kühn, ont en revanche été écartés de Galenus verbatim<sup class="sup"><a class="noteref" href="#note4" id="note4_" epub:type="noteref">4</a></sup>.</p>
+  <p class="p">On y trouve les traités publiés dans les volumes&nbsp;1&nbsp;à&nbsp;18b l’édition de C.G.&nbsp;Kühn, ainsi que quelques autres, qui proviennent du dépôt du projet <a class="external" href="https://opengreekandlatin.github.io/First1KGreek/">First Thousand Years of Greek</a><a class="noteref" href="#note2" id="note2_" epub:type="noteref">2</a>, publié sous licence CC BY-SA 4.0&nbsp;: celui-ci a repris les textes galéniques du <a class="external" href="https://www.graeco-arabic-studies.org/home.html">Digital Corpus for Graeco-Arabic Studies</a> et en a notamment enrichi les métadonnées pour les intégrer à la <a class="external" href="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0057/">Perseus Digital Library</a> (en omettant curieusement le texte du <i>Commentaire au Prorrhétique I d’Hippocrate</i> [16.489-840 K], que Galenus verbatim a donc directement repris au Digital Corpus for Graeco-Arabic Studies)<sup class="sup"><a class="noteref" href="#note3" id="note3_" epub:type="noteref">3</a></sup>. Deux textes de l’édition de C.G.&nbsp;Kühn qui sont présents dans la Perseus Digital Library, mais qui consistent en des compilations d’extraits de textes provenant d’autres traités édités par Kühn, ont en revanche été écartés de Galenus verbatim<sup class="sup"><a class="noteref" href="#note4" id="note4_" epub:type="noteref">4</a></sup>.</p>
 
-<p class="p">Sont en cours de préparation, et seront progressivement publiés au fur et à mesure de l’avancement de la structuration des fichiers XML-TEI et de la correction du texte océrisé (toutes les bonnes volontés sont les bienvenues&nbsp;!)&nbsp;:</p>
+  <p class="p">Sont en cours de préparation, et seront progressivement publiés au fur et à mesure de l’avancement de la structuration des fichiers XML-TEI et de la correction du texte océrisé (toutes les bonnes volontés sont les bienvenues&nbsp;!)&nbsp;:</p>
 
-<p class="p">—&nbsp;d’une part tous les textes grecs de l’édition de Kühn qui ne figuraient pas dans le corpus de <a class="external" href="https://opengreekandlatin.github.io/First1KGreek/">First Thousand Years of Greek</a> (22 traités couvrant 1&nbsp;133 demi-pages)&nbsp;: <i>Thrasybule</i> ou <i>Si l’hygiène relève de la médecine ou de la gymnastique</i> (vol. 5), <i>Facultés des aliments</i> (vol. 6), ainsi que l’ensemble des traités galéniques ou pseudo-galéniques présents dans le volume 19<a class="noteref" href="#note5" id="note5_" epub:type="noteref">5</a>&nbsp;;</p>
+  <p class="p">—&nbsp;d’une part tous les textes grecs de l’édition de Kühn qui ne figuraient pas dans le corpus de <a class="external" href="https://opengreekandlatin.github.io/First1KGreek/">First Thousand Years of Greek</a> (22 traités couvrant 1&nbsp;133 demi-pages)&nbsp;: <i>Thrasybule</i> ou <i>Si l’hygiène relève de la médecine ou de la gymnastique</i> (vol. 5), <i>Facultés des aliments</i> (vol. 6), ainsi que l’ensemble des traités galéniques ou pseudo-galéniques présents dans le volume 19<a class="noteref" href="#note5" id="note5_" epub:type="noteref">5</a>&nbsp;;</p>
 
-<p class="p">—&nbsp;d’autre part toutes les traductions latines présentes dans l’édition de Kühn (118 traités couvrant 18&nbsp;170 demi-pages)<a class="noteref" href="#note6" id="note6_" epub:type="noteref">6</a>.</p>
+  <p class="p">—&nbsp;d’autre part toutes les traductions latines présentes dans l’édition de Kühn (118 traités couvrant 18&nbsp;170 demi-pages)<a class="noteref" href="#note6" id="note6_" epub:type="noteref">6</a>.</p>
 
-<p class="p">Toute proposition pour enrichir Galenus verbatim de textes libres de droits est la bienvenue. </p>
-
-<p class="p">&nbsp;</p>
-
-
+  <p class="p">Toute proposition pour enrichir Galenus verbatim de textes libres de droits est la bienvenue. </p>
 </section>
 <section id="s3" class="div level1"> <header>
 
-<h1 class="head">Ces textes font-ils autorité&nbsp;?<a class="bookmark" href="#s3"> </a></h1>
+  <h1 class="head">Ces textes font-ils autorité&nbsp;?<a class="bookmark" href="#s3"> </a></h1>
 
-</header>
-<p class="p noindent">Le texte de Kühn fait encore autorité pour les traités qui n’ont pas encore fait l’objet d’une édition critique. Pour les autres traités, il est nécessaire de consulter l’édition critique, qui n’est pas toujours disponible en ligne&nbsp;: voir, dans le cartouche situé au-dessus du texte, la rubrique «&nbsp;editio critica&nbsp;», qui donne le nom de l’éditeur et la date d’édition&nbsp;; les indications bibliographiques complètes se trouvent dans la bibliothèque Zotero associée, section <a class="external" href="https://www.zotero.org/groups/4571007/galenus-verbatim/collections/9QP457XQ">Editiones criticae</a><a class="noteref" href="#note7" id="note7_" epub:type="noteref">7</a>.</p>
+  </header>
+  <p class="p noindent">Le texte de Kühn fait encore autorité pour les traités qui n’ont pas encore fait l’objet d’une édition critique. Pour les autres traités, il est nécessaire de consulter l’édition critique, qui n’est pas toujours disponible en ligne&nbsp;: voir, dans le cartouche situé au-dessus du texte, la rubrique «&nbsp;editio critica&nbsp;», qui donne le nom de l’éditeur et la date d’édition&nbsp;; les indications bibliographiques complètes se trouvent dans la bibliothèque Zotero associée, section <a class="external" href="https://www.zotero.org/groups/4571007/galenus-verbatim/collections/9QP457XQ">Editiones criticae</a><a class="noteref" href="#note7" id="note7_" epub:type="noteref">7</a>.</p>
 
-<p class="p">&nbsp;</p>
-
+  <p class="p">&nbsp;</p>
 
 </section>
-<section id="s4" class="div level1"> <header>
+<section id="s4" class="div level1">
+  <header>
 
-<h1 class="head">Comment citer une œuvre galénique&nbsp;?<a class="bookmark" href="#s4"> </a></h1>
+    <h1 class="head">Comment citer une œuvre galénique&nbsp;?<a class="bookmark" href="#s4"> </a></h1>
 
-</header>
-<p class="p noindent">Que le texte bénéficie ou non d’une édition critique, il est nécessaire de mentionner entre parenthèses les numéros du <b class="b">volume</b>, de la <b class="b">page</b> et de la <b class="b">ligne de l’édition Kühn</b> où il se trouve (le cas échéant), suivis de «&nbsp;Kühn&nbsp;» ou même d’un simple «&nbsp;K&nbsp;».</p>
+  </header>
+  <p class="p noindent">Que le texte bénéficie ou non d’une édition critique, il est nécessaire de mentionner entre parenthèses les numéros du <b class="b">volume</b>, de la <b class="b">page</b> et de la <b class="b">ligne de l’édition Kühn</b> où il se trouve (le cas échéant), suivis de «&nbsp;Kühn&nbsp;» ou même d’un simple «&nbsp;K&nbsp;».</p>
 
-<p class="p">En revanche, cette mention qui sert simplement à repérer la <i>localisation</i> d’un texte au sein d’un ensemble de volumes ne suffit pas&nbsp;: il convient, comme pour tout texte ancien, de donner également le <b class="b">titre du traité</b> et d’indiquer la place du passage cité en fonction de la <i>division logique</i> de l’œuvre, en mentionnant les numéros de <b class="b">livre</b>, de <b class="b">chapitre</b> et éventuellement de <b class="b">section</b> où il se trouve.</p>
+  <p class="p">En revanche, cette mention qui sert simplement à repérer la <i>localisation</i> d’un texte au sein d’un ensemble de volumes ne suffit pas&nbsp;: il convient, comme pour tout texte ancien, de donner également le <b class="b">titre du traité</b> et d’indiquer la place du passage cité en fonction de la <i>division logique</i> de l’œuvre, en mentionnant les numéros de <b class="b">livre</b>, de <b class="b">chapitre</b> et éventuellement de <b class="b">section</b> où il se trouve.</p>
 
-<p class="p">Dans Galenus verbatim, la <a class="external" href="https://galenus-verbatim.huma-num.fr"><b class="b">Table des traités galéniques et pseudo-galéniques</b></a> ainsi que <b class="b">le cartouche</b> placé au-dessus du texte consulté&nbsp;indiquent&nbsp;:</p>
+  <p class="p">Dans Galenus verbatim, la <a class="external" href="https://galenus-verbatim.huma-num.fr"><b class="b">Table des traités galéniques et pseudo-galéniques</b></a> ainsi que <b class="b">le cartouche</b> placé au-dessus du texte consulté&nbsp;indiquent&nbsp;:</p>
 
-<ul class="bullet">
-<li><b class="b">l’attribution</b> actuelle du traité à Galien («&nbsp;Galenus&nbsp;») ou pas («&nbsp;Pseudo-Galenus&nbsp;»), sur la base des connaissances les plus récentes<sup class="sup"><a class="noteref" href="#note8" id="note8_" epub:type="noteref">8</a></sup>&nbsp;;</li>
-<li><i>sans référence bibliographique associée</i>, <b class="b">les titres des traités <i>qui font autorité</i></b>, en latin, en grec, en français et en anglais, ainsi qu’entre parenthèses les abréviations de ces titres qui font autorité, en latin et en anglais<a class="noteref" href="#note9" id="note9_" epub:type="noteref">9</a> (tandis que les titres placés en gras en bas du cartouche, juste au-dessus du texte consulté, qui sont accompagnés d’un nom d’éditeur, d’une date, et d’un numéro de volume et de page, sont ceux qui figurent sur l’édition mentionnée)&nbsp;;</li>
-<li>lorsqu’il existe une <b class="b">édition critique</b> de ce texte, le nom de l’éditeur et la date d’édition, sous la rubrique «&nbsp;editio critica&nbsp;»&nbsp;; les indications bibliographiques complètes se trouvent dans la bibliothèque Zotero associée, section <a class="external" href="https://www.zotero.org/groups/4571007/galenus-verbatim/collections/9QP457XQ">Editiones criticae</a><a class="noteref" href="#note10" id="note10_" epub:type="noteref">10</a>.</li>
-</ul>
+  <ul class="bullet">
+  <li><b class="b">l’attribution</b> actuelle du traité à Galien («&nbsp;Galenus&nbsp;») ou pas («&nbsp;Pseudo-Galenus&nbsp;»), sur la base des connaissances les plus récentes<sup class="sup"><a class="noteref" href="#note8" id="note8_" epub:type="noteref">8</a></sup>&nbsp;;</li>
+  <li><i>sans référence bibliographique associée</i>, <b class="b">les titres des traités <i>qui font autorité</i></b>, en latin, en grec, en français et en anglais, ainsi qu’entre parenthèses les abréviations de ces titres qui font autorité, en latin et en anglais<a class="noteref" href="#note9" id="note9_" epub:type="noteref">9</a> (tandis que les titres placés en gras en bas du cartouche, juste au-dessus du texte consulté, qui sont accompagnés d’un nom d’éditeur, d’une date, et d’un numéro de volume et de page, sont ceux qui figurent sur l’édition mentionnée)&nbsp;;</li>
+  <li>lorsqu’il existe une <b class="b">édition critique</b> de ce texte, le nom de l’éditeur et la date d’édition, sous la rubrique «&nbsp;editio critica&nbsp;»&nbsp;; les indications bibliographiques complètes se trouvent dans la bibliothèque Zotero associée, section <a class="external" href="https://www.zotero.org/groups/4571007/galenus-verbatim/collections/9QP457XQ">Editiones criticae</a><a class="noteref" href="#note10" id="note10_" epub:type="noteref">10</a>.</li>
+  </ul>
 
-<p class="p noindent">Par ailleurs, <b class="b">en bas du cartouche</b>, juste au-dessus du texte consulté, après le titre donné par l’éditeur du texte qui est présenté, figurent <b class="b">en gras les numéros de livre</b>, <b class="b">de chapitre</b> et éventuellement <b class="b">de section</b> qui correspondent à la structure du texte <i>de l’édition consultée</i> (N.B.&nbsp;: il arrive souvent que les éditions critiques reprennent la structure en livres et chapitres de l’édition de Kühn, mais en subdivisant les chapitres en sections).</p>
+  <p class="p noindent">Par ailleurs, <b class="b">en bas du cartouche</b>, juste au-dessus du texte consulté, après le titre donné par l’éditeur du texte qui est présenté, figurent <b class="b">en gras les numéros de livre</b>, <b class="b">de chapitre</b> et éventuellement <b class="b">de section</b> qui correspondent à la structure du texte <i>de l’édition consultée</i> (N.B.&nbsp;: il arrive souvent que les éditions critiques reprennent la structure en livres et chapitres de l’édition de Kühn, mais en subdivisant les chapitres en sections).</p>
 
-<p class="p">&nbsp;</p>
+  <p class="p">&nbsp;</p>
 
-<p class="p noindent">Exemples&nbsp;:</p>
+  <p class="p noindent">Exemples&nbsp;:</p>
 
-<p class="p">—&nbsp;pour un texte qui ne bénéficie pas d’une édition critique&nbsp;: l’étymologie de κραιπάλη, expliquée à partir de <a class="external" href="https://galenus-verbatim.huma-num.fr/urn:cts:greekLit:tlg0057.tlg092.1st1K-grc1:5.5">17b.788.16 K</a>, au chapitre 5 du 5<sup class="sup">e</sup> livre du <i>Commentaire aux Aphorismes d’Hippocrate</i>, peut être citée ainsi&nbsp;: <b class="b">Gal., <i>In Hipp. Aph.</i> 5.5 (17b.788.16—789.2 K)</b>.</p>
+  <p class="p">—&nbsp;pour un texte qui ne bénéficie pas d’une édition critique&nbsp;: l’étymologie de κραιπάλη, expliquée à partir de <a class="external" href="https://galenus-verbatim.huma-num.fr/urn:cts:greekLit:tlg0057.tlg092.1st1K-grc1:5.5">17b.788.16 K</a>, au chapitre 5 du 5<sup class="sup">e</sup> livre du <i>Commentaire aux Aphorismes d’Hippocrate</i>, peut être citée ainsi&nbsp;: <b class="b">Gal., <i>In Hipp. Aph.</i> 5.5 (17b.788.16—789.2 K)</b>.</p>
 
-<p class="p">—&nbsp;pour un texte qui bénéficie d’une édition critique&nbsp;: la seule occurrence de πέμπελος, en <a class="external" href="https://galenus-verbatim.huma-num.fr/urn:cts:greekLit:tlg0057.tlg036.1st1K-grc1:5.12?kuhn=6.380.2">6.380.2 K</a>, au chapitre 12 du 5<sup class="sup">e</sup> livre (<i>dans l’édition de Kühn</i>) du traité sur l’<em>Hygiène,</em> peut être citée ainsi&nbsp;: <b class="b">Gal., <i>De san. tuenda</i>, 5.12.29 Koch (6.380.2 K)</b> [<a class="external" href="https://cmg.bbaw.de/epubl/online/cmg_05_04_02.php?page=167">l’édition de Koch</a>, comme la plupart des éditions du Corpus Medicorum Graecorum, subdivise les chapitres en sections].</p>
+  <p class="p">—&nbsp;pour un texte qui bénéficie d’une édition critique&nbsp;: la seule occurrence de πέμπελος, en <a class="external" href="https://galenus-verbatim.huma-num.fr/urn:cts:greekLit:tlg0057.tlg036.1st1K-grc1:5.12?kuhn=6.380.2">6.380.2 K</a>, au chapitre 12 du 5<sup class="sup">e</sup> livre (<i>dans l’édition de Kühn</i>) du traité sur l’<em>Hygiène,</em> peut être citée ainsi&nbsp;: <b class="b">Gal., <i>De san. tuenda</i>, 5.12.29 Koch (6.380.2 K)</b> [<a class="external" href="https://cmg.bbaw.de/epubl/online/cmg_05_04_02.php?page=167">l’édition de Koch</a>, comme la plupart des éditions du Corpus Medicorum Graecorum, subdivise les chapitres en sections].</p>
 
-<p class="p">&nbsp;</p>
+  <p class="p">&nbsp;</p>
 
 </section>
 
