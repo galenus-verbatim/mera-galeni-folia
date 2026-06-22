@@ -161,6 +161,53 @@ def _get_first_pages_per_ref(cts_urn: str, json_dir: Path) -> dict[str, str]:
     return ref_to_first_page
 
 
+def _build_editions_data(zotero_data: list[dict]) -> tuple[list[dict], list[str]]:
+    editions = []
+    for opus in zotero_data:
+        addable_tags = [
+            t for t in opus.get("tags", []) if t.startswith("_") and t != "_opus"
+        ]
+        author = opus.get("author")
+        authors = author.get("lastName", "Galenus") if author else "Galenus"
+        for ed in opus.get("verbatimEditions", []):
+            edition_cts_urn = _extract_cts_urn(ed.get("extra", ""))
+            if not edition_cts_urn:
+                continue
+            creators = ed.get("creators", [])
+            editors = "; ".join(
+                f"{c.get('lastName', '')}, {c.get('firstName', '')}".strip(", ")
+                for c in creators
+                if c.get("creatorType") == "editor"
+            )
+            editions.append(
+                {
+                    "cts": edition_cts_urn,
+                    "kuehnEditionVolume": opus.get("kuehnEditionVolume"),
+                    "kuehnEditionPages": opus.get("kuehnEditionPages"),
+                    "callNumber": opus.get("callNumber"),
+                    "editors": editors,
+                    "greek_title": opus.get("greekTitle"),
+                    "latin_title": opus.get("latinTitle"),
+                    "french_title": opus.get("frenchTitle"),
+                    "english_title": opus.get("englishTitle"),
+                    "tags": addable_tags,
+                    "authors": authors,
+                    "title": ed.get("title"),
+                }
+            )
+    all_tags = [
+        "gen", "anat", "physiol", "nosol", "therap", "pharm", "hipp", "phil",
+    ]
+    return editions, all_tags
+
+
+def write_editions_data(zotero_data: list[dict]) -> None:
+    editions, all_tags = _build_editions_data(zotero_data)
+    path = APP_DIR / "static" / "json" / "editions.json"
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"editions": editions, "all_tags": all_tags}, f, ensure_ascii=False)
+
+
 def write_cts_index(zotero_data: list[dict], json_dir: Path) -> None:
     print("\n\nBuilding rapid access\n\n")
     result = []
@@ -220,6 +267,7 @@ def setup():
     app.jinja_env.globals["BASE_URL"] = os.getenv("FREEZER_BASE_URL", "")
 
     write_cts_index(zotero_data, JSON_DIR)
+    write_editions_data(zotero_data)
 
     @app.route("/")
     def index():
@@ -303,64 +351,8 @@ def setup():
 
     @app.route("/recherche/")
     def search():
-        editions = []
-
-        for opus in zotero_data:
-            addable_tags = [
-                t for t in opus.get("tags", []) if t.startswith("_") and t != "_opus"
-            ]
-
-            author = opus.get("author")
-            authors = author.get("lastName", "Galenus") if author else "Galenus"
-
-            for ed in opus.get("verbatimEditions", []):
-                edition_cts_urn = _extract_cts_urn(ed.get("extra", ""))
-                if not edition_cts_urn:
-                    continue
-
-                creators = ed.get("creators", [])
-                editors = "; ".join(
-                    f"{c.get('lastName', '')}, {c.get('firstName', '')}".strip(", ")
-                    for c in creators
-                    if c.get("creatorType") == "editor"
-                )
-
-                editions.append(
-                    {
-                        "cts": edition_cts_urn,
-                        "kuehnEditionVolume": opus.get("kuehnEditionVolume"),
-                        "kuehnEditionPages": opus.get("kuehnEditionPages"),
-                        "callNumber": opus.get("callNumber"),
-                        "editors": editors,
-                        "greek_title": opus.get("greekTitle"),
-                        "latin_title": opus.get("latinTitle"),
-                        "french_title": opus.get("frenchTitle"),
-                        "english_title": opus.get("englishTitle"),
-                        "tags": addable_tags,
-                        "authors": authors,
-                        "title": ed.get("title"),
-                    }
-                )
-
-        # the order of `all_tags` is important for sorting
-        all_tags = [
-            "gen",
-            "anat",
-            "physiol",
-            "nosol",
-            "therap",
-            "pharm",
-            "hipp",
-            "phil",
-        ]
-
         return (
-            render_template(
-                "recherche.html.jinja",
-                editions=editions,
-                all_tags=all_tags,
-                BASE_URL=os.getenv("FREEZER_BASE_URL", "//127.0.0.1:5000/"),
-            ),
+            render_template("recherche.html.jinja"),
             200,
             {"Content-Type": "text/html; charset=utf-8"},
         )

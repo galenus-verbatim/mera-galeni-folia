@@ -162,6 +162,19 @@
       </template>
 
     </table>
+
+    <div x-show="loaded && !loading" class="text-center mt-6 mb-4">
+      <span x-show="editions.length > 0" x-text="`${editions.length} de ${filteredCount}`"></span>
+      <span x-show="editions.length > 0 && editions.length < filteredCount">
+        — <button class="btn btn-sm" @click="loadMore" x-text="`Afficher les ${Math.min(pageSize, filteredCount - editions.length)} suivants\u202f»`"></button>
+      </span>
+      <p x-show="loaded && filteredCount === 0" class="text-gray-500 mt-4">Aucun résultat.</p>
+    </div>
+  </div>
+
+  <div x-show="loading" class="text-center mt-8">
+    <span class="loading loading-spinner loading-md"></span>
+    <span class="ml-2">Chargement du corpus…</span>
   </div>
 </div>
 {% endblock %}
@@ -179,8 +192,12 @@
   document.addEventListener('alpine:init', () => {
     Alpine.data('search', () => ({
       // --- edition browsing state ---
-      allTags: {{all_tags|tojson}},
-      allEditions: {{editions|tojson}},
+      allTags: [],
+      allEditions: [],
+      loaded: false,
+      loading: false,
+      pageSize: 50,
+      currentPage: 1,
       baseURL: BASE_URL,
       ignoreDuplicates: false,
       sortAscending: true,
@@ -199,77 +216,92 @@
       searchQuery: '',
       searchResults: [],
 
-      // --- edition browsing methods ---
-      clearSelectedTags() { this.selectedTags = []; },
-      get editions() { return this.filterEditions(); },
-      editorLastName(editor) { return editor.split(', ')[0]; },
+      async init() {
+        this.$watch('selectedAuthor', () => { this.currentPage = 1; });
+        this.$watch('selectedTags', () => { this.currentPage = 1; });
+        this.$watch('ignoreDuplicates', () => { this.currentPage = 1; });
+        this.$watch('sortBy', () => { this.currentPage = 1; });
 
-      filterEditions() {
-        let editionsFiltered = this.allEditions;
-
-        if (this.selectedAuthor !== 'Toutes') {
-          editionsFiltered = editionsFiltered.filter(e => e.authors === this.selectedAuthor || e.authors.startsWith(this.selectedAuthor));
+        this.loading = true;
+        try {
+          var res = await fetch('/static/json/editions.json');
+          var data = await res.json();
+          this.allEditions = data.editions;
+          this.allTags = data.all_tags;
+          this.loaded = true;
+        } catch (e) {
+          console.error('Failed to load editions data:', e);
+        } finally {
+          this.loading = false;
         }
-        if (this.selectedTags.length > 0) {
-          editionsFiltered = editionsFiltered.filter(e =>
-            this.selectedTags.every(t => e.tags.includes(t))
-          );
-        }
-        return this.sortEditions(editionsFiltered);
       },
 
-      sortEditions(editionsFiltered) {
-        let editionsSorted = editionsFiltered;
+      // --- edition browsing methods ---
+      clearSelectedTags() { this.selectedTags = []; },
+      get filteredEditions() { return this._filterAndSort(); },
+      get editions() { return this.filteredEditions.slice(0, this.pageSize * this.currentPage); },
+      get hasMore() { return this.editions.length < this.filteredEditions.length; },
+      get filteredCount() { return this.filteredEditions.length; },
 
-        if (this.sortBy === "page_kuehn") {
-          editionsSorted = editionsFiltered.toSorted((a, b) => {
-            const aFichtner = parseInt((a.callNumber || '0').replace(/[^\d]/, ""));
-            const bFichtner = parseInt((b.callNumber || '0').replace(/[^\d]/, ""));
+      editorLastName(editor) { return editor.split(', ')[0]; },
 
-            return this.sortAscending
-              ? aFichtner - bFichtner
-              : bFichtner - aFichtner;
-          })
+      loadMore() { this.currentPage++; },
+
+      _filterAndSort() {
+        if (!this.loaded) return [];
+        var result = this.allEditions;
+
+        if (this.selectedAuthor !== 'Toutes') {
+          result = result.filter(function(e) {
+            return e.authors === this.selectedAuthor || e.authors.startsWith(this.selectedAuthor);
+          }.bind(this));
+        }
+        if (this.selectedTags.length > 0) {
+          result = result.filter(function(e) {
+            return this.selectedTags.every(function(t) { return e.tags.includes(t); });
+          }.bind(this));
+        }
+
+        if (this.sortBy === 'page_kuehn') {
+          result = result.toSorted(function(a, b) {
+            var aF = parseInt((a.callNumber || '0').replace(/[^\d]/, ''));
+            var bF = parseInt((b.callNumber || '0').replace(/[^\d]/, ''));
+            return this.sortAscending ? aF - bF : bF - aF;
+          }.bind(this));
         } else if (this.sortBy === 'editors') {
-          editionsSorted = editionsFiltered.toSorted((a, b) => {
-            const aEditor = this.editorLastName(a.editors);
-            const bEditor = this.editorLastName(b.editors);
-            return this.sortAscending
-              ? -aEditor.localeCompare(bEditor)
-              : aEditor.localeCompare(bEditor);
-          });
+          result = result.toSorted(function(a, b) {
+            var aE = this.editorLastName(a.editors);
+            var bE = this.editorLastName(b.editors);
+            return this.sortAscending ? -aE.localeCompare(bE) : aE.localeCompare(bE);
+          }.bind(this));
         } else if (this.sortBy === 'tags') {
-          editionsSorted = editionsFiltered.toSorted((a, b) => {
-            const aTagsCleaned = a.tags.map(t => t.replace('_', ''));
-            const bTagsCleaned = b.tags.map(t => t.replace('_', ''));
-            const minTagIndexA = Math.min(...aTagsCleaned.map(t => this.allTags.indexOf(t)));
-            const minTagIndexB = Math.min(...bTagsCleaned.map(t => this.allTags.indexOf(t)));
-            return this.sortAscending
-              ? minTagIndexA - minTagIndexB
-              : minTagIndexB - minTagIndexA;
-          });
+          result = result.toSorted(function(a, b) {
+            var aC = a.tags.map(function(t) { return t.replace('_', ''); });
+            var bC = b.tags.map(function(t) { return t.replace('_', ''); });
+            var aM = Math.min.apply(null, aC.map(function(t) { return this.allTags.indexOf(t); }.bind(this)));
+            var bM = Math.min.apply(null, bC.map(function(t) { return this.allTags.indexOf(t); }.bind(this)));
+            return this.sortAscending ? aM - bM : bM - aM;
+          }.bind(this));
         } else {
-          editionsSorted = editionsFiltered.toSorted((a, b) => {
-            const aField = a[this.sortBy] || a['title'] || '';
-            const bField = b[this.sortBy] || b['title'] || '';
-            return this.sortAscending
-              ? -aField.localeCompare(bField)
-              : aField.localeCompare(bField);
-          });
+          result = result.toSorted(function(a, b) {
+            var aF = a[this.sortBy] || a['title'] || '';
+            var bF = b[this.sortBy] || b['title'] || '';
+            return this.sortAscending ? -aF.localeCompare(bF) : aF.localeCompare(bF);
+          }.bind(this));
         }
 
         if (this.ignoreDuplicates) {
-          let seenURNs = {};
-          editionsSorted = editionsSorted.filter(e => {
-            const ctsURN = e.cts.split(':')[3];
-            const withoutVersion = ctsURN.split('.').slice(0, 2).join('.');
-            if (seenURNs[withoutVersion]) return false;
-            seenURNs[withoutVersion] = true;
+          var seen = {};
+          result = result.filter(function(e) {
+            var cts = e.cts.split(':')[3];
+            var key = cts.split('.').slice(0, 2).join('.');
+            if (seen[key]) return false;
+            seen[key] = true;
             return true;
           });
         }
 
-        return editionsSorted;
+        return result;
       },
 
       updateSort(sortColumn) {

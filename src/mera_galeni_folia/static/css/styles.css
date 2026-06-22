@@ -790,6 +790,20 @@
       }
     }
   }
+  .\!loading {
+    @layer daisyui.l1.l2.l3 {
+      pointer-events: none !important;
+      display: inline-block !important;
+      aspect-ratio: 1 / 1 !important;
+      background-color: currentcolor !important;
+      vertical-align: middle !important;
+      width: calc(var(--size-selector, 0.25rem) * 6) !important;
+      mask-size: 100% !important;
+      mask-repeat: no-repeat !important;
+      mask-position: center !important;
+      mask-image: url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E") !important;
+    }
+  }
   .loading {
     @layer daisyui.l1.l2.l3 {
       pointer-events: none;
@@ -2730,6 +2744,9 @@
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);
   }
@@ -2927,6 +2944,11 @@
   .max-h-screen {
     max-height: 100vh;
   }
+  .loading-md {
+    @layer daisyui.l1.l2 {
+      width: calc(var(--size-selector, 0.25rem) * 6);
+    }
+  }
   .w-0 {
     width: calc(var(--spacing) * 0);
   }
@@ -3099,6 +3121,11 @@
   }
   .bg-yellow-400 {
     background-color: var(--color-yellow-400);
+  }
+  .loading-spinner {
+    @layer daisyui.l1.l2 {
+      mask-image: url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");
+    }
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
