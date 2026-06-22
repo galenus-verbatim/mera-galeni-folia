@@ -238,14 +238,32 @@ def setup():
         )
 
         sorted_lists: dict[str, list] = {}
+        sorted_lists_light: dict[str, list] = {}
         for key, info in SORT_ORDERS.items():
             sorted_lists[key] = info["sort_fn"](zotero_data)
+            sorted_lists_light[key] = [
+                {
+                    "u": item.get("ctsURN"),
+                    "c": item.get("callNumber"),
+                    "lt": item.get("latinTitle"),
+                    "t": item.get("title"),
+                    "kv": item.get("kuehnEditionVolume"),
+                    "kp": item.get("kuehnEditionPages"),
+                    "la": item.get("latinAbbreviatedTitle"),
+                    "gt": item.get("greekTitle"),
+                    "ft": item.get("frenchTitle"),
+                    "et": item.get("englishTitle"),
+                    "es": item.get("englishShortTitle"),
+                }
+                for item in sorted_lists[key]
+            ]
 
         return (
             render_template(
                 "index.html.jinja",
                 items=items,
                 sorted_lists=sorted_lists,
+                sorted_lists_light=sorted_lists_light,
                 sort_orders=SORT_ORDERS,
                 default_sort="kuehn",
             ),
