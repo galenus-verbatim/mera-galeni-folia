@@ -15,6 +15,7 @@ zotero_test.json
 out
 tmp
 tei_json
+tei_chunks
 *.sqlite
 *.sqlite.gz
 

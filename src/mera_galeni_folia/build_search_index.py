@@ -1,13 +1,14 @@
-"""Build the token-level FTS4 search index (search-index.sqlite) from tei_json/.
+"""Build the token-level FTS4 search index (search-index.sqlite) from tei_chunks/.
 
 Run with:
     uv run galenus-index
 
 Steps:
-1. Walk tei_json/ for all non-metadata JSON files
+1. Walk tei_chunks/ for every work's metadata.json, and for each leaf passage
+   chunk listed in its table of contents, load the chunk's TEI XML
 2. Download Stanza models if needed
-3. Lemmatize word-tokens with the appropriate Stanza pipeline (grc or la),
-   using the pre-tokenized input mode so we never re-split the text
+3. Tokenize and lemmatize each passage's primary text with the
+   appropriate Stanza pipeline (grc or la)
 4. Write search-index.sqlite:
      tokens(id, token_urn, title, language)
      search_fts USING fts4(form, lemma)   -- rowid == tokens.id
@@ -23,20 +24,20 @@ import shutil
 import sqlite3
 import unicodedata
 from pathlib import Path
-from typing import Iterator
 
 import stanza
+from lxml import etree
 from tqdm import tqdm
 
+from kodon_py.tei_parser import TEIParser
+
 APP_DIR = Path(__file__).resolve().parent
-JSON_DIR = APP_DIR.parent.parent / "tei_json"
+CHUNKS_DIR = APP_DIR.parent.parent / "tei_chunks"
 DST_PATH = APP_DIR / "static" / "search-index.sqlite"
 
-# Maps the language code found in the JSON to the Stanza language code.
-STANZA_LANG: dict[str, str] = {"grc": "grc", "lat": "la"}
-
-# Maximum words per Stanza "sentence" to avoid memory spikes with the neural POS tagger.
-CHUNK_SIZE = 200
+# Languages found in metadata.json's "document.language", which already use
+# Stanza's own language codes ("grc", "la").
+SUPPORTED_LANGS = ("grc", "la")
 
 # SQLite batch size (rows per commit).
 BATCH_SIZE = 5_000
@@ -57,74 +58,75 @@ def is_word(text: str) -> bool:
     return any(c.isalpha() for c in text)
 
 
-def _chunks(lst: list, n: int) -> Iterator[list]:
-    for i in range(0, len(lst), n):
-        yield lst[i : i + n]
-
-
-def collect_tokens(textpart: dict) -> list[dict]:
-    """Recursively collect all tokens from a textpart tree."""
-    result: list[dict] = list(textpart.get("tokens", []))
-    for child in textpart.get("textparts", []):
-        result.extend(collect_tokens(child))
+def _collect_leaf_entries(entries: list) -> list[dict]:
+    """Flatten a (possibly nested) table of contents to its leaf chunks."""
+    result = []
+    for entry in entries:
+        subpassages = entry.get("subpassages") or []
+        if subpassages:
+            result.extend(_collect_leaf_entries(subpassages))
+        elif "path" in entry:
+            result.append(entry)
     return result
 
 
 # ---------------------------------------------------------------------------
-# Lemmatization
+# Tokenization
 # ---------------------------------------------------------------------------
 
 
-def _lemmatize_words(words: list[str], nlp: stanza.Pipeline) -> list[str]:
-    """Return one lemma per word in *words* using a pre-loaded Stanza pipeline."""
-    all_lemmas: list[str] = []
-    for chunk in _chunks(words, CHUNK_SIZE):
-        doc = nlp([chunk])
-        all_lemmas.extend(
-            w.lemma if w.lemma else w.text for sent in doc.sentences for w in sent.words
-        )
-    return all_lemmas
+def _load_primary_text(chunk_path: Path) -> str | None:
+    chunk_root = etree.parse(str(chunk_path)).getroot()
+    elements_el = chunk_root.find("elements")
+    if elements_el is None:
+        return None
+
+    parser = TEIParser(elements_el, chunk_root.get("base_urn", ""), chunk_root.get("unit", ""))
+    return parser.primary_text
 
 
-def process_file(
-    path: Path, pipelines: dict[str, stanza.Pipeline]
+def process_chunk(
+    chunk_dir: Path, entry: dict, document: dict, pipelines: dict[str, stanza.Pipeline]
 ) -> list[tuple[str, str, str, str, str, str]]:
-    """Return a list of (token_urn, title, language, original_form, form, lemma) tuples for *path*."""
-    data = json.loads(path.read_text(encoding="utf-8"))
-    language: str = data.get("language", "")
-    title: str = data.get("title", "")
-
+    """Return a list of (token_urn, title, language, original_form, form, lemma) tuples."""
+    language: str = document.get("language", "")
     if language not in pipelines:
         return []
 
-    all_tokens: list[dict] = []
-    for tp in data.get("textparts", []):
-        all_tokens.extend(collect_tokens(tp))
-
-    word_positions = [
-        (i, t) for i, t in enumerate(all_tokens) if is_word(t.get("text", ""))
-    ]
-    if not word_positions:
+    chunk_path = chunk_dir / entry["path"]
+    if not chunk_path.exists():
         return []
 
-    words = [t["text"] for _, t in word_positions]
-    lemmas = _lemmatize_words(words, pipelines[language])
+    primary_text = _load_primary_text(chunk_path)
+    if not primary_text:
+        return []
 
+    title: str = document.get("title") or ""
+    leaf_urn: str = entry["urn"]
+
+    doc = pipelines[language](primary_text)
+
+    occurrences: dict[str, int] = {}
     rows: list[tuple[str, str, str, str, str, str]] = []
-    for (_, token), lemma in zip(word_positions, lemmas):
-        urn = token.get("urn", "")
-        if not urn:
-            continue
-        rows.append(
-            (
-                urn,
-                title,
-                language,
-                token["text"],
-                strip_diacritics(token["text"]),
-                strip_diacritics(lemma),
+    for sentence in doc.sentences:
+        for token in sentence.tokens:
+            if not is_word(token.text):
+                continue
+
+            occurrences[token.text] = occurrences.get(token.text, 0) + 1
+            token_urn = f"{leaf_urn}@{token.text}[{occurrences[token.text]}]"
+            lemma = " ".join(w.lemma or w.text for w in token.words)
+
+            rows.append(
+                (
+                    token_urn,
+                    title,
+                    language,
+                    token.text,
+                    strip_diacritics(token.text),
+                    strip_diacritics(lemma),
+                )
             )
-        )
     return rows
 
 
@@ -160,48 +162,49 @@ def _init_db(dst_path: Path) -> sqlite3.Connection:
 # ---------------------------------------------------------------------------
 
 
-def build(json_dir: Path = JSON_DIR, dst_path: Path = DST_PATH) -> None:
-    langs = list(STANZA_LANG.values())
-    print(f"Downloading Stanza models: {langs}…")
-    for lang in langs:
+def build(chunks_dir: Path = CHUNKS_DIR, dst_path: Path = DST_PATH) -> None:
+    print(f"Downloading Stanza models: {list(SUPPORTED_LANGS)}…")
+    for lang in SUPPORTED_LANGS:
         stanza.download(lang, processors="tokenize,pos,lemma", verbose=False)
 
     print("Loading Stanza pipelines…")
-    pipelines: dict[str, stanza.Pipeline] = {}
-    for json_lang, stanza_lang in STANZA_LANG.items():
-        pipelines[json_lang] = stanza.Pipeline(
-            lang=stanza_lang,
-            processors="tokenize,pos,lemma",
-            tokenize_pretokenized=True,
-            verbose=False,
-        )
+    pipelines: dict[str, stanza.Pipeline] = {
+        lang: stanza.Pipeline(lang=lang, processors="tokenize,pos,lemma", verbose=False)
+        for lang in SUPPORTED_LANGS
+    }
 
     dst = _init_db(dst_path)
 
-    json_files = sorted(
-        p for p in json_dir.rglob("*.json") if not p.name.endswith(".metadata.json")
-    )
-    print(f"Processing {len(json_files)} JSON files…")
+    metadata_paths = sorted(chunks_dir.rglob("metadata.json"))
+    print(f"Processing {len(metadata_paths)} works…")
 
     batch_tokens: list[tuple] = []
     batch_fts: list[tuple] = []
     next_id = 1
 
-    for path in tqdm(json_files):
-        for token_urn, title, language, original_form, form, lemma in process_file(path, pipelines):
-            batch_tokens.append((next_id, token_urn, title, language, original_form))
-            batch_fts.append((next_id, form, lemma))
-            next_id += 1
+    for metadata_path in tqdm(metadata_paths):
+        chunk_dir = metadata_path.parent
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        document = metadata.get("document", {})
+        leaf_entries = _collect_leaf_entries(metadata.get("table_of_contents", []))
 
-            if len(batch_tokens) >= BATCH_SIZE:
-                dst.executemany("INSERT INTO tokens VALUES (?,?,?,?,?)", batch_tokens)
-                dst.executemany(
-                    "INSERT INTO search_fts(rowid, form, lemma) VALUES (?,?,?)",
-                    batch_fts,
-                )
-                dst.commit()
-                batch_tokens.clear()
-                batch_fts.clear()
+        for entry in leaf_entries:
+            for token_urn, title, language, original_form, form, lemma in process_chunk(
+                chunk_dir, entry, document, pipelines
+            ):
+                batch_tokens.append((next_id, token_urn, title, language, original_form))
+                batch_fts.append((next_id, form, lemma))
+                next_id += 1
+
+                if len(batch_tokens) >= BATCH_SIZE:
+                    dst.executemany("INSERT INTO tokens VALUES (?,?,?,?,?)", batch_tokens)
+                    dst.executemany(
+                        "INSERT INTO search_fts(rowid, form, lemma) VALUES (?,?,?)",
+                        batch_fts,
+                    )
+                    dst.commit()
+                    batch_tokens.clear()
+                    batch_fts.clear()
 
     if batch_tokens:
         dst.executemany("INSERT INTO tokens VALUES (?,?,?,?,?)", batch_tokens)
@@ -219,8 +222,11 @@ def build(json_dir: Path = JSON_DIR, dst_path: Path = DST_PATH) -> None:
     size = dst_path.stat().st_size
     print(f"Built {dst_path.name} ({size / 1024 / 1024:.1f} MB), compressing…")
 
-    gz_path = dst_path.with_suffix('.sqlite.gz')
-    with open(dst_path, 'rb') as f_in, gzip.open(gz_path, 'wb', compresslevel=9) as f_out:
+    gz_path = dst_path.with_suffix(".sqlite.gz")
+    with (
+        open(dst_path, "rb") as f_in,
+        gzip.open(gz_path, "wb", compresslevel=9) as f_out,
+    ):
         shutil.copyfileobj(f_in, f_out)
 
     gz_size = gz_path.stat().st_size

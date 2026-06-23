@@ -324,14 +324,12 @@ wheels = [
 [[package]]
 name = "kodon-py"
 version = "0.1.0"
-source = { git = "https://github.com/PerseusDLCode/kodon-py.git#940e4c7dbb8fcb804bc7d801599609d639bebc1b" }
+source = { git = "https://github.com/PerseusDLCode/kodon-py.git#5fd6a7c3bb85f44b00ef7fa985aee1a026d7fffa" }
 dependencies = [
     { name = "click" },
     { name = "flask" },
     { name = "lxml" },
     { name = "lxml-stubs" },
-    { name = "numpy" },
-    { name = "stanza" },
 ]
 
 [[package]]

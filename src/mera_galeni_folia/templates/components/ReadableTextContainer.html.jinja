@@ -3,9 +3,9 @@
 {%- set tagname = text_container.subtype or text_container.tagname or 'span' -%}
 
 {%- if tagname == 'text_run' or text_container.tagname == 'text_run' -%}
-  {%- for token in text_container.tokens or [] -%}
-    <span id="{{ token.urn }}">{{- token.text -}}{% if token.whitespace %} {% endif %}</span>
-  {%- endfor -%}
+  {{- text_container.content -}}
+{%- elif tagname == 'token' -%}
+  <span{% if text_container.urn %} id="{{ text_container.urn }}"{% endif %}>{{- text_container.text -}}</span>{% if text_container.whitespace %} {% endif %}
 {%- elif tagname == 'lb' -%}
   <br />
   {%- if text_container.get("rend") == "rule" -%}

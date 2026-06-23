@@ -7,9 +7,12 @@ from typing import Any
 import markdown
 
 from flask import abort, render_template, url_for
+from lxml import etree
 
 from kodon_py.config import default_config
-from kodon_py.server import create_app, load_passage_from_urn, load_toc_from_urn
+from kodon_py.server import create_app, load_toc_from_urn
+from kodon_py.tei_parser import TEIParser, inject_tokens
+from kodon_py.urn_utils import parse_urn
 
 from mera_galeni_folia.build import (
     _format_critical_edition,
@@ -24,7 +27,7 @@ from mera_galeni_folia.zotero import SORT_ORDERS, fetch_opera, read_zotero_json
 
 APP_DIR = Path(__file__).resolve().parent
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-JSON_DIR = (ROOT_DIR / "tei_json").absolute()
+FRAGMENT_DIR = (ROOT_DIR / "tei_chunks").absolute()
 
 CTS_INDEX = APP_DIR / "static" / "json" / "cts_index.json"
 FAQ_MARKDOWN = APP_DIR / "static" / "markdown" / "faq.md"
@@ -74,89 +77,138 @@ def _extract_cts_urn(extra: str | Any) -> str | None:
     return None
 
 
-def _refs_from_metadata(cts_urn: str, json_dir: Path) -> list[str]:
+def _chunk_dir_and_metadata(cts_urn: str, json_dir: Path) -> tuple[Path, dict] | None:
+    """Locate the chunk directory and load its metadata.json for a work URN."""
+    parsed = parse_urn(cts_urn)
+    if not parsed.text_group or not parsed.work or not parsed.work_component:
+        return None
+
+    chunk_dir = json_dir / parsed.text_group / parsed.work / parsed.work_component
+    metadata_path = chunk_dir / "metadata.json"
+    if not metadata_path.exists():
+        return None
+
+    with open(metadata_path, encoding="utf-8") as f:
+        return chunk_dir, json.load(f)
+
+
+def _collect_leaf_entries(entries: list) -> list[dict]:
+    """Flatten a (possibly nested) table of contents to its leaf chunks."""
+    result = []
+    for entry in entries:
+        subpassages = entry.get("subpassages") or []
+        if subpassages:
+            result.extend(_collect_leaf_entries(subpassages))
+        elif "path" in entry:
+            result.append(entry)
+    return result
+
+
+def _load_passage(urn: str, fragment_dir: Path) -> dict | None:
+    """Load a passage's text_containers, same shape as kodon_py.server.load_passage_from_urn.
+
+    Reimplemented locally (rather than calling kodon_py.server directly) so that
+    a sibling "<chunk>.tokens.json" sidecar, if present, can be injected into the
+    parsed elements via inject_tokens. Without a sidecar, text_run nodes are left
+    as plain text and rendered as-is by ReadableTextContainer.html.jinja.
+    """
+    found = _chunk_dir_and_metadata(urn, fragment_dir)
+    if found is None:
+        return None
+    chunk_dir, metadata = found
+
+    leaves = _collect_leaf_entries(metadata.get("table_of_contents", []))
+    if not leaves:
+        return None
+
+    parsed = parse_urn(urn)
+    if parsed.passage_component:
+        leaf = next((leaf for leaf in leaves if leaf["urn"] == urn), None)
+        if leaf is None:
+            return None
+    else:
+        leaf = leaves[0]
+
+    chunk_path = chunk_dir / leaf["path"]
+    if not chunk_path.exists():
+        return None
+
+    chunk_root = etree.parse(str(chunk_path)).getroot()
+    content_el = chunk_root.find("elements")
+    if content_el is None:
+        return None
+
+    base_urn = chunk_root.get("base_urn", "")
+    unit = chunk_root.get("unit", "")
+    cts_urn = chunk_root.get("cts_urn", "")
+    prev_urn = chunk_root.get("prev_urn")
+    next_urn = chunk_root.get("next_urn")
+
+    parser = TEIParser(content_el, base_urn, unit)
+
+    tokens_path = chunk_path.with_suffix(".tokens.json")
+    if tokens_path.exists():
+        with open(tokens_path, encoding="utf-8") as f:
+            inject_tokens(parser.elements, json.load(f).get("tokens", []))
+
+    children = parser.elements[0]["children"] if parser.elements else []
+
+    return {
+        "text_containers": [{"urn": cts_urn, "children": children}],
+        "previous": prev_urn,
+        "next": next_urn,
+    }
+
+
+def _refs_from_metadata(cts_urn: str, chunk_dir: Path) -> list[str]:
     """Return leaf-level passage refs by flattening the TOC.
 
     For single-level texts (chapters only) this is identical to the old
     behaviour.  For multi-level texts (book > chapter) it recurses into
     subpassages so refs like "2.71" are returned instead of just "2".
     """
-    parts = cts_urn.split(":")
-    if len(parts) < 4:
+    found = _chunk_dir_and_metadata(cts_urn, chunk_dir)
+    if found is None:
         return []
-    work_parts = parts[3].split(".")
-    if len(work_parts) < 3:
-        return []
-    metadata_path = (
-        json_dir / work_parts[0] / work_parts[1] / f"{parts[3]}.metadata.json"
-    )
-    if not metadata_path.exists():
-        return []
-    with open(metadata_path, encoding="utf-8") as f:
-        metadata = json.load(f)
+    _chunk_dir, metadata = found
 
-    def collect_leaf_refs(entries: list) -> list[str]:
-        result = []
-        for entry in entries:
-            subpassages = entry.get("subpassages") or []
-            if subpassages:
-                result.extend(collect_leaf_refs(subpassages))
-            elif "urn" in entry:
-                result.append(entry["urn"].rsplit(":", 1)[1])
-        return result
-
-    return collect_leaf_refs(metadata.get("table_of_contents", []))
+    return [
+        entry["urn"].rsplit(":", 1)[1]
+        for entry in _collect_leaf_entries(metadata.get("table_of_contents", []))
+    ]
 
 
-def _get_first_pages_per_ref(cts_urn: str, json_dir: Path) -> dict[str, str]:
+def _get_first_pages_per_ref(cts_urn: str, fragment_dir: Path) -> dict[str, str]:
     """Return a mapping of chapter ref -> first Kühn page n in that chapter.
 
     Page n values are stored verbatim from the <pb n="..."> attribute
     (e.g. "18b.926") so that multi-volume texts can be disambiguated in JS.
     """
-    parts = cts_urn.split(":")
-    if len(parts) < 4:
+    found = _chunk_dir_and_metadata(cts_urn, fragment_dir)
+    if found is None:
         return {}
-    work_parts = parts[3].split(".")
-    if len(work_parts) < 3:
-        return {}
-    json_path = json_dir / work_parts[0] / work_parts[1] / f"{parts[3]}.json"
-    if not json_path.exists():
-        return {}
-
-    with open(json_path, encoding="utf-8") as f:
-        work_data = json.load(f)
-
-    textparts = work_data.get("textparts", [])
-    # Use the full passage ref from the textpart URN (e.g. "2.71"), not just
-    # tp["n"] ("71"), so multi-level texts map correctly.
-    idx_to_ref = {
-        tp["index"]: tp["urn"].rsplit(":", 1)[1] for tp in textparts if tp.get("urn")
-    }
-
-    # Collect all <pb> elements recursively; each carries textpart_index and index.
-    all_pbs: list[tuple[int, int, str]] = []
-
-    def collect_pbs(elements: list) -> None:
-        for elem in elements:
-            if elem.get("tagname") == "pb":
-                all_pbs.append(
-                    (
-                        elem.get("index", 0),
-                        elem.get("textpart_index", 0),
-                        elem.get("n", ""),
-                    )
-                )
-            collect_pbs(elem.get("children", []))
-
-    collect_pbs(work_data.get("elements", []))
-    all_pbs.sort(key=lambda x: x[0])
+    chunk_dir, metadata = found
 
     ref_to_first_page: dict[str, str] = {}
-    for _, tp_idx, page_n in all_pbs:
-        ref = idx_to_ref.get(tp_idx)
-        if ref and ref not in ref_to_first_page and page_n:
-            ref_to_first_page[ref] = page_n
+    for entry in _collect_leaf_entries(metadata.get("table_of_contents", [])):
+        chunk_path = chunk_dir / entry["path"]
+        if not chunk_path.exists():
+            continue
+
+        chunk_root = etree.parse(str(chunk_path)).getroot()
+        elements_el = chunk_root.find("elements")
+        if elements_el is None:
+            continue
+
+        pb = next(
+            (el for el in elements_el.iter() if etree.QName(el).localname == "pb"),
+            None,
+        )
+        if pb is None or not pb.get("n"):
+            continue
+
+        ref = entry["urn"].rsplit(":", 1)[1]
+        ref_to_first_page[ref] = str(pb.get("n"))
 
     return ref_to_first_page
 
@@ -215,7 +267,7 @@ def write_editions_data(zotero_data: list[dict]) -> None:
         json.dump({"editions": editions, "all_tags": all_tags}, f, ensure_ascii=False)
 
 
-def write_cts_index(zotero_data: list[dict], json_dir: Path) -> None:
+def write_cts_index(zotero_data: list[dict], fragment_dir: Path) -> None:
     print("\n\nBuilding rapid access\n\n")
     result = []
 
@@ -235,11 +287,11 @@ def write_cts_index(zotero_data: list[dict], json_dir: Path) -> None:
             if not cts_urn:
                 continue
 
-            refs = _refs_from_metadata(cts_urn, json_dir)
+            refs = _refs_from_metadata(cts_urn, fragment_dir)
             if not refs:
                 continue
 
-            first_pages_map = _get_first_pages_per_ref(cts_urn, json_dir)
+            first_pages_map = _get_first_pages_per_ref(cts_urn, fragment_dir)
             first_pages = [first_pages_map.get(str(ref), "") for ref in refs]
 
             result.append(
@@ -263,7 +315,7 @@ def setup():
     config["template_folder"] = (APP_DIR / "templates").absolute()  # ty:ignore[invalid-assignment]
 
     app = create_app(
-        json_dir=JSON_DIR,
+        fragment_dir=FRAGMENT_DIR,
         config=config,
     )
 
@@ -273,7 +325,7 @@ def setup():
 
     app.jinja_env.globals["BASE_URL"] = os.getenv("FREEZER_BASE_URL", "")
 
-    write_cts_index(zotero_data, JSON_DIR)
+    write_cts_index(zotero_data, FRAGMENT_DIR)
     write_editions_data(zotero_data)
 
     @app.route("/")
@@ -368,7 +420,7 @@ def setup():
     def reading(urn):
         """Text reader page for a given CTS URN."""
 
-        passage = load_passage_from_urn(urn, JSON_DIR)
+        passage = _load_passage(urn, FRAGMENT_DIR)
 
         text_containers = passage.get("text_containers", [])
 
@@ -381,7 +433,7 @@ def setup():
         previous_urn = passage["previous"]
         next_urn = passage["next"]
 
-        toc = load_toc_from_urn(urn, JSON_DIR)  # ty: ignore
+        toc = load_toc_from_urn(urn, FRAGMENT_DIR)  # ty: ignore
         zotero_data = read_zotero_json()
         zotero_item = None
 
@@ -461,7 +513,7 @@ def setup():
                 "reading.html.jinja",
                 critical_edition=critical_edition,
                 current_urn=urn,
-                edition_title=toc.get("title", ""),
+                edition_title=toc.get("document", {}).get("title", ""),
                 image_vars=image_vars,
                 next_urn=next_urn,
                 page_citation=page_citation,

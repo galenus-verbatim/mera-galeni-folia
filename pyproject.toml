@@ -27,6 +27,7 @@ kodon-py = { git = "https://github.com/PerseusDLCode/kodon-py.git" }
 galenus = "mera_galeni_folia.build:main"
 galenus-dev = "mera_galeni_folia.app:main"
 galenus-index = "mera_galeni_folia.build_search_index:main"
+galenus-tokenize = "mera_galeni_folia.build_token_sidecars:main"
 
 [build-system]
 requires = ["hatchling"]
