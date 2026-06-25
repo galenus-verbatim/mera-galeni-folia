@@ -422,6 +422,9 @@ def setup():
 
         passage = _load_passage(urn, FRAGMENT_DIR)
 
+        if passage is None:
+            abort(404)
+
         text_containers = passage.get("text_containers", [])
 
         if text_containers is None or len(text_containers) == 0:
