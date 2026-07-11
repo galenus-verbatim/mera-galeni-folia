@@ -25,13 +25,20 @@
       {% endwith %}
     </div>
     <div class="mt-8">
+      <span>
+        {% if zotero_item.author.name == "Galenus" %}
+          Gal.
+        {% elif zotero_item.author.name == "Pseudo-Galenus" %}
+          Ps. Gal.
+        {% endif %}
+      </span>
       <em>{{ zotero_item.title }}</em>,
       <span>
-        ed. {{ critical_edition.creators | selectattr('creatorType', 'equalto', 'editor') | map(attribute='lastName') | join("and") | default('') }}
-      </span>,
+        ed. {{ critical_edition.creators | selectattr('creatorType', 'equalto', 'editor') | map(attribute='lastName') | join("and") | default('') }},
+      </span>
       <span>{{ critical_edition.date }}</span>,
       {% if critical_edition.volume %}
-      <span>vol. {{ critical_edition.volume }}</span>,
+        <span>vol. {{ critical_edition.volume }}</span>,
       {% endif %}
       <span>{{ page_citation }}</span>.
       <span>{{ current_urn.rsplit(":", 1)[1] }}</span>.

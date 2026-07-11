@@ -981,7 +981,7 @@
       "version": 20834,
       "parentItem": "GB9H5762",
       "itemType": "note",
-      "note": "<div data-schema-version=\"9\"><p><span style=\"color: rgb(112, 48, 160);\">Note sur le texte grec de Kühn, repris sur celui de Chartier: «Comme il ne disposait pas de manuscrits nous ayant transmis le texte en entier», puisque le texte de l’Aldine «s’interrompt à ἀκρίβειαν» [2.843.12&nbsp;K] «comme c’est le cas dans le </span><em><span style=\"color: rgb(112, 48, 160);\">Par. gr. </span></em><span style=\"color: rgb(112, 48, 160);\">&nbsp;2164, duquel elle dérive avec quelques corrections et fautres supplémentaires», «Chartier a transcrit les dix chapitres de la </span><em><span style=\"color: rgb(112, 48, 160);\">Basileensis</span></em><span style=\"color: rgb(112, 48, 160);\"> (qui est une copie de l’Aldine) et il a intégré le reste en collant les extraits d’Oribase et en complétant ce qui manquait avec une (mauvaise) rétroversion en grec de la traduction de Gadaldini. Chartier a inséré deux passages» [2.846.14-15 K; 2.847.14-848.8] «tirés d’Oribase qui ne viennent pas de l’</span><em><span style=\"color: rgb(112, 48, 160);\">Anatomie des nerfs</span></em><span style=\"color: rgb(112, 48, 160);\">, mais de l’</span><em><span style=\"color: rgb(112, 48, 160);\">Utilité des parties</span></em><span style=\"color: rgb(112, 48, 160);\">, et il omet de traduire en grec quelques passages que lui offrait le latin de Gadaldini» (Garofalo &amp; Debru [éd.] 2008, p. 19-20).</span></p>\n</div>",
+      "note": "<div data-schema-version=\"9\"><p><span>Note sur le texte grec de Kühn, repris sur celui de Chartier: «Comme il ne disposait pas de manuscrits nous ayant transmis le texte en entier», puisque le texte de l’Aldine «s’interrompt à ἀκρίβειαν» [2.843.12&nbsp;K] «comme c’est le cas dans le </span><em><span>Par. gr. </span></em><span>&nbsp;2164, duquel elle dérive avec quelques corrections et fautres supplémentaires», «Chartier a transcrit les dix chapitres de la </span><em><span>Basileensis</span></em><span> (qui est une copie de l’Aldine) et il a intégré le reste en collant les extraits d’Oribase et en complétant ce qui manquait avec une (mauvaise) rétroversion en grec de la traduction de Gadaldini. Chartier a inséré deux passages» [2.846.14-15 K; 2.847.14-848.8] «tirés d’Oribase qui ne viennent pas de l’</span><em><span>Anatomie des nerfs</span></em><span>, mais de l’</span><em><span>Utilité des parties</span></em><span>, et il omet de traduire en grec quelques passages que lui offrait le latin de Gadaldini» (Garofalo &amp; Debru [éd.] 2008, p. 19-20).</span></p>\n</div>",
       "tags": [],
       "relations": {},
       "dateAdded": "2026-06-02T17:50:27Z",
@@ -31194,7 +31194,7 @@
       "ISBN": "",
       "DOI": "",
       "citationKey": "Galenus200e",
-      "url": "https://galenus-verbatuim.hma-num.fr/#urn:cts:greekLit:tlg0057.tlg0115",
+      "url": "https://galenus-verbatuim.hma-num.fr/#urn:cts:greekLit:tlg0057.tlg115",
       "accessDate": "",
       "ISSN": "",
       "archive": "",
@@ -31204,7 +31204,7 @@
       "libraryCatalog": "",
       "callNumber": "113",
       "rights": "",
-      "extra": "CTS URN: urn:cts:greekLit:tlg0057.tlg0115",
+      "extra": "CTS URN: urn:cts:greekLit:tlg0057.tlg115",
       "tags": [
         {
           "tag": "_hipp"

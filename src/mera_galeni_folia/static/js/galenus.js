@@ -20,13 +20,6 @@ async function initCtsSearch() {
             for (const ref of ed.refs) {
                 const url = `${BASE_URL ? BASE_URL : "/"}${ed.b}:${ref}/`;
 
-                const kuehnKey = `${ed.v}.${ref}`;
-                urlMap.set(kuehnKey, url);
-                const kuehnOpt = document.createElement("option");
-                kuehnOpt.value = kuehnKey;
-                kuehnOpt.label = ed.t;
-                fragment.appendChild(kuehnOpt);
-
                 const urnKey = `${ed.b}:${ref}`;
                 urlMap.set(urnKey, url);
                 const urnOpt = document.createElement("option");
@@ -37,6 +30,19 @@ async function initCtsSearch() {
 
             if (ed.first_pages && ed.first_pages.some(p => p)) {
                 editionsWithPages.push({ ed, BASE_URL });
+
+                // Suggest real Kühn page numbers (not volume+chapter-index,
+                // which collides across works sharing a volume). These are
+                // resolved via resolveByPage()/resolveByLine() at navigate
+                // time rather than looked up directly in urlMap, since the
+                // same page can legitimately appear in more than one edition.
+                for (const fp of ed.first_pages) {
+                    if (!fp) continue;
+                    const pageOpt = document.createElement("option");
+                    pageOpt.value = fp;
+                    pageOpt.label = ed.t;
+                    fragment.appendChild(pageOpt);
+                }
             }
         }
 
