@@ -148,7 +148,7 @@
           <tr x-show="openSlideouts[edition.cts]" x-collapse>
             <td colspan="8" class="bg-olive-50 px-8 py-2">
               <ul class="text-sm space-y-1">
-                <template x-for="result in searchResults.filter(r => r.chapter_urn.startsWith(edition.cts + ':'))" :key="result.chapter_urn">
+                <template x-for="result in searchResults.filter(r => r.chapter_urn.startsWith(edition.cts + ':'))" :key="result.id">
                   <li>
                     <a :href="result.url" class="text-yellow-700" x-text="result.token_urn"></a>
                     <span class="text-gray-700 ml-2 font-mono text-xs" x-html="contextCache[result.id] || ''"></span>
@@ -465,7 +465,7 @@
             JOIN (SELECT rowid FROM search_fts WHERE search_fts MATCH ?) AS fts
               ON t.id = fts.rowid
             ${workFilter}
-            GROUP BY chapter_urn
+            ORDER BY t.id
             LIMIT 1000
           `);
 
@@ -498,7 +498,7 @@
             JOIN search_fts fts ON t.id = fts.rowid
             WHERE fts.${column} LIKE ?
             ${workFilter}
-            GROUP BY chapter_urn
+            ORDER BY t.id
             LIMIT 50
           `);
 
