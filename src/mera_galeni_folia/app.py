@@ -49,15 +49,35 @@ def _find_page_ns(
     return first, last
 
 
+def _decrement_page_n(page_n: str) -> str:
+    """Decrement a Kühn page-n value by 1, preserving a leading volume part.
+
+    Handles both "{vol}.{pg}" (e.g. "17a.693" -> "17a.692") and bare "{pg}"
+    forms. Returns the input unchanged if the page part isn't numeric.
+    """
+    vol, _, pg = page_n.rpartition(".")
+    if not pg.isdigit():
+        return page_n
+    decremented = str(int(pg) - 1)
+    return f"{vol}.{decremented}" if vol else decremented
+
+
 def _assign_line_ids(text_containers, current_page_n=None):
+    if current_page_n is None:
+        first_page_n, _ = _find_page_ns(text_containers)
+        if first_page_n is not None:
+            current_page_n = _decrement_page_n(first_page_n)
+
     for text_container in text_containers:
         if text_container.get("tagname") == "pb":
             current_page_n = text_container["n"]
 
         if text_container.get("tagname") == "lb":
-            text_container["html_id"] = (
-                f"l{current_page_n}.{text_container.get('n', '')}"
-            )
+            if current_page_n:
+                html_id = f"l{current_page_n}.{text_container.get('n', '')}"
+            else:
+                html_id = f"l{text_container.get('n', '')}"
+            text_container["html_id"] = html_id
 
         if len(text_container.get("children", [])) > 0:
             current_page_n = _assign_line_ids(

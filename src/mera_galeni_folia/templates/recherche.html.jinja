@@ -124,8 +124,7 @@
             @click="editionIsClickable(edition) && toggleSlideout(edition)"
           >
             <td>
-              <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'"
-                :class="openSlideouts[edition.cts] ? 'text-zinc-800' : 'text-sky-800'"></span>
+              <span x-show="editionIsClickable(edition)" x-text="openSlideouts[edition.cts] ? '▼' : '▶'" class="text-yellow-700"></span>
               <span x-text="`${edition.kuehnEditionVolume}.${(edition.kuehnEditionPages || '').split('-')[0]} [${edition.callNumber} Ficht.]`">
             </td>
             <td>
