@@ -220,7 +220,7 @@ def _build_editions_data(zotero_data: list[dict]) -> tuple[list[dict], list[str]
             t for t in opus.get("tags", []) if t.startswith("_") and t != "_opus"
         ]
         author = opus.get("author")
-        authors = author.get("lastName", "Galenus") if author else "Galenus"
+        authors = author.get("name", "Galenus") if author else "Galenus"
         for ed in opus.get("verbatimEditions", []):
             edition_cts_urn = _extract_cts_urn(ed.get("extra", ""))
             if not edition_cts_urn:
