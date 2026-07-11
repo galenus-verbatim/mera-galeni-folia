@@ -6,6 +6,14 @@
   {{- text_container.content -}}
 {%- elif tagname == 'token' -%}
   <span{% if text_container.urn %} id="{{ text_container.urn }}"{% endif %}>{{- text_container.text -}}</span>{% if text_container.whitespace %} {% endif %}
+{%- elif tagname == "sic" -%}
+  <span class="hidden tei-sic">
+    {%- for child in text_container.children or [] -%}
+      {%- with text_container = child -%}
+        {%- include 'components/ReadableTextContainer.html.jinja' -%}
+      {%- endwith -%}
+    {%- endfor -%}
+  </span>
 {%- elif tagname == 'lb' -%}
   <br />
   {%- if text_container.get("rend") == "rule" -%}
